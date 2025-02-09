@@ -66,6 +66,9 @@
                 <button id="sendButton" class="send-button">
                     <img src="{% static 'image/assistant/message-send.svg' %}" alt="Send">
                 </button>
+                <button id="sendTts" class="send-button">
+                    <img src="{% static 'image/assistant/mic.png' %}" alt="Voice">
+                </button>
             </div>
         </div>
     </div>
@@ -203,6 +206,9 @@
                     messageContainer.addClass('user-message');
                     messageContainer.append(messageBody);
                     disableInput();
+
+                    // tts
+                    textToSpeech(text);
                 }
 
                 $('#messageList').append(messageContainer);
@@ -286,6 +292,7 @@
             }
 
             function appendMessageWithTypingEffect(text, sender) {
+                textToSpeech(text); // tts 실행
                 const messageContainer = $('<div>', { class: 'message-container ai-message' });
                 const profileImage = $('<img>', {
                     src: '{{ assistant.photo.url }}',
@@ -301,6 +308,7 @@
                 $('#messageList').append(messageContainer);
 
                 const messageElement = messageContent.find('p');
+
 
                 // Pass the callback to typeText
                 typeText(messageElement, text, function() {
@@ -360,6 +368,145 @@
                     console.error('No text found to copy.');
                 }
             };
+
+            // STT
+            const sendTtsButton = document.getElementById('sendTts');
+            const messageInput = document.getElementById('messageInput');
+
+            let mediaRecorder;
+            let audioChunks = [];
+            let isRecording = false;
+
+            // 음성 감지를 위한 설정
+            let audioContext;
+            let analyser;
+            let source;
+
+            sendTtsButton.addEventListener('click', async function () {
+                if (!isRecording) {
+                    try {
+                        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+                        // 음성 감지 설정
+                        audioContext = new AudioContext();
+                        analyser = audioContext.createAnalyser();
+                        source = audioContext.createMediaStreamSource(stream);
+                        source.connect(analyser);
+
+                        mediaRecorder = new MediaRecorder(stream);
+                        audioChunks = [];
+
+                        mediaRecorder.ondataavailable = (event) => {
+                            audioChunks.push(event.data);
+                        };
+
+                        let silenceTimer = null;
+                        const checkSilence = () => {
+                            const array = new Uint8Array(analyser.frequencyBinCount);
+                            analyser.getByteFrequencyData(array);
+
+                            // 음성 레벨 체크
+                            const average = array.reduce((a, b) => a + b) / array.length;
+
+                            if (average < 10) {  // 임계값
+                                if (!silenceTimer) {
+                                    silenceTimer = setTimeout(() => {
+                                        if (isRecording) {
+                                            mediaRecorder.stop();
+                                            isRecording = false;
+                                            sendTtsButton.style.backgroundColor = '';
+                                            stream.getTracks().forEach(track => track.stop());
+                                        }
+                                    }, 2000);  // 2초 동안 소리가 없으면 중지
+                                }
+                            } else {
+                                if (silenceTimer) {
+                                    clearTimeout(silenceTimer);
+                                    silenceTimer = null;
+                                }
+                            }
+
+                            if (isRecording) {
+                                requestAnimationFrame(checkSilence);
+                            }
+                        };
+
+                        mediaRecorder.onstop = async () => {
+                            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                            const formData = new FormData();
+                            formData.append('audio', audioBlob);
+
+                            try {
+                                console.log(getCookie('csrftoken'));
+                                const response = await fetch('/stt/', {
+                                    method: 'POST',
+                                    body: formData,
+                                    headers: {
+                                        'X-CSRFToken': getCookie('csrftoken')
+                                    }
+                                });
+
+                                const data = await response.json();
+                                if (data.text) {
+                                    messageInput.value = data.text;
+                                }
+                            } catch (error) {
+                                console.error('API 호출 오류:', error);
+                            }
+                        };
+
+                        mediaRecorder.start();
+                        isRecording = true;
+                        sendTtsButton.style.backgroundColor = 'red';
+                        checkSilence();  // 음성 감지 시작
+
+                    } catch (error) {
+                        console.error('마이크 접근 오류:', error);
+                    }
+                }
+            });
+            // STT end
+
+
+            // TTS
+            function textToSpeech(text) {
+                fetch('/tts/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({ text: text })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.audio_data) {
+                            const audio = new Audio(`data:audio/mpeg;base64,${data.audio_data}`);
+                            audio.play();
+                        } else {
+                            console.error('TTS 오류:', data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('TTS 호출 오류:', error);
+                    });
+            }
+            // TTS end
+
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
         });
     </script>
 </body>
