@@ -14,6 +14,8 @@ from .views import (
     memorium_chatbot_view,
     AssistantListView,
     ChatbotAPIView,
+    speech_to_text,
+    text_to_speech
     )
 
 urlpatterns = [
@@ -35,5 +37,8 @@ urlpatterns = [
 
     path('api/assistants/', AssistantListView.as_view(), name='assistant-list'),
     path('api/chatbot/<int:id>/', ChatbotAPIView.as_view(), name='chatbot-api'),  # 새로운 챗봇 API
+
+    path('stt/', speech_to_text, name='speech_to_text'),
+    path('tts/', text_to_speech, name='text_to_speech'),
 
 ]
