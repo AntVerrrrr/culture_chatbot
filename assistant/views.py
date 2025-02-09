@@ -13,7 +13,9 @@ from openai import OpenAI, AssistantEventHandler
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-import re
+import tempfile
+from decouple import config
+import re, json, base64
 import logging
 logger = logging.getLogger(__name__)
 
@@ -310,3 +312,66 @@ class ChatbotAPIView(APIView):
             logger.error(f"Error processing request: {str(e)}")
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
+#-----------------------------------------------------------------------------------------------------------------------
+# SST
+def speech_to_text(request):
+    if request.method == 'POST':
+        if 'audio' not in request.FILES:
+            return JsonResponse({'error': 'No audio file provided'}, status=400)
+        audio_file = request.FILES['audio']
+        # 임시 파일 생성
+        tmp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.webm')  # with 문 밖에서 생성
+        tmp_file_path = tmp_file.name
+        try:
+            for chunk in audio_file.chunks():
+                tmp_file.write(chunk)
+            tmp_file.close()  # 파일 쓰기 완료 후 닫기
+            # Whisper API 호출
+            try:
+                with open(tmp_file_path, 'rb') as audio: # 파일을 다시 열어서 Whisper에 전달
+                    transcript = client.audio.transcriptions.create(
+                        model="whisper-1",
+                        file=audio,
+                        language="ko"
+                    )
+                    
+                # 임시 파일 삭제
+                os.unlink(tmp_file_path)
+                return JsonResponse({'text': transcript.text})
+            except Exception as whisper_e:
+                print(f"Whisper API 오류: {whisper_e}") # 구체적인 예외 메시지 출력
+                import traceback
+                traceback.print_exc() # 스택 트레이스 출력
+                return JsonResponse({'error': str(whisper_e)}, status=400) # 에러 반환
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+        finally:
+            # 에러가 발생하더라도 임시 파일 삭제
+            if os.path.exists(tmp_file_path):
+                try:
+                    os.unlink(tmp_file_path) # 파일 삭제 시도
+                except Exception as unlink_err:
+                    print(f"파일 삭제 오류: {unlink_err}") # 삭제 실패 시 로그
+        return JsonResponse({'error': 'Invalid request'}, status=400)
+#-----------------------------------------------------------------------------------------------------------------------
+# TTS 
+def text_to_speech(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            text = data.get('text')
+            if not text:
+                return JsonResponse({'error': 'Text is required'}, status=400)
+            # OpenAI TTS API 호출
+            response = client.audio.speech.create(
+            model="tts-1",
+            voice="alloy", # alloy, echo, fable, onyx, nova, shimmer 중 선택
+            input=text,
+            speed=1.0
+            )
+            # 오디오 데이터를 base64로 인코딩
+            audio_data = base64.b64encode(response.content).decode('utf-8')
+            return JsonResponse({'audio_data': audio_data})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+        return JsonResponse({'error': 'Invalid request'}, status=400)
