@@ -1,10 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework import generics
+from django.views.decorators.csrf import csrf_exempt
 from .models import Province, CityCountyTown, Assistant
 from .serializers import ProvinceSerializer, AssistantSerializer, CityCountyTownSerializer
 from django.http import StreamingHttpResponse, JsonResponse
 import time
-# import openai
 import os
 from rest_framework.exceptions import ValidationError
 from dotenv import load_dotenv
@@ -314,6 +314,7 @@ class ChatbotAPIView(APIView):
 
 #-----------------------------------------------------------------------------------------------------------------------
 # SST
+@csrf_exempt  # CSRF 검사를 예외 처리
 def speech_to_text(request):
     if request.method == 'POST':
         if 'audio' not in request.FILES:
@@ -354,7 +355,8 @@ def speech_to_text(request):
                     print(f"파일 삭제 오류: {unlink_err}") # 삭제 실패 시 로그
         return JsonResponse({'error': 'Invalid request'}, status=400)
 #-----------------------------------------------------------------------------------------------------------------------
-# TTS 
+# TTS
+@csrf_exempt  # CSRF 검사를 예외 처리
 def text_to_speech(request):
     if request.method == 'POST':
         try:

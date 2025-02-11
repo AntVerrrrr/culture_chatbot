@@ -118,13 +118,13 @@ TEMPLATES = [
         },
     },
 ]
-
+# csrf토큰 설정---------------------------------------------------------------------------------------------------
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = [
     "https://sgimagine.com",  # 허용할 도메인
     "https://www.sgimagine.com",
     "http://localhost:8000",    # 로컬 개발 중일 때 허용
-    "http://158.247.200.5",     # 서버의 IP 주소 (예시)
+    "http://158.247.200.5",     # 서버의 IP 주소
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -133,10 +133,31 @@ CSRF_TRUSTED_ORIGINS = [
     "http://158.247.200.5",
 ]
 
+# CORS 요청 허용 메서드 추가 (모바일 및 외부 요청 대응)
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "PUT",
+    "DELETE",
+    "OPTIONS"
+]
+
+# 허용할 요청 헤더 추가
+CORS_ALLOW_HEADERS = [
+    "content-type",
+    "x-csrftoken",
+    "authorization",
+    "accept"
+]
+
+# 세션 기반 인증 허용 (로그인 인증 관련)
+CORS_ALLOW_CREDENTIALS = True
+
+# wsgi----------------------------------------------------------------------------------------------------
 WSGI_APPLICATION = 'culture_chatbot.wsgi.application'
 
 
-# Database
+# Database---------------------------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
