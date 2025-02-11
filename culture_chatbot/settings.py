@@ -66,8 +66,14 @@ if not SECRET_KEY:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
-
+# ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    "sgimagine.com",
+    "www.sgimagine.com",
+    "158.247.200.5",  # 서버의 IP 주소
+    "localhost",
+    "127.0.0.1",
+]
 
 # Application definition
 
@@ -113,10 +119,18 @@ TEMPLATES = [
     },
 ]
 
+CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = [
-    "https://your-domain.com",  # 허용할 도메인
+    "https://sgimagine.com",  # 허용할 도메인
+    "https://www.sgimagine.com",
     "http://localhost:8000",    # 로컬 개발 중일 때 허용
     "http://158.247.200.5",     # 서버의 IP 주소 (예시)
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://sgimagine.com",
+    "https://www.sgimagine.com",
+    "http://158.247.200.5",
 ]
 
 WSGI_APPLICATION = 'culture_chatbot.wsgi.application'
