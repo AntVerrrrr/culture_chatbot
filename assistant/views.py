@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 # -------------------------------------------------------------
 # 첫 번째 페이지: 추천 페이지
 def main_view(request):
-    descriptions = ["라운지(여행공간)와 함께하는 안동 여행", "데이트 코스로 제격", "로컬 음식에 담긴 이야기"]
+    descriptions = ["라운지(여행공간)와 함께하는 안동 여행", "데이트 코스로 제격", "로컬 음식에 담긴 이야기", "설화로 떠나는 로컬 여행"]
     assistants_by_description = {}
 
     # 각 description에 맞는 어시스턴트 데이터를 가져옴
