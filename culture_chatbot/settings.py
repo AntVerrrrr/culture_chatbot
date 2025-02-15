@@ -70,7 +70,10 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "sgimagine.com",
     "www.sgimagine.com",
-    "45.77.15.145"
+    "koreaura.sgimagine.com",
+    "45.77.15.145",    # 서버 아이피
+    "127.0.0.1",       # 로컬호스트
+    "localhost"        # 로컬 테스트
 ]
 
 # Application definition
