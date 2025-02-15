@@ -70,9 +70,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "sgimagine.com",
     "www.sgimagine.com",
-    "158.247.200.5",  # 서버의 IP 주소
-    "localhost",
-    "127.0.0.1",
+    "45.77.15.145"
 ]
 
 # Application definition
