@@ -122,13 +122,13 @@ CORS_ALLOWED_ORIGINS = [
     "https://sgimagine.com",  # 허용할 도메인
     "https://www.sgimagine.com",
     "http://localhost:8000",    # 로컬 개발 중일 때 허용
-    "http://158.247.200.5",     # 서버의 IP 주소
+    "http://45.77.15.145",     # 서버의 IP 주소
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://sgimagine.com",
     "https://www.sgimagine.com",
-    "http://158.247.200.5",
+    "http://45.77.15.145",
 ]
 
 # CORS 요청 허용 메서드 추가 (모바일 및 외부 요청 대응)
