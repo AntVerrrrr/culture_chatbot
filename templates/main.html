@@ -53,7 +53,9 @@
                         {% for assistant in assistants %}
                             <div class="swiper-slide tour-item">
                                 <a href="/chatbot/{{ assistant.id }}/" onclick="setArrayIndex(1)" class="chatbot-link">
-                                    <img src="{{ assistant.photo.url }}" alt="{{ assistant.name }}">
+<!--                                    <img src="{{ assistant.photo.url }}" alt="{{ assistant.name }}">-->
+                                    <img src="{% if assistant.photo %}{{ assistant.photo.url }}{% else %}{{ MEDIA_URL }}assistnat_photos/default.png{% endif %}" alt="{{ assistant.name }}">
+
                                     <p class="tour-title">{{ assistant.name }}</p>
                                     <!--<p class="tour-address"> {{ assistant.province.name }}, {{ assistant.city_county_town.name }}, {{ assistant.country }}</p>-->
                                     <p class="tour-address">

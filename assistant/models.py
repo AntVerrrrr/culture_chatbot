@@ -24,7 +24,12 @@ class Tag(models.Model):
 class Assistant(models.Model):
     assistant_id = models.CharField(max_length=255, unique=True, null=False, default='default_assistant_id')  # 어시스턴트 아이디
     name = models.CharField(max_length=255)  # 어시스턴트 이름
-    photo = models.ImageField(upload_to='assistant_photos/', blank=True, null=True)  # 어시스턴트 이미지
+    photo = models.ImageField(
+        upload_to='assistant_photos/',
+        null=False,
+        blank=False,
+        default='assistant_photos/default.png'  # 기본 이미지 설정
+    ) # 어시스턴트 이미지
     description = models.TextField(default='No description available')  # 어시스턴트 설명
     country = models.CharField(max_length=100, default='대한민국')  # 나라
     province = models.ForeignKey('Province', on_delete=models.CASCADE, default=1)  # 기본값으로 ID 1인 Province 사용 경상북도, 경상남도 등등
