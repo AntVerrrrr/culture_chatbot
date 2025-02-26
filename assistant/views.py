@@ -5,19 +5,33 @@ from .models import Province, CityCountyTown, Assistant
 from .serializers import ProvinceSerializer, AssistantSerializer, CityCountyTownSerializer
 from django.http import StreamingHttpResponse, JsonResponse
 import time
+from django.utils.timezone import now
 import os
 from rest_framework.exceptions import ValidationError
 from dotenv import load_dotenv
 from typing_extensions import override
 from openai import OpenAI, AssistantEventHandler
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.views import APIView
 import tempfile
 from decouple import config
 import re, json, base64
 import logging
 logger = logging.getLogger(__name__)
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.core.cache import cache
+from concurrent.futures import ThreadPoolExecutor
+#import logging
+
+import redis
+from django_redis import get_redis_connection
+from django.core.cache import cache
+from concurrent.futures import ThreadPoolExecutor
+import asyncio
+from functools import lru_cache
+from django.conf import settings
+
 
 # -------------------------------------------------------------
 # 첫 번째 페이지: 추천 페이지
@@ -247,30 +261,85 @@ load_dotenv(override=True)
 # OpenAI API 클라이언트 초기화
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+# 10,000 원 = 약 $6.9(1$ = 1450원)
+# GPT-4o-mini 기준 입력(프롬프트): 1,000 토큰당 $0.01, 출력(응답): 1,000 토큰당 $0.03(1달러면 100,000개 토큰)
+# 6.9 * 100,000 = 690,000 토큰 / 한 사람당
+# 하루 토큰 제한
+TOKEN_LIMIT_PER_DAY = 690000
+
+
 # Chatbot API (질문을 받아 OpenAI로 처리)
 class ChatbotAPIView(APIView):
+    def __init__(self):
+        super().__init__()
+        self.thread_pool = ThreadPoolExecutor(max_workers=10)
+        try:
+            self.redis_connection = get_redis_connection("default")
+        except Exception as e:
+            self.redis_connection = None
+
+    def get_client_ip(self, request):
+        """사용자의 IP 주소 가져오기"""
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+
+        return ip
+
+    def update_token_usage(self, ip, tokens_used):
+        """IP 기반으로 토큰 사용량 업데이트"""
+        if not self.redis_connection:
+            print("Redis 연결이 없으므로 토큰 사용량을 추적할 수 없습니다.")
+            return 0  # Redis가 없으면 사용량을 0으로 처리
+
+        today = now().date()
+        cache_key = f"token_usage:{ip}:{today}"
+        try:
+            used_tokens = self.redis_connection.get(cache_key)
+            used_tokens = int(used_tokens) if used_tokens else 0
+            new_total = used_tokens + tokens_used
+            self.redis_connection.set(cache_key, new_total, ex=86400)  # 24시간 유지
+            return new_total
+        except Exception as e:
+            print(f"Redis 오류: {e}")
+            return 0
+
+    def check_token_limit(self, ip, tokens_used):
+        """토큰 초과 여부 확인"""
+        new_total = self.update_token_usage(ip, tokens_used)
+
+        return new_total > TOKEN_LIMIT_PER_DAY
 
     def post(self, request, id):
-        # logger.debug(f"Request Data: {request.data}")
-
-        # assistant_id와 document_id는 DB에서 가져옴
+        ip = self.get_client_ip(request)
         assistant = get_object_or_404(Assistant, id=id)
         assistant_id = request.data.get('assistant_id')
         document_id = request.data.get('document_id')
         question = request.data.get('question')
+        fast_response = request.data.get('fast_response', False)  # 빠른 응답 모드
 
-        # 파일 유효성 확인--------------------------
-        try:
-            file_info = client.files.retrieve(file_id=document_id)
-            logger.debug(f"File Info: {file_info}")
-        except Exception as e:
-            logger.error(f"Invalid document ID: {document_id}, error: {str(e)}")
-            return Response({"error": f"Invalid document ID: {document_id}"}, status=404)
+        # 토큰 초과 확인
+        if self.check_token_limit(ip, 1000):  # 요청당 1000 토큰 가정
+            return Response({"error": "Token limit exceeded"}, status=429)
 
+        prompt = f"""
+        당신은 '{assistant.name}'입니다.
+        - 사람과 대화하듯 답변해주세요.
+        - 첨부된 파일의 내용을 바탕으로 답변하세요.
+        """
 
+        # 빠른 응답 모드일 경우 프롬프트 추가
+        if fast_response:
+            prompt += "\n- 답변은 2문장 이내로 요약해서 해주세요."
 
+        # OpenAI API 호출
+        response = self.process_chat_request(assistant_id, document_id, question, prompt)
 
-        # 기존 스레드를 사용하지 않고, 항상 새로운 스레드를 생성-------------------
+        return Response({"response": response}, status=status.HTTP_200_OK)
+
+    def process_chat_request(self, assistant_id, document_id, question, prompt):
         try:
             thread = client.beta.threads.create(
                 messages=[
@@ -283,34 +352,21 @@ class ChatbotAPIView(APIView):
                     }
                 ],
             )
-            thread_id = thread.id  # 새로 생성된 스레드 ID 저장
-            # logger.debug(f"Created Thread ID: {thread_id}")
 
             event_handler = EventHandler()
             with client.beta.threads.runs.stream(
-                    thread_id=thread_id,
+                    thread_id=thread.id,
                     assistant_id=assistant_id,
-                    instructions=f"""
-                    당신은 '{assistant.name}'입니다.
-                    - 사람과 대화하듯이 억양을 질문에 대한 답변을 해주세요. 특히 '{assistant.name}'이 사람일 경우 그 인물의 성격을 이용하여 답변해주세요.
-                    - 첨부된 파일에는 '{assistant.name}'와 관련된 여러 질문(Qn)과 답변(An)이 포함되어 있습니다.
-                    - 사용자의 질문과 일치하거나 가장 유사한 질문을 찾아서 그에 대응하는 답변을 정확히 제공합니다.
-                    - 이전의 맥락을 무시하고, 파일에 있는 정보만을 바탕으로 답변하세요.
-                    """,
+                    instructions=prompt,
                     event_handler=event_handler,
             ) as stream:
                 stream.until_done()
 
-            # 스레드 사용 후 자동 삭제
-            client.beta.threads.delete(thread_id)
+            client.beta.threads.delete(thread.id)
 
-            logger.debug(f"Responses collected: {event_handler.responses}")
-
-            return Response({"response": event_handler.responses}, status=status.HTTP_200_OK)
-
+            return event_handler.responses
         except Exception as e:
-            logger.error(f"Error processing request: {str(e)}")
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return {"error": str(e)}
 
 #-----------------------------------------------------------------------------------------------------------------------
 # SST
@@ -320,6 +376,7 @@ def speech_to_text(request):
         if 'audio' not in request.FILES:
             return JsonResponse({'error': 'No audio file provided'}, status=400)
         audio_file = request.FILES['audio']
+
         # 임시 파일 생성
         tmp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.webm')  # with 문 밖에서 생성
         tmp_file_path = tmp_file.name
@@ -327,32 +384,36 @@ def speech_to_text(request):
             for chunk in audio_file.chunks():
                 tmp_file.write(chunk)
             tmp_file.close()  # 파일 쓰기 완료 후 닫기
+
             # Whisper API 호출
             try:
-                with open(tmp_file_path, 'rb') as audio: # 파일을 다시 열어서 Whisper에 전달
+                with open(tmp_file_path, 'rb') as audio:  # 파일을 다시 열어서 Whisper에 전달
                     transcript = client.audio.transcriptions.create(
                         model="whisper-1",
                         file=audio,
                         language="ko"
                     )
-                    
+
                 # 임시 파일 삭제
                 os.unlink(tmp_file_path)
                 return JsonResponse({'text': transcript.text})
+
             except Exception as whisper_e:
-                print(f"Whisper API 오류: {whisper_e}") # 구체적인 예외 메시지 출력
+                print(f"Whisper API 오류: {whisper_e}")  # 구체적인 예외 메시지 출력
                 import traceback
-                traceback.print_exc() # 스택 트레이스 출력
-                return JsonResponse({'error': str(whisper_e)}, status=400) # 에러 반환
+                traceback.print_exc()  # 스택 트레이스 출력
+                return JsonResponse({'error': str(whisper_e)}, status=400)  # 에러 반환
+
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
         finally:
             # 에러가 발생하더라도 임시 파일 삭제
             if os.path.exists(tmp_file_path):
                 try:
-                    os.unlink(tmp_file_path) # 파일 삭제 시도
+                    os.unlink(tmp_file_path)  # 파일 삭제 시도
                 except Exception as unlink_err:
-                    print(f"파일 삭제 오류: {unlink_err}") # 삭제 실패 시 로그
+                    print(f"파일 삭제 오류: {unlink_err}")  # 삭제 실패 시 로그
+
         return JsonResponse({'error': 'Invalid request'}, status=400)
 #-----------------------------------------------------------------------------------------------------------------------
 # TTS
@@ -362,8 +423,10 @@ def text_to_speech(request):
         try:
             data = json.loads(request.body)
             text = data.get('text')
+
             if not text:
                 return JsonResponse({'error': 'Text is required'}, status=400)
+
             # OpenAI TTS API 호출
             response = client.audio.speech.create(
             model="tts-1",
@@ -371,9 +434,12 @@ def text_to_speech(request):
             input=text,
             speed=1.0
             )
+
             # 오디오 데이터를 base64로 인코딩
             audio_data = base64.b64encode(response.content).decode('utf-8')
             return JsonResponse({'audio_data': audio_data})
+
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
+
         return JsonResponse({'error': 'Invalid request'}, status=400)

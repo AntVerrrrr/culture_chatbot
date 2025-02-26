@@ -14,9 +14,10 @@ body {
 /** 메뉴 바 **/
 .menu-bar {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     padding: 15px;
+    position: relative;
 }
 
 .menu-bar button {
@@ -268,4 +269,81 @@ body {
 #sendTts.recording {
     background-color: red;
     border-radius: 50%;
+}
+
+.loading-animation {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 3px solid #ccc;
+    border-top-color: #3498db;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.message-container.ai-message.thinking .message-content {
+    font-style: italic;
+    color: gray;
+}
+
+.message-container.ai-message.thinking .message-content p {
+    display: flex;
+    align-items: center;
+}
+
+.message-container.ai-message.thinking .message-content p .loading-animation {
+    margin-left: 5px;
+}
+
+.welcome-message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-logo-button {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border: none;
+    background: none;
+    padding: 0;
+}
+
+.menu-right {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    flex-grow: 1;
+    padding-bottom: 5px;
+    text-align: right;
+}
+
+.fast-response-button {
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8em;
+    margin-left: auto;
+}
+
+.fast-response-button img {
+    width: 20px;
+    height: 20px;
+}
+
+.fast-response-button.active {
+    background-color: azure;
 }
