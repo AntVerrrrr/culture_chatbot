@@ -36,7 +36,7 @@ from django.conf import settings
 # -------------------------------------------------------------
 # 첫 번째 페이지: 추천 페이지
 def main_view(request):
-    descriptions = ["라운지(여행공간)와 함께하는 안동 여행", "데이트 코스로 제격", "로컬 음식에 담긴 이야기", "설화로 떠나는 로컬 여행"]
+    descriptions = ["다양한 시야로 즐기는 로컬", "역사와 문화를 따라 떠나는 로컬 여행", "로컬 맛집 안에 숨은 이야기"]
     assistants_by_description = {}
 
     # 각 description에 맞는 어시스턴트 데이터를 가져옴
