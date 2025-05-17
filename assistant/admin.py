@@ -13,8 +13,10 @@ class AssistantAdmin(admin.ModelAdmin):
     list_filter = ['country', 'province', 'city_county_town', 'tags']
     fields = (
         'assistant_id', 'name', 'photo', 'description', 'country', 'province', 'city_county_town',
-        'document_id', 'tags', 'question_1', 'question_2', 'question_3', 'question_4',
-        'question_5', 'question_6', 'question_7', 'question_8', 'question_9', 'question_10', 'welcome_message'
+        'document_id', 'tags', 'prompt_context',
+        'question_1', 'question_2', 'question_3', 'question_4',
+        'question_5', 'question_6', 'question_7', 'question_8', 'question_9', 'question_10',
+        'welcome_message'
     )
     filter_horizontal = ('tags',)  # ManyToManyField를 쉽게 선택할 수 있도록 필터 사용
 

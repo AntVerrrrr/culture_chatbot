@@ -195,8 +195,6 @@ def lounge_chatbot_view(request, id):
     })
 
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-
 # -------------------------------------------------------------------------------------------------------------------
 # 메모리움 챗봇 페이지 렌더링
 def memorium_chatbot_view(request, id):
@@ -240,6 +238,7 @@ class EventHandler(AssistantEventHandler):
     def __init__(self):
         super().__init__()  # 상위 클래스 초기화 호출
         self.responses = []
+        self.usage = 0
 
     @override
     def on_text_created(self, text) -> None:
@@ -253,6 +252,9 @@ class EventHandler(AssistantEventHandler):
         clean_text = clean_response(message_content)  # 메타데이터 제거 후 추가
         self.responses.append(clean_text)
 
+        # usage 정보 저장
+        if hasattr(message, 'usage') and message.usage and message.usage.total_tokens:
+            self.usage = message.usage.total_tokens
 
 #-----------------------------------------------------------------------------------------------------------------------
 # .env 파일 로드 (기존 환경 변수 덮어쓰기 허용)
@@ -306,11 +308,20 @@ class ChatbotAPIView(APIView):
             print(f"Redis 오류: {e}")
             return 0
 
-    def check_token_limit(self, ip, tokens_used):
-        """토큰 초과 여부 확인"""
-        new_total = self.update_token_usage(ip, tokens_used)
+    def check_token_limit(self, ip):
+        """IP 기준 누적 사용량이 초과됐는지 확인"""
+        if not self.redis_connection:
+            return False  # Redis 없으면 초과 확인 못 함
 
-        return new_total > TOKEN_LIMIT_PER_DAY
+        today = now().date()
+        cache_key = f"token_usage:{ip}:{today}"
+        try:
+            used_tokens = self.redis_connection.get(cache_key)
+            used_tokens = int(used_tokens) if used_tokens else 0
+            return used_tokens > TOKEN_LIMIT_PER_DAY
+        except Exception as e:
+            print(f"Redis 오류 (check): {e}")
+            return False
 
     def post(self, request, id):
         ip = self.get_client_ip(request)
@@ -320,11 +331,7 @@ class ChatbotAPIView(APIView):
         question = request.data.get('question')
         fast_response = request.data.get('fast_response', False)  # 빠른 응답 모드
 
-        # 토큰 초과 확인
-        if self.check_token_limit(ip, 1000):  # 요청당 1000 토큰 가정
-            return Response({"error": "Token limit exceeded"}, status=429)
-
-        prompt = f"""
+        prompt = assistant.prompt_context or f"""
         당신은 '{assistant.name}'입니다.
         - 사람과 대화하듯 답변해주세요.
         - 첨부된 파일의 내용을 바탕으로 답변하세요.
@@ -334,10 +341,24 @@ class ChatbotAPIView(APIView):
         if fast_response:
             prompt += "\n- 답변은 2문장 이내로 요약해서 해주세요."
 
-        # OpenAI API 호출
-        response = self.process_chat_request(assistant_id, document_id, question, prompt)
+        # GPT 호출 및 실제 토큰 사용량 수집
+        responses, tokens_used = self.process_chat_request(
+            assistant_id, document_id, question, prompt
+        )
 
-        return Response({"response": response}, status=status.HTTP_200_OK)
+        # 오류 반환 처리
+        if isinstance(responses, dict) and "error" in responses:
+            return Response(responses, status=500)
+
+        # 사용량 저장
+        self.update_token_usage(ip, tokens_used)
+
+        # 초과 여부 확인
+        if self.check_token_limit(ip):
+            return Response({"error": "Token limit exceeded"}, status=429)
+
+        return Response({"response": responses}, status=status.HTTP_200_OK)
+
 
     def process_chat_request(self, assistant_id, document_id, question, prompt):
         try:
@@ -352,8 +373,10 @@ class ChatbotAPIView(APIView):
                     }
                 ],
             )
-
+            # 응답 수집 핸들러
             event_handler = EventHandler()
+
+            # 응답 생성 (stream 방식)
             with client.beta.threads.runs.stream(
                     thread_id=thread.id,
                     assistant_id=assistant_id,
@@ -362,11 +385,27 @@ class ChatbotAPIView(APIView):
             ) as stream:
                 stream.until_done()
 
-            client.beta.threads.delete(thread.id)
+            # responses 수집
+            responses = event_handler.responses
 
-            return event_handler.responses
+            # 실제 사용된 토큰 수 가져오기 (이 부분은 이후 확장)
+            tokens_used = event_handler.usage
+
+            return responses, tokens_used
+
+
         except Exception as e:
-            return {"error": str(e)}
+            logger.exception("OpenAI 처리 중 오류 발생")
+            return {"error": str(e)}, 0
+
+        finally:
+            # 스레드 삭제는 항상 실행
+            if thread:
+                try:
+                    client.beta.threads.delete(thread.id)
+                except Exception as delete_err:
+                    logger.warning(f"스레드 삭제 실패: {delete_err}")
+
 
 #-----------------------------------------------------------------------------------------------------------------------
 # SST

@@ -55,6 +55,13 @@ class Assistant(models.Model):
     question_9 = models.CharField(max_length=255, null=True, blank=True)
     question_10 = models.CharField(max_length=255, null=True, blank=True)
 
+    # 어시스턴트 성격 설정
+    prompt_context = models.TextField(
+        blank=True,
+        null=True,
+        help_text="이 Assistant가 따르는 기본 프롬프트를 적어주세요 (말투/성격/역할 등)"
+    )
+
     def __str__(self):
         return self.name
 

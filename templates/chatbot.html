@@ -182,7 +182,8 @@
                     $('#messageInput').val('');
                     //sendMessageToBot(message);
                     // "검색중..." 메시지를 표시
-                    thinkingMessageElement = showThinkingMessage();
+                    $('#sendButton').prop('disabled', true); // 버튼 비활성화
+                    //thinkingMessageElement = showThinkingMessage();
                     sendMessageToBot(message); // 메시지 전송
                 }
             });
@@ -196,6 +197,11 @@
 
             // "검색중..." 메시지를 표시하는 함수
             function showThinkingMessage() {
+                if (thinkingMessageElement) {
+                    thinkingMessageElement.remove();
+                    thinkingMessageElement = null;
+                }
+
                 const messageContainer = $('<div>', { class: 'message-container ai-message thinking' });
                 const profileImage = $('<img>', {
                     src: '{{ assistant.photo.url }}',
@@ -219,7 +225,8 @@
                 $('#messageList').append(messageContainer);
                 scrollToBottom();
 
-                return messageContainer;
+                // 전역 변수로 저장하여 나중에 삭제할 수 있도록 함
+                thinkingMessageElement = messageContainer;
             }
 
             // 메시지를 화면에 추가하는 함수
@@ -272,7 +279,10 @@
 
             function scrollToBottom() {
                 const chatContainer = $('#chatContainer');
-                chatContainer.scrollTop(chatContainer[0].scrollHeight);
+                // 사용자가 스크롤을 올려둔 상태가 아니라면 자동 스크롤
+                if (!isUserScrollingUp) {
+                    chatContainer.scrollTop(chatContainer.prop('scrollHeight'));
+                }
             }
 
             function sendMessageToBot(message) {
@@ -294,6 +304,15 @@
 
                 console.log('Sending data:', data);  // 요청 전에 데이터 출력3
 
+                // 🔹 사용자가 직접 입력한 경우에만 TTS 실행 (STT 입력이면 실행 안 함)
+                if (!sttUsed) {
+                    textToSpeech(message);
+                }
+
+                // ⬇ 메시지 전송 전에 버튼 비활성화
+                $('#sendButton').prop('disabled', true);
+                showThinkingMessage(); // "검색중..." 메시지 표시
+
                 fetch(apiBaseUrl, {
                     method: 'POST',
                     headers: {
@@ -302,43 +321,55 @@
                     },
                     body: JSON.stringify(data),
                 })
-                    .then(response => {
-                        console.log(response);  // 응답 상태 로그4
-                        if (response.ok) {
-                            return response.json();
-                        } else {
-                            throw new Error('HTTP error, status = ' + response.status);
-                        }
-                    })
-                    .then(data => {
-                        console.log(data);  // 응답 데이터 로그5
-                        // 응답을 받으면 "검색중..." 메시지를 삭제
-                        if (thinkingMessageElement) {
-                            thinkingMessageElement.remove();
-                            thinkingMessageElement = null;
-                        }
+                .then(response => {
+                    console.log(response);  // 응답 상태 로그4
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('HTTP error, status = ' + response.status);
+                    }
+                })
+                .then(data => {
+                    console.log(data);  // 응답 데이터 로그5
 
-                        if (Array.isArray(data.response)) {
-                            appendMessageWithTypingEffect(data.response.join('\n'), 'ai');
-                        } else {
-                            appendMessageWithTypingEffect(data.response, 'ai');
-                        }
-                    })
-                    .catch((error) => {
-                        console.error('Error:', error);
+                    // 응답을 받으면 "검색중..." 메시지를 삭제
+                    if (thinkingMessageElement) {
+                        thinkingMessageElement.remove();
+                        thinkingMessageElement = null;
+                    }
 
-                        // 오류 발생 시 "검색중..." 메시지를 삭제
-                        if (thinkingMessageElement) {
-                            thinkingMessageElement.remove();
-                            thinkingMessageElement = null;
-                        }
+                    let botResponse = Array.isArray(data.response) ? data.response.join('\n') : data.response;
 
-                        if (error.message.includes('429')) {
-                            appendMessage('토큰 하루 사용량이 초과되었습니다. 24시간 후에 다시 시도하여 주십시오.', 'ai');
-                        } else {
-                            appendMessage('챗봇 답변을 가져오는 중 오류가 발생했습니다.', 'ai');
-                        }
-                    });
+                    // 🔹 챗봇 응답도 TTS 실행
+                    textToSpeech(botResponse);
+
+                    appendMessageWithTypingEffect(botResponse, 'ai');
+
+                    // 🔹 버튼 다시 활성화 및 입력창 포커스
+                    $('#sendButton').prop('disabled', false);
+                    $('#messageInput').focus();  // 🔹 메시지 전송 후 입력창 자동 포커스
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+
+                    // 오류 발생 시 "검색중..." 메시지를 삭제
+                    if (thinkingMessageElement) {
+                        thinkingMessageElement.remove();
+                        thinkingMessageElement = null;
+                    }
+
+                    if (error.message.includes('429')) {
+                        appendMessage('토큰 하루 사용량이 초과되었습니다. 24시간 후에 다시 시도하여 주십시오.', 'ai');
+                    } else {
+                        appendMessage('챗봇 답변을 가져오는 중 오류가 발생했습니다.', 'ai');
+                    }
+                    // ⬇ 오류 발생 시 버튼 다시 활성화
+                    $('#sendButton').prop('disabled', false);
+                    $('#messageInput').focus();  // 🔹 오류 발생 후에도 입력창 포커스 유지
+                });
+
+                // 🔹 STT 입력 처리 후 다시 false로 초기화 (다음 질문이 텍스트일 경우 대비)
+                sttUsed = false;
             }
 
             // AI 메시지를 한 글자씩 타이핑 효과로 추가하는 함수
@@ -460,86 +491,61 @@
             let source;
 
             sendTtsButton.addEventListener('click', async function () {
-                if (!isRecording) {
-                    sttUsed = true;
-                    try {
-                        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                if (isRecording) return;  // 이미 녹음 중이면 실행되지 않음
+                sttUsed = true;
 
-                        // 음성 감지 설정
-                        audioContext = new AudioContext();
-                        analyser = audioContext.createAnalyser();
-                        source = audioContext.createMediaStreamSource(stream);
-                        source.connect(analyser);
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-                        mediaRecorder = new MediaRecorder(stream);
-                        audioChunks = [];
+                    // 버튼 색상 변경
+                    sendTtsButton.style.backgroundColor = 'red';
 
-                        mediaRecorder.ondataavailable = (event) => {
-                            audioChunks.push(event.data);
-                        };
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
 
-                        let silenceTimer = null;
-                        const checkSilence = () => {
-                            const array = new Uint8Array(analyser.frequencyBinCount);
-                            analyser.getByteFrequencyData(array);
+                    mediaRecorder.ondataavailable = (event) => {
+                        audioChunks.push(event.data);
+                    };
 
-                            // 음성 레벨 체크
-                            const average = array.reduce((a, b) => a + b) / array.length;
+                    mediaRecorder.onstop = async () => {
+                        sendTtsButton.style.backgroundColor = ''; // 원래 색상으로 복원
+                        isRecording = false;  // 녹음 상태 초기화
 
-                            if (average < 10) {  // 임계값
-                                if (!silenceTimer) {
-                                    silenceTimer = setTimeout(() => {
-                                        if (isRecording) {
-                                            mediaRecorder.stop();
-                                            isRecording = false;
-                                            sendTtsButton.style.backgroundColor = '';
-                                            stream.getTracks().forEach(track => track.stop());
-                                        }
-                                    }, 2000);  // 2초 동안 소리가 없으면 중지
-                                }
-                            } else {
-                                if (silenceTimer) {
-                                    clearTimeout(silenceTimer);
-                                    silenceTimer = null;
-                                }
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        const formData = new FormData();
+                        formData.append('audio', audioBlob);
+
+                        try {
+                            const response = await fetch('/stt/', {
+                                method: 'POST',
+                                body: formData,
+                                headers: { 'X-CSRFToken': getCookie('csrftoken') }
+                            });
+
+                            const data = await response.json();
+                            if (data.text) {
+                                messageInput.value = data.text;  // 입력창에 텍스트 표시
+                                appendMessage(data.text, 'user');  // 사용자 채팅창에 메시지 추가
+                                sendMessageToBot(data.text);  // 자동으로 질문 전송
                             }
+                        } catch (error) {
+                            console.error('API 호출 오류:', error);
+                        }
+                    };
 
-                            if (isRecording) {
-                                requestAnimationFrame(checkSilence);
-                            }
-                        };
+                    mediaRecorder.start();
+                    isRecording = true;  // 녹음 상태 설정
 
-                        mediaRecorder.onstop = async () => {
-                            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                            const formData = new FormData();
-                            formData.append('audio', audioBlob);
+                    setTimeout(() => {
+                        if (isRecording) {
+                            mediaRecorder.stop();
+                            isRecording = false;
+                            sendTtsButton.style.backgroundColor = '';
+                        }
+                    }, 5000);  // 5초 후 자동 종료
 
-                            try {
-                                const response = await fetch('/stt/', {
-                                    method: 'POST',
-                                    body: formData,
-                                    headers: {
-                                        'X-CSRFToken': getCookie('csrftoken')
-                                    }
-                                });
-
-                                const data = await response.json();
-                                if (data.text) {
-                                    messageInput.value = data.text;
-                                }
-                            } catch (error) {
-                                console.error('API 호출 오류:', error);
-                            }
-                        };
-
-                        mediaRecorder.start();
-                        isRecording = true;
-                        sendTtsButton.style.backgroundColor = 'red';
-                        checkSilence();  // 음성 감지 시작
-
-                    } catch (error) {
-                        console.error('마이크 접근 오류:', error);
-                    }
+                } catch (error) {
+                    console.error('마이크 접근 오류:', error);
                 }
             });
             // STT end
@@ -547,7 +553,6 @@
 
             // TTS
             function textToSpeech(text) {
-
                 if (currentAudio) {
                     currentAudio.pause();
                     currentAudio = null;
@@ -560,31 +565,31 @@
                     },
                     body: JSON.stringify({ text: text })
                 })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.audio_data) {
-                            currentAudio = new Audio(`data:audio/mpeg;base64,${data.audio_data}`);
-                            // 오디오 재생 완료 이벤트
-                            currentAudio.onended = function () {
-                                currentAudio = null;
-                                // STT 버튼 활성화
-                                document.getElementById('sendTts').disabled = false;
-                            };
+                .then(response => response.json())
+                .then(data => {
+                    if (data.audio_data) {
+                        currentAudio = new Audio(`data:audio/mpeg;base64,${data.audio_data}`);
 
-                            // STT 버튼 비활성화
-                            document.getElementById('sendTts').disabled = true;
-                            currentAudio.play();
-                        } else {
-                            console.error('TTS 오류:', data.error);
-                            document.getElementById('sendTts').disabled = false;
-                        }
-                    })
-                    .catch(error => {
-                        console.error('TTS 호출 오류:', error);
+                        // STT 버튼 비활성화
+                        document.getElementById('sendTts').disabled = true;
+
+                        currentAudio.onended = function () {
+                            currentAudio = null;
+                            document.getElementById('sendTts').disabled = false;  // STT 버튼 활성화
+                        };
+
+                        currentAudio.play();
+                    } else {
+                        console.error('TTS 오류:', data.error);
                         document.getElementById('sendTts').disabled = false;
-                    });
-            }
-            // TTS end
+                    }
+                })
+                .catch(error => {
+                console.error('TTS 호출 오류:', error);
+                document.getElementById('sendTts').disabled = false;
+            });
+        }
+        // TTS end
 
         });
     </script>
