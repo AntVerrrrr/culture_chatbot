@@ -1,84 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <!-- static 태그 로드 -->
     {% load static %}
-
-    <!-- 정적 파일 경로에서 CSS 참조 -->
+    <link rel="stylesheet" href="{% static 'css/assistant/main.css' %}">
     <link rel="stylesheet" href="{% static 'css/assistant/search_results.css' %}">
 </head>
 <body>
-    <div class="main-container">
-        <header class="menu-bar">
-            <button id="menuButton"><a href="{% url 'main-select' %}"><img src="{% static 'image/assistant/newlogo.png' %}" alt="Menu"></a></button>
-{#            <button id="userButton"><img src="{% static 'image/assistant/user-circle.svg' %}" alt="User" class="size-12"></button>#}
-        </header>
+<div class="page-container">
+    <!-- 메뉴 바 -->
+    <header class="menu-bar">
+        <button id="menuButton">
+            <a href="{% url 'main-select' %}">
+                <img src="{% static 'image/assistant/newlogo.png' %}" alt="Menu">
+            </a>
+        </button>
+    </header>
 
-        <!-- 검색창 추가 -->
-        <div class="search-bar">
-            <div class="search-container">
-                <form method="GET" action="{% url 'search-results' %}">
-                    <input type="text" placeholder="대화하고 싶은 서비스를 검색해보세요" name="query" id="searchInput">
-                    <button id="searchButton" type="submit"><img src="{% static 'image/assistant/search.svg' %}" alt="Search"></button>
-                </form>
-            </div>
-        </div>
-
-        <!-- 카테고리 리스트 -->
-        <div>
-            <ul class="category-list">
-                <li><a href="{% url 'main-select' %}">크리에이터</a></li>
-                <li><a href="{% url 'local-select' %}">지역별</a></li>
-<!--              <li><a href="{% url 'thema-select' %}">테마별</a></li>-->
-                <li><a href="{% url 'independence-select' %}">독립운동</a></li>
-                <li><a href="{% url 'sommelier-select' %}">소믈리에</a></li>
-            </ul>
-        </div>
-    </div>    
-    
-    <div class="main-container">
-        <h2>검색 결과: "{{ query }}"</h2>
-        <div class="photo-grid" id="assistantList">
-            {% if results %}
-                {% for assistant in results %}
-                    <div class="photo-item">
-                        <a href="/chatbot/{{ assistant.id }}/" onclick="setArrayIndex(2)" >
-<!--                            <img src="{{ assistant.photo.url }}" alt="{{ assistant.name }}">-->
-                            <img src="{% if assistant.photo %}{{ assistant.photo.url }}{% else %}{{ MEDIA_URL }}assistnat_photos/default.png{% endif %}" alt="{{ assistant.name }}">
-                            <p class="photo-title">{{ assistant.name }}</p>
-                            <p class="tour-address">
-                                <!-- 우선순위별 해시태그 표시 -->
-                                {% for tag in assistant.tags.all|dictsort:"priority" %}
-                                    #{{ tag.name }}
-                                {% endfor %}
-                            </p>
-                        </a>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p>검색 결과가 없습니다.</p>
-            {% endif %}
+    <!-- 검색창 -->
+    <div class="search-bar">
+        <div class="search-container">
+            <form method="GET" action="{% url 'search-results' %}">
+                <input type="text" placeholder="대화하고 싶은 서비스를 검색해보세요" name="query" id="searchInput">
+                <button id="searchButton" type="submit">
+                    <img src="{% static 'image/assistant/search.svg' %}" alt="Search">
+                </button>
+            </form>
         </div>
     </div>
-</body>
+
+    <!-- 카테고리 -->
+    <ul class="category-list">
+        <li><a href="{% url 'main-select' %}">크리에이터</a></li>
+        <li><a href="{% url 'local-select' %}">지역별</a></li>
+        <li><a href="{% url 'independence-select' %}">독립운동</a></li>
+        <li><a href="{% url 'sommelier-select' %}">소믈리에</a></li>
+    </ul>
+
+    <!-- 검색 결과 -->
+    <h2>검색 결과: "{{ query }}"</h2>
+    <div class="photo-grid" id="assistantList">
+        {% if results %}
+            {% for assistant in results %}
+                <div class="photo-item">
+                    <a href="/chatbot/{{ assistant.id }}/" onclick="setArrayIndex(2)">
+                        <img src="
+                                {% if assistant.photo %}{{ assistant.photo.url }}{% else %}{{ MEDIA_URL }}assistnat_photos/default.png{% endif %}"
+                             alt="{{ assistant.name }}">
+                        <p class="assistant-title">{{ assistant.name }}</p>
+                        <p class="assistant-address">
+                            {% for tag in assistant.tags.all|dictsort:"priority" %}
+                                #{{ tag.name }}
+                            {% endfor %}
+                        </p>
+                    </a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>검색 결과가 없습니다.</p>
+        {% endif %}
+    </div>
+</div>
 
 <script>
-    // 세션 스토리지에 배열 인덱스 저장
     function setArrayIndex(index) {
         sessionStorage.setItem('arrayIndex', index);
     }
 </script>
+</body>
 </html>
-
-
-
-
-
-
-
-

@@ -1,598 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot for {{ assistant_name }}</title>
-
-    <!-- 추가된 부분 -->
-    <link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/nanummyeongjo.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Chatbot</title>
     {% load static %}
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
-    <link rel="stylesheet" href="{% static 'css/assistant/chatbot.css' %}">
+    <link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/nanummyeongjo.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="{% static 'css/assistant/chatbot.css' %}"/>
 </head>
 
-<body>
-    <div class="page-container">
-        <!-- 추가된 메뉴 바 -->
-        <header class="menu-bar">
-            <button id="menuButton" class="menu-logo-button">
-                <a href="{% url 'main-select' %}">
-                    <img src="{% static 'image/assistant/newlogo.png' %}" alt="Menu">
-                </a>
+<body data-assistant-img="{{ assistant.photo.url }}">
+<div class="page-container">
+    <!-- 헤더 -->
+    <header class="menu-bar">
+        <button id="menuButton" class="menu-logo-button">
+            <a href="{% url 'main-select' %}">
+                <img src="{% static 'image/assistant/newlogo.png' %}" alt="Menu">
+            </a>
+        </button>
+        <div class="menu-right">
+            <button id="fastResponseButton" class="fast-response-button">
+                <img src="{% static 'image/assistant/fast-response.png' %}" alt="빠른 응답">
+                빠른 응답
             </button>
-            <div class="menu-right"> <!-- 추가된 래퍼 -->
-                <button id="fastResponseButton" class="fast-response-button">
-                    <img src="{% static 'image/assistant/fast-response.png' %}" alt="빠른 응답">
-                    빠른 응답
-                </button>
-            </div>
-        </header>
+        </div>
+    </header>
 
-        <!-- 채팅 컨테이너 -->
-        <div id="chatContainer" class="chat-container">
-            <div id="messageList" class="message-list">
-                <div class="message-container ai-message">
-                    <img src="{{ assistant.photo.url }}" alt="{{ assistant.name }}" alt="Assistant Profile"
-                        class="profile-image">
-                    <div class="message-body">
-                        <div class="message-content">
-                            <p id="welcomeMessage">{{ assistant.welcome_message }}</p>
-                            <div class="actions-wrapper">
-                                <hr class="msg-hr">
-                                <div class="message-actions">
-                                    <button class="action-button like-btn"
-                                        data-like-img="{% static 'image/assistant/like.svg' %}">
-                                        <img src="{% static 'image/assistant/like.svg' %}" alt="좋아요">
-                                    </button>
-                                    <button class="action-button unlike-btn"
-                                        data-unlike-img="{% static 'image/assistant/unlike.svg' %}">
-                                        <img src="{% static 'image/assistant/unlike.svg' %}" alt="싫어요">
-                                    </button>
-                                    <button class="action-button action-button-cp copy-btn"
-                                        data-copy-img="{% static 'image/assistant/copy.svg' %}"
-                                        onclick="handleCopy(this)">
-                                        <img src="{% static 'image/assistant/copy.svg' %}" alt="복사">
-                                    </button>
-                                </div>
-                            </div>
+    <!-- 채팅 메시지 목록 -->
+    <div id="chatContainer" class="chat-container">
+        <div id="messageList" class="message-list">
+            <div class="message-container ai-message">
+                <img src="{{ assistant.photo.url }}" alt="{{ assistant.name }}" class="profile-image"/>
+                <div class="message-body">
+                    <div class="message-content">
+                        <p id="welcomeMessage">{{ assistant.welcome_message }}</p>
+                        <div class="actions-wrapper">
+                            {#                <hr class="msg-hr">#}
+                            {#                <div class="message-actions">#}
+                            {#                  <button class="action-button like-btn" data-like-img="{% static 'image/assistant/like.svg' %}">#}
+                            {#                    <img src="{% static 'image/assistant/like.svg' %}" alt="좋아요">#}
+                            {#                  </button>#}
+                            {#                  <button class="action-button unlike-btn" data-unlike-img="{% static 'image/assistant/unlike.svg' %}">#}
+                            {#                    <img src="{% static 'image/assistant/unlike.svg' %}" alt="싫어요">#}
+                            {#                  </button>#}
+                            {#                  <button class="action-button action-button-cp copy-btn"#}
+                            {#                    data-copy-img="{% static 'image/assistant/copy.svg' %}" onclick="handleCopy(this)">#}
+                            {#                    <img src="{% static 'image/assistant/copy.svg' %}" alt="복사">#}
+                            {#                  </button>#}
+                            {#                </div>#}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- 추가된 Swiper 슬라이더 -->
-        <div class="swiper-container">
+
+    <!-- 입력창 -->
+    <div class="input-container">
+        <!-- 질문 버블 슬라이더 -->
+        <div class="question-slider swiper-container">
             <div class="swiper-wrapper">
+                {% for q in questions %}
+                    <div class="swiper-slide">{{ q }}</div>
+                {% endfor %}
             </div>
         </div>
 
-        <!-- 입력 컨테이너 수정 -->
-        <div class="input-container">
-            <div class="input-wrapper">
-                <input id="messageInput" type="text" placeholder="무엇이든 물어보세요...">
-                <input type="hidden" id="assistant_id" value="{{ assistant_id }}">
-                <input type="hidden" id="document_id" value="{{ document_id }}">
-                <button id="sendButton" class="send-button">
-                    <img src="{% static 'image/assistant/message-send.svg' %}" alt="Send">
-                </button>
-                <button id="sendTts" class="send-button">
-                    <img src="{% static 'image/assistant/mic.png' %}" alt="Voice">
-                </button>
-            </div>
+        <!-- 입력창 -->
+        <div class="input-wrapper" id="inputWrapper">
+            <input id="messageInput" type="text" placeholder="무엇이든 물어보세요...">
+            <input type="hidden" id="assistant_id" value="{{ assistant_id }}">
+            <input type="hidden" id="assistant_db_id" value="{{ assistant.id }}">
+            <input type="hidden" id="document_id" value="{{ document_id }}">
+            <button id="sendButton" class="send-button">
+                <img src="{% static 'image/assistant/message-send.svg' %}" alt="Send">
+            </button>
+            <button id="sendTts" class="send-button" type="button">
+                <img src="{% static 'image/assistant/mic.png' %}" alt="Voice">
+            </button>
         </div>
     </div>
 
-    <!-- 이미지 URL을 JavaScript 변수로 전달 -->
-    <script>
-        const likeImgUrl = "{% static 'image/assistant/like.svg' %}";
-        const unlikeImgUrl = "{% static 'image/assistant/unlike.svg' %}";
-        const copyImgUrl = "{% static 'image/assistant/copy.svg' %}";
-    </script>
-
-    <!-- 추가된 스크립트 -->
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    <script>
-        // 기존의 getCookie 함수 유지
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-
-        const csrftoken = getCookie('csrftoken');
-
-        $(document).ready(function () {
-            const apiBaseUrl = '/api/chatbot/{{ id }}/';  // 서버의 API URL이 올바른지 확인
-            let isUserScrollingUp = true;
-            let currentAudio = null;
-            let fastResponseMode = false;
-
-            // 서버에서 전달된 질문 데이터를 사용
-            const questions = {{ questions|safe }};  // 템플릿에서 안전하게 질문 리스트 전달
-
-            // 입력창 및 버튼 비활성화
-            function disableInput() {
-                $('#messageInput').prop('disabled', true);
-                $('#sendButton').prop('disabled', true);
-                $('.tag-button').prop('disabled', true);
-            }
-
-            // 입력창 및 버튼 활성화
-            function enableInput() {
-                $('#messageInput').prop('disabled', false);
-                $('#sendButton').prop('disabled', false);
-                $('.tag-button').prop('disabled', false);
-            }
-
-            // Swiper 슬라이더 초기화
-            var swiper = new Swiper('.swiper-container', {
-                slidesPerView: 'auto',
-                spaceBetween: 15,
-                freeMode: true,
-                watchOverflow: true,
-            });
-
-            // Swiper 슬라이더에 질문 추가
-            function updateSwiperTags() {
-                const swiperWrapper = $('.swiper-wrapper');
-                swiperWrapper.empty();
-
-                // questions 배열을 사용해 버튼 추가
-                questions.forEach(question => {
-                    if (question) {
-                        const slide = $(`<div class="swiper-slide">
-                                <button class="tag-button">${question}</button>
-                            </div>`);
-                        swiperWrapper.append(slide);
-                    }
-                });
-
-                swiper.update();
-            }
-
-            updateSwiperTags();
-
-            $('.swiper-wrapper').on('click', '.tag-button', function () {
-                const tagText = $(this).text().trim();
-                // console.log("사용자가 선택한 질문: ", tagText);  // 사용자가 선택한 질문 콘솔에 출력1
-                appendMessage(tagText, 'user');
-                sendMessageToBot(tagText);
-            });
-
-            let thinkingMessageElement = null; // 검색중 메시지 요소를 저장할 변수
-
-            $('#sendButton').on('click', function () {
-                const message = $('#messageInput').val().trim();
-                if (message) {
-                    // console.log("사용자가 입력한 질문: ", message);  // 사용자가 선택한 질문 콘솔에 출력2
-                    appendMessage(message, 'user');
-                    $('#messageInput').val('');
-                    //sendMessageToBot(message);
-                    // "검색중..." 메시지를 표시
-                    $('#sendButton').prop('disabled', true); // 버튼 비활성화
-                    //thinkingMessageElement = showThinkingMessage();
-                    sendMessageToBot(message); // 메시지 전송
-                }
-            });
-
-            // 빠른 응답 버튼 클릭 이벤트
-            $('#fastResponseButton').on('click', function () {
-                fastResponseMode = !fastResponseMode; // 모드 전환
-                $(this).toggleClass('active'); // CSS 클래스를 추가/제거하여 활성 상태를 표시 (선택 사항)
-                // console.log("빠른 응답 모드: ", fastResponseMode);
-            });
-
-            // "검색중..." 메시지를 표시하는 함수
-            function showThinkingMessage() {
-                if (thinkingMessageElement) {
-                    thinkingMessageElement.remove();
-                    thinkingMessageElement = null;
-                }
-
-                const messageContainer = $('<div>', { class: 'message-container ai-message thinking' });
-                const profileImage = $('<img>', {
-                    src: '{{ assistant.photo.url }}',
-                    alt: 'Assistant Profile',
-                    class: 'profile-image'
-                });
-
-                const messageBody = $('<div>', { class: 'message-body' });
-                const messageContent = $('<div>', { class: 'message-content' });
-                const messageText = $('<p>').text("검색중...");
-
-                // 로딩 애니메이션 요소 추가
-                const loadingAnimation = $('<span>', { class: 'loading-animation' });
-                messageText.append(loadingAnimation);  // 텍스트 뒤에 로딩 애니메이션 추가
-
-                messageContent.append(messageText);
-                messageBody.append(messageContent);
-                messageContainer.append(profileImage);
-                messageContainer.append(messageBody);
-
-                $('#messageList').append(messageContainer);
-                scrollToBottom();
-
-                // 전역 변수로 저장하여 나중에 삭제할 수 있도록 함
-                thinkingMessageElement = messageContainer;
-            }
-
-            // 메시지를 화면에 추가하는 함수
-            function appendMessage(text, sender) {
-                const messageContainer = $('<div>', { class: 'message-container' });
-                const messageBody = $('<div>', { class: 'message-body' });
-                const messageContent = $('<div>', { class: 'message-content' });
-                const messageText = $('<p>').text(text);  // 전달된 텍스트를 사용
-                messageContent.append(messageText);
-
-                if (sender === 'ai') {
-                    const profileImage = $('<img>', {
-                        src: '{% static "image/assistant/user-circle.svg" %}',
-                        alt: 'Assistant Profile',
-                        class: 'profile-image'
-                    });
-
-                    // 액션 버튼과 구분선을 메시지 내용 안에 추가
-                    const actionsContainer = $(`
-                            <div class="actions-wrapper">
-                                <hr class="msg-hr">
-                                <div class="message-actions">
-                                    <button class="action-button"><img src="{% static 'image/assistant/like.svg' %}" alt="좋아요"></button>
-                                    <button class="action-button"><img src="{% static 'image/assistant/unlike.svg' %}" alt="싫어요"></button>
-                                    <button class="action-button action-button-cp" onclick="handleCopy(this)">
-                                        <img src="{% static 'image/assistant/copy.svg' %}" alt="복사">
-                                    </button>
-                                </div>
-                            </div>
-                        `);
-
-                    messageContent.append(actionsContainer); // 액션 버튼을 message-content 안에 추가
-                    messageBody.append(messageContent);
-                    messageContainer.addClass('ai-message');
-                    messageContainer.append(profileImage);
-                    messageContainer.append(messageBody);
-                } else {
-                    if (sttUsed) {
-                        textToSpeech(text); // tts 실행
-                    }
-                    messageBody.append(messageContent);
-                    messageContainer.addClass('user-message');
-                    messageContainer.append(messageBody);
-                    disableInput();
-                }
-
-                $('#messageList').append(messageContainer);
-                scrollToBottom();
-            }
-
-            function scrollToBottom() {
-                const chatContainer = $('#chatContainer');
-                // 사용자가 스크롤을 올려둔 상태가 아니라면 자동 스크롤
-                if (!isUserScrollingUp) {
-                    chatContainer.scrollTop(chatContainer.prop('scrollHeight'));
-                }
-            }
-
-            function sendMessageToBot(message) {
-                const assistantId = $('#assistant_id').val();
-                const documentId = $('#document_id').val();
-
-                if (!assistantId || !documentId) {
-                    console.error('assistant_id 또는 document_id가 설정되지 않았습니다.');
-                    appendMessage('assistant_id 또는 document_id가 누락되었습니다.', 'ai');
-                    return;
-                }
-
-                const data = {
-                    assistant_id: assistantId,
-                    document_id: documentId,
-                    question: message,
-                    fast_response: fastResponseMode  // 빠른 응답 모드 여부 전달
-                };
-
-                console.log('Sending data:', data);  // 요청 전에 데이터 출력3
-
-                // 🔹 사용자가 직접 입력한 경우에만 TTS 실행 (STT 입력이면 실행 안 함)
-                if (!sttUsed) {
-                    textToSpeech(message);
-                }
-
-                // ⬇ 메시지 전송 전에 버튼 비활성화
-                $('#sendButton').prop('disabled', true);
-                showThinkingMessage(); // "검색중..." 메시지 표시
-
-                fetch(apiBaseUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': csrftoken
-                    },
-                    body: JSON.stringify(data),
-                })
-                .then(response => {
-                    console.log(response);  // 응답 상태 로그4
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        throw new Error('HTTP error, status = ' + response.status);
-                    }
-                })
-                .then(data => {
-                    console.log(data);  // 응답 데이터 로그5
-
-                    // 응답을 받으면 "검색중..." 메시지를 삭제
-                    if (thinkingMessageElement) {
-                        thinkingMessageElement.remove();
-                        thinkingMessageElement = null;
-                    }
-
-                    let botResponse = Array.isArray(data.response) ? data.response.join('\n') : data.response;
-
-                    // 🔹 챗봇 응답도 TTS 실행
-                    textToSpeech(botResponse);
-
-                    appendMessageWithTypingEffect(botResponse, 'ai');
-
-                    // 🔹 버튼 다시 활성화 및 입력창 포커스
-                    $('#sendButton').prop('disabled', false);
-                    $('#messageInput').focus();  // 🔹 메시지 전송 후 입력창 자동 포커스
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-
-                    // 오류 발생 시 "검색중..." 메시지를 삭제
-                    if (thinkingMessageElement) {
-                        thinkingMessageElement.remove();
-                        thinkingMessageElement = null;
-                    }
-
-                    if (error.message.includes('429')) {
-                        appendMessage('토큰 하루 사용량이 초과되었습니다. 24시간 후에 다시 시도하여 주십시오.', 'ai');
-                    } else {
-                        appendMessage('챗봇 답변을 가져오는 중 오류가 발생했습니다.', 'ai');
-                    }
-                    // ⬇ 오류 발생 시 버튼 다시 활성화
-                    $('#sendButton').prop('disabled', false);
-                    $('#messageInput').focus();  // 🔹 오류 발생 후에도 입력창 포커스 유지
-                });
-
-                // 🔹 STT 입력 처리 후 다시 false로 초기화 (다음 질문이 텍스트일 경우 대비)
-                sttUsed = false;
-            }
-
-            // AI 메시지를 한 글자씩 타이핑 효과로 추가하는 함수
-            function appendActions(messageContent) {
-                const likeImg = $('.like-btn').data('like-img');
-                const unlikeImg = $('.unlike-btn').data('unlike-img');
-                const copyImg = $('.copy-btn').data('copy-img');
-
-                const actionsContainer = $(`
-                        <div class="actions-wrapper">
-                            <hr class="msg-hr">
-                            <div class="message-actions">
-                                <button class="action-button"><img src="${likeImg}" alt="좋아요"></button>
-                                <button class="action-button"><img src="${unlikeImg}" alt="싫어요"></button>
-                                <button class="action-button action-button-cp" onclick="handleCopy(this)">
-                                    <img src="${copyImg}" alt="복사">
-                                </button>
-                            </div>
-                        </div>
-                    `);
-
-                messageContent.append(actionsContainer); // messageContent에 액션 추가
-                enableInput();
-            }
-
-            function appendMessageWithTypingEffect(text, sender) {
-                if (sttUsed) {
-                    textToSpeech(text); // tts 실행
-                    sttUsed = false; // TTS 실행 후 sttUsed를 false로 리셋
-                }
-
-                const messageContainer = $('<div>', { class: 'message-container ai-message' });
-                const profileImage = $('<img>', {
-                    src: '{{ assistant.photo.url }}',
-                    alt: 'Assistant Profile',
-                    class: 'profile-image'
-                });
-
-                const messageBody = $('<div>', { class: 'message-body' });
-                const messageContent = $('<div>', { class: 'message-content' }).append($('<p>'));
-                messageBody.append(messageContent);
-                messageContainer.append(profileImage);
-                messageContainer.append(messageBody);
-                $('#messageList').append(messageContainer);
-
-                const messageElement = messageContent.find('p');
-
-                // Pass the callback to typeText
-                typeText(messageElement, text, function() {
-                    // Actions to perform after typing is complete
-                    appendActions(messageContent);
-                });
-            }
-
-            // 텍스트를 한 글자씩 출력하는 타이핑 효과 함수
-            function typeText(element, text, callback, index = 0) {
-                if (index < text.length) {
-                    element.text(element.text() + text.charAt(index));
-
-                    if (!isUserScrollingUp) {
-                        scrollToBottom();
-                    }
-
-                    setTimeout(function () {
-                        typeText(element, text, callback, index + 1);
-                    }, 50);
-                } else {
-                    if (callback) callback();
-                }
-            }
-
-            // 스크롤을 맨 아래로 이동시키는 함수
-            function scrollToBottom() {
-                if (!isUserScrollingUp) {
-                    const chatContainer = $('#chatContainer');
-                    chatContainer.scrollTop(chatContainer.prop('scrollHeight'));
-                }
-            }
-
-            $('#chatContainer').on('scroll', function () {
-                const chatContainer = $(this);
-                const scrollTop = chatContainer.scrollTop();
-                const scrollHeight = chatContainer.prop('scrollHeight');
-                const clientHeight = chatContainer.prop('clientHeight');
-
-                if (scrollTop + clientHeight >= scrollHeight) {
-                    isUserScrollingUp = false;
-                } else {
-                    isUserScrollingUp = true;
-                }
-            });
-
-            window.handleCopy = function (button) {
-                const messageText = $(button).closest('.message-container').find('.message-content p').text();
-
-                if (messageText) {
-                    navigator.clipboard.writeText(messageText).then(() => {
-                        // console.log("Text copied to clipboard:", messageText);
-                    }).catch(err => {
-                        console.error('복사 오류:', err);
-                    });
-                } else {
-                    console.error('No text found to copy.');
-                }
-            };
-
-            // STT
-            let sttUsed = false;
-            const sendTtsButton = document.getElementById('sendTts');
-            const messageInput = document.getElementById('messageInput');
-
-            let mediaRecorder;
-            let audioChunks = [];
-            let isRecording = false;
-
-            // 음성 감지를 위한 설정
-            let audioContext;
-            let analyser;
-            let source;
-
-            sendTtsButton.addEventListener('click', async function () {
-                if (isRecording) return;  // 이미 녹음 중이면 실행되지 않음
-                sttUsed = true;
-
-                try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-
-                    // 버튼 색상 변경
-                    sendTtsButton.style.backgroundColor = 'red';
-
-                    mediaRecorder = new MediaRecorder(stream);
-                    audioChunks = [];
-
-                    mediaRecorder.ondataavailable = (event) => {
-                        audioChunks.push(event.data);
-                    };
-
-                    mediaRecorder.onstop = async () => {
-                        sendTtsButton.style.backgroundColor = ''; // 원래 색상으로 복원
-                        isRecording = false;  // 녹음 상태 초기화
-
-                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                        const formData = new FormData();
-                        formData.append('audio', audioBlob);
-
-                        try {
-                            const response = await fetch('/stt/', {
-                                method: 'POST',
-                                body: formData,
-                                headers: { 'X-CSRFToken': getCookie('csrftoken') }
-                            });
-
-                            const data = await response.json();
-                            if (data.text) {
-                                messageInput.value = data.text;  // 입력창에 텍스트 표시
-                                appendMessage(data.text, 'user');  // 사용자 채팅창에 메시지 추가
-                                sendMessageToBot(data.text);  // 자동으로 질문 전송
-                            }
-                        } catch (error) {
-                            console.error('API 호출 오류:', error);
-                        }
-                    };
-
-                    mediaRecorder.start();
-                    isRecording = true;  // 녹음 상태 설정
-
-                    setTimeout(() => {
-                        if (isRecording) {
-                            mediaRecorder.stop();
-                            isRecording = false;
-                            sendTtsButton.style.backgroundColor = '';
-                        }
-                    }, 5000);  // 5초 후 자동 종료
-
-                } catch (error) {
-                    console.error('마이크 접근 오류:', error);
-                }
-            });
-            // STT end
-
-
-            // TTS
-            function textToSpeech(text) {
-                if (currentAudio) {
-                    currentAudio.pause();
-                    currentAudio = null;
-                }
-                fetch('/tts/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCookie('csrftoken')
-                    },
-                    body: JSON.stringify({ text: text })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.audio_data) {
-                        currentAudio = new Audio(`data:audio/mpeg;base64,${data.audio_data}`);
-
-                        // STT 버튼 비활성화
-                        document.getElementById('sendTts').disabled = true;
-
-                        currentAudio.onended = function () {
-                            currentAudio = null;
-                            document.getElementById('sendTts').disabled = false;  // STT 버튼 활성화
-                        };
-
-                        currentAudio.play();
-                    } else {
-                        console.error('TTS 오류:', data.error);
-                        document.getElementById('sendTts').disabled = false;
-                    }
-                })
-                .catch(error => {
-                console.error('TTS 호출 오류:', error);
-                document.getElementById('sendTts').disabled = false;
-            });
-        }
-        // TTS end
-
-        });
-    </script>
+    <!-- ✅ 음성 UI는 body 바로 아래 위치 -->
+    <div id="voiceUi" class="voice-ui hidden">
+        🎙 듣는 중...
+        <div class="waveform">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+        <button id="cancelMic" class="cancel-button">취소</button>
+    </div>
+</div>
+
+<!-- 외부 라이브러리 -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Static 이미지 JS 변수화 -->
+<script>
+    const likeImgUrl = "{% static 'image/assistant/like.svg' %}";
+    const unlikeImgUrl = "{% static 'image/assistant/unlike.svg' %}";
+    const copyImgUrl = "{% static 'image/assistant/copy.svg' %}";
+</script>
+
+<!-- 챗봇 로직 스크립트 -->
+<script src="{% static 'js/assistant/chatbot.js' %}"></script>
 </body>
-
 </html>

@@ -5,10 +5,15 @@ body {
 }
 
 .page-container {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 3%;
     display: flex;
     flex-direction: column;
     height: 100vh;
-    overflow-y: auto;
 }
 
 /** 메뉴 바 **/
@@ -16,8 +21,9 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px;
+    padding: 15px 0;
     position: relative;
+    margin-top: 21px;
 }
 
 .menu-bar button {
@@ -35,9 +41,15 @@ body {
 .chat-container {
     flex: 1;
     overflow-y: auto;
-    margin: 0 5px;
-    padding: 1rem;
-    background-color: #f2efe4;
+    margin: 0;
+    /*background-color: #f2efe4;*/
+    overflow-y: auto;              /* 세로 스크롤은 동작하도록 */
+    -ms-overflow-style: none;      /* IE/Edge */
+    scrollbar-width: none;         /* Firefox */
+}
+
+.chat-container::-webkit-scrollbar {
+  display: none;                 /* Chrome, Safari, Opera */
 }
 
 /* 메시지 리스트 및 메시지 자체 */
@@ -153,16 +165,45 @@ body {
     /* 사용자 메시지에서는 액션 버튼 숨김 */
 }
 
+/* 입력창, 음성 UI 등도 중앙 정렬 */
 .input-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
-    background-color: #f2efe4;
-    margin-bottom: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 0; /* 상하 패딩만 주고 좌우는 page-container에 맡김 */
+  box-sizing: border-box;
+}
+
+/* 질문 버블 슬라이더 */
+.question-slider {
+  overflow-x: auto;
+  white-space: nowrap;
+  padding-left: 0;
+  padding-right: 0;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.swiper-slide {
+  display: inline-block;
+  background: #eee;
+  border-radius: 8px !important;
+  padding: 10px 6px;
+  margin-right: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.swiper-slide:hover {
+  background-color: #ddd;
 }
 
 .input-wrapper {
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     background-color: #ffffff;
@@ -170,6 +211,7 @@ body {
     border-radius: 10px;
     padding: 5px 10px;
     width: 100%;
+
 }
 
 .input-wrapper input {
@@ -180,6 +222,10 @@ body {
     font-size: 16px;
     border-radius: 10px;
     background-color: #ffffff;
+}
+
+.input-wrapper.hidden {
+  display: none;
 }
 
 .send-button {
@@ -195,12 +241,12 @@ body {
 }
 
 .swiper-container {
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
     max-width: 100%;
     width: 100%;
-    padding: 0 10px;
+    padding: 0px;
     box-sizing: border-box;
-    overflow-x: hidden;
-    overflow-y: auto;
     max-height: 200px;
 }
 
@@ -217,7 +263,7 @@ body {
     background-color: #F5F5F5;
     border: 1px solid #cccccc;
     padding: 8px 12px;
-    border-radius: 20px;
+    border-radius: 10px;
     cursor: pointer;
     text-decoration: none;
     white-space: nowrap;
@@ -325,7 +371,7 @@ body {
     align-items: flex-end;
     justify-content: flex-end;
     flex-grow: 1;
-    padding-bottom: 5px;
+    /*padding-bottom: 5px;*/
     text-align: right;
 }
 
@@ -346,4 +392,63 @@ body {
 
 .fast-response-button.active {
     background-color: azure;
+}
+
+.voice-ui {
+  position: absolute;
+  bottom: 13px;
+  left: 3%;
+  right: 0;
+  max-width: 900px;
+  width: 94%; /* padding: 3% 좌우 보정 */
+  background-color: #222;
+  color: #fff;
+  padding: 15px 5%; /* 내부 여백은 여기서 */
+  border-radius: 10px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  min-height: 52px;
+}
+
+.voice-ui.hidden {
+  display: none;
+}
+
+.voice-ui .waveform {
+  display: flex;
+  gap: 4px;
+  align-items: flex-end;
+}
+
+.voice-ui .waveform .bar {
+  width: 4px;
+  height: 15px;
+  background-color: white;
+  animation: waveHeight 1s infinite ease-in-out;
+}
+
+.voice-ui .waveform .bar:nth-child(2) { animation-delay: 0.1s; }
+.voice-ui .waveform .bar:nth-child(3) { animation-delay: 0.2s; }
+.voice-ui .waveform .bar:nth-child(4) { animation-delay: 0.3s; }
+
+@keyframes waveHeight {
+  0%, 100% { height: 20px; }
+  50% { height: 36px; }
+}
+
+.cancel-button {
+  background: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+  border-radius: 12px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.cancel-button:hover {
+  background: rgba(255,255,255,0.1);
 }

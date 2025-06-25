@@ -92,6 +92,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'assistant',
     'rest_framework',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -123,6 +124,16 @@ TEMPLATES = [
         },
     },
 ]
+# channels 설정---------------------------------------------------------------------------------------------------
+ASGI_APPLICATION = "culture_chatbot.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
+
+
 # csrf토큰 설정---------------------------------------------------------------------------------------------------
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = [
@@ -198,11 +209,11 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko-kr'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
-USE_I18N = True
+USE_L10N = True
 
 USE_TZ = True
 

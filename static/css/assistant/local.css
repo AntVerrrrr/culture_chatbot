@@ -1,176 +1,93 @@
-body {
-    font-family: 'Nanum Myeongjo', Serif;
-    background-color: #f2efe4;
-    margin: 0;
+/* 스크롤 가능한 지역 선택 영역 */
+.tag-scroll-container {
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 5px 20px 10px 0;
 }
 
-.page-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    overflow-y: auto;
+.tag-scroll-wrapper {
+  display: inline-flex;
+  gap: 8px;
 }
 
-/** 메뉴 바 **/
-.menu-bar {
-    display: flex;
-    justify-content: center; /* 버튼을 수평으로 중앙 정렬 */
-    align-items: center; /* 수직으로 중앙 정렬 */
-    padding: 15px;
+.tag-scroll-container::-webkit-scrollbar {
+  display: none;
 }
 
-.menu-bar button {
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-.menu-bar #menuButton img {
-    width: 70px;
-    height: 70px;
-    display: block; /* 중앙 정렬을 위해 이미지 자체도 블록 요소로 처리 */
-}
-
-/*.menu-bar #userButton img {*/
-/*    width: 40px;*/
-/*    height: 40px;*/
-/*}*/
-
-/** 검색창 **/
-.search-bar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-    padding-left: 18px;
-}
-
-.search-container {
-    position: relative;
-    width: 95%;
-}
-
-.search-bar input {
-    font-family: 'Nanum Myeongjo', Serif;
-    width: 90%;
-    padding: 18px 15px;
-    border-radius: 15px;
-    border: 1px solid #f1f1f1;
-    outline: none;
-    font-size: 14px;
-    background-color: #ffffff;
-}
-
-.search-bar input::placeholder {
-    color: #c8c8c8;
-}
-
-#searchButton {
-    position: absolute;
-    top: 50%;
-    right: 16px; /* 오른쪽 여백 조정 */
-    transform: translateY(-50%);
-    background-color: #fff;
-    border: none;
-    cursor: pointer;
-    z-index: 5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#searchButton img {
-    width: 20px; /* 검색 아이콘 크기 */
-    height: 20px;
-}
-
-/** 카테고리 **/
-.category-list {
-    list-style-type: none; /* 기본 목록 스타일 제거 */
-    display: flex; /* 가로 배열 */
-    justify-content: flex-start; /* 항목을 왼쪽 정렬 */
-    gap: 15px; /* 항목 간의 간격 강제 설정 */
-    padding-top: 10px;
-    padding-left: 30px; /* 왼쪽에 여백 추가 */
-    margin: 0;
-}
-
-.category-list li {
-    font-size: 18px;
-}
-
-.category-list .category-select {
-    color: #000;
-}
-
-.category-list li a {
-    text-decoration: none; /* 링크 밑줄 제거 */
-    color: #BBBBBB; /* 텍스트 색상 */
-    font-weight: bold;
-}
-
-/* Swiper 스타일 */
-.swiper-container {
-    padding: 0px 24px; /* 좌우 padding을 40px로 설정하여 좌우 여백 추가 */
-    padding-top: 12px;
-    overflow: hidden; /* 화면 바깥으로 넘어가는 요소 숨기기 */
-}
-
-.swiper-slide {
-    margin: 0; /* 개별 슬라이드의 여백을 없애고 전체 간격을 spaceBetween으로 제어 */
-}
-
-.swiper-wrapper {
-    display: flex;
-}
-
+/* 버튼 스타일 */
 .tag-button {
-    background-color: #F5F5F5;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 20px;
-    cursor: pointer;
-    text-decoration: none; /* 밑줄 제거 */
-    white-space: nowrap; /* 텍스트 줄바꿈 없이 한 줄로 */
-    min-width: 90px; /* 버튼의 최소 너비를 설정하여 줄바꿈 방지 */
-    font-size: 14px; /* 텍스트 크기 */
-    text-align: center;
+  padding: 6px 14px;
+  font-size: 14px;
+  font-family: 'Nanum Myeongjo', Serif;
+  border: none;
+  border-radius: 20px;
+  background-color: #f5f5f5;
+  color: #000;
+  cursor: pointer;
+  white-space: nowrap;
 }
 
 .tag-button.selected {
-    background-color: #000;
-    color: #F5F5F5;
-    text-decoration: none; /* 선택된 버튼에서도 밑줄 제거 */
+  background-color: #000;
+  color: #fff;
 }
 
-/** 사진 그리드 **/
-.photo-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2열로 설정 */
-    gap: 10px;
-    padding: 20px;
+/* 결과 그리드 */
+.assistant-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4%; /* 카드 간 간격 */
 }
 
-.photo-item img {
-    width: 100%; /* 이미지의 너비를 100%로 설정 */
-    aspect-ratio: 1 / 1; /* 정방형 비율로 설정 */
-    object-fit: cover; /* 이미지가 컨테이너를 꽉 채우도록 함 */
-    border-radius: 20px;
+.assistant-item {
+  flex: 0 0 48%;
+  margin-bottom: 45px;
+  box-sizing: border-box;
 }
 
-
-.photo-item a {
-    text-decoration: none; /* 링크의 밑줄 제거 */
-    color: inherit; /* 링크의 색상 제거 */
+.img-box {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 20px;
 }
 
-.photo-title {
-    font-weight: bold;
-    margin-top: 8px;
+.img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+  display: block;
 }
 
-.photo-address {
-    margin-top: -10px;
-    font-size: 12px;
-    color: #757575;
+.assistant-title {
+  font-weight: bold;
+  font-size: 15px;
+  margin-top: 8px;
+  color: black;
 }
+
+.assistant-address {
+  font-size: 12px;
+  margin-top: 4px;
+  color: #757575;
+}
+
+.assistant-grid a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/*.photo-title {*/
+/*  font-weight: bold;*/
+/*  font-size: 15px;*/
+/*  margin-top: 8px;*/
+/*  color: black;*/
+/*}*/
+
+/*.tour-address {*/
+/*  font-size: 12px;*/
+/*  margin-top: 4px;*/
+/*  color: #757575;*/
+/*}*/

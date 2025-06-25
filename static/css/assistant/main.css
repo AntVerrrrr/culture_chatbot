@@ -1,174 +1,156 @@
+/* main.css */
 body {
-    font-family: 'Nanum Myeongjo', Serif;
-    background-color: #f2efe4;
-    margin: 0;
+  font-family: 'Nanum Myeongjo', Serif;
+  background-color: #f2efe4;
+  margin: 0;
 }
 
 .page-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    overflow-y: auto;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 3%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-/** 메뉴 바 **/
 .menu-bar {
-    display: flex;
-    justify-content: center; /* 버튼을 수평으로 중앙 정렬 */
-    align-items: center; /* 수직으로 중앙 정렬 */
-    padding: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 0;
 }
 
 .menu-bar button {
-    background: none;
-    border: none;
-    cursor: pointer;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 .menu-bar #menuButton img {
-    width: 70px;
-    height: 70px;
-    display: block; /* 중앙 정렬을 위해 이미지 자체도 블록 요소로 처리 */
+  width: 70px;
+  height: 70px;
+  display: block;
 }
 
-/*.menu-bar #userButton img {*/
-/*    width: 40px;*/
-/*    height: 40px;*/
-/*}*/
-
-/** 검색창 **/
 .search-bar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-    padding-left: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
 }
 
 .search-container {
-    position: relative;
-    width: 95%;
+  position: relative;
+  width: 100%;
 }
 
 .search-bar input {
-    font-family: 'Nanum Myeongjo', Serif;
-    width: 90%;
-    padding: 18px 15px;
-    border-radius: 15px;
-    border: 1px solid #f1f1f1;
-    outline: none;
-    font-size: 14px;
-    background-color: #ffffff;
-}
-
-.search-bar input::placeholder {
-    color: #c8c8c8;
+  width: 100%;
+  padding: 18px 50px 18px 15px;
+  border-radius: 15px;
+  border: 1px solid #f1f1f1;
+  outline: none;
+  font-size: 14px;
+  background-color: #ffffff;
+  box-sizing: border-box;
 }
 
 #searchButton {
-    position: absolute;
-    top: 50%;
-    right: 16px; /* 오른쪽 여백 조정 */
-    transform: translateY(-50%);
-    background-color: #fff;
-    border: none;
-    cursor: pointer;
-    z-index: 5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }
 
 #searchButton img {
-    width: 20px; /* 검색 아이콘 크기 */
-    height: 20px;
+  width: 20px;
+  height: 20px;
 }
 
-/** 카테고리 **/
 .category-list {
-    list-style-type: none; /* 기본 목록 스타일 제거 */
-    display: flex; /* 가로 배열 */
-    justify-content: flex-start; /* 항목을 왼쪽 정렬 */
-    gap: 15px; /* 항목 간의 간격 강제 설정 */
-    padding-top: 10px;
-    padding-left: 30px; /* 왼쪽에 여백 추가 */
-    margin: 0;
-}
-
-.category-list li {
-    font-size: 18px;
-}
-
-.category-list .category-select {
-    color: #000;
+  list-style-type: none;
+  display: flex;
+  justify-content: flex-start;
+  gap: 15px;
+  padding: 10px 0;
+  margin: 0;
 }
 
 .category-list li a {
-    text-decoration: none; /* 링크 밑줄 제거 */
-    color: #BBBBBB; /* 텍스트 색상 */
+    text-decoration: none;
+    color: #BBBBBB;
+}
+
+.category-list li a.category-select {
     font-weight: bold;
+    color: #000000; /* 진하게 보이게 텍스트 색상도 변경 */
 }
 
-/** 사진 항목 **/
-.tour-container-title {
-    padding: 10px 24px;
-    margin-bottom: 4px;
-    font-weight: bold;
-    font-size: 16px;
+
+.assistant-container-title {
+  padding: 25px 0 10px 0;
+  margin: 0;
+  font-weight: bold;
+  font-size: 20px;
 }
 
-.tour-title {
-    font-weight: bold;
+.assistant-container {
+  padding: 0;
+  padding-bottom: 20px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.tour-address {
-    margin-top: -10px;
-    font-size: 12px;
-    color: #757575;
+.swiper-container {
+  overflow: hidden;
+  width: 100%;
 }
 
-/* Swiper 공통 스타일 */
-.tour-container,
-.tour-container-2,
-.tour-container-3 {
-    padding: 0 14px; /* 내부 여백 설정 */
-    padding-bottom: 10px;
-    overflow: hidden; /* 내부 요소가 padding을 넘어서지 않도록 설정 */
+.swiper-slide {
+  flex: 0 0 51.9%;
+  box-sizing: border-box;
+  padding-right: 4%;
 }
 
-.swiper-container,
-.swiper-container-2 {
-    overflow: hidden; /* 화면 밖으로 나가는 요소 숨기기 */
+.swiper-slide a {
+  display: flex;
+  flex-direction: column;
 }
 
-.swiper-container-3 {
-    padding-bottom: 100px;
-    overflow: hidden; /* 화면 밖으로 나가는 요소 숨기기 */
-}
-
-.swiper-slide,
-.swiper-slide-2,
-.swiper-slide-3 {
-    padding: 0 8px; /* 슬라이드 자체에 padding 적용 */
-    box-sizing: border-box; /* padding이 width에 영향을 미치지 않도록 설정 */
-}
-
-.swiper-slide img,
-.swiper-slide-2 img,
-.swiper-slide-3 img {
-    width: 100%; /* 너비를 100%로 설정 */
-    aspect-ratio: 1 / 1; /* 정방형으로 설정 */
-    object-fit: cover; /* 이미지가 컨테이너를 채우도록 설정 */
-    border-radius: 20px;
-}
-
-.swiper-scrollbar,
-.swiper-scrollbar-2,
-.swiper-scrollbar-3 {
-    display: none; /* 스크롤바 숨기기 */
+.swiper-slide img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 20px;
+  display: block;
 }
 
 .chatbot-link {
-    text-decoration: none; /* 링크의 밑줄 제거 */
-    color: inherit; /* 링크의 색상 제거 */
+  text-decoration: none;
+  color: inherit;
+}
+
+.assistant-title {
+  font-weight: bold;
+  margin: 15px 3%;
+  color: black;
+}
+
+.assistant-address {
+  margin: -2% 3% 0;
+  font-size: 12px;
+  color: #757575;
+}
+
+.swiper-scrollbar {
+  display: none;
 }

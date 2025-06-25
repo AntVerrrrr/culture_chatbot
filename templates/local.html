@@ -1,231 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Local</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- static 태그를 로드 -->
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>지역별 어시스턴트</title>
     {% load static %}
-    <!-- 정적 파일 경로에서 CSS 참조 -->
+
+    <!-- 폰트 및 스타일 -->
+    <link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/nanummyeongjo.css">
+    <link rel="stylesheet" href="{% static 'css/assistant/main.css' %}">
     <link rel="stylesheet" href="{% static 'css/assistant/local.css' %}">
-    <!-- Swiper CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 </head>
+
 <body>
-    <div class="main-container">
-        <header class="menu-bar">
-            <button id="menuButton"><a href="{% url 'main-select' %}"><img src="{% static 'image/assistant/newlogo.png' %}" alt="Menu"></a></button>
-{#            <button id="userButton"><img src="{% static 'image/assistant/user-circle.svg' %}" alt="User" class="size-12"></button>#}
-        </header>
+<div class="page-container">
 
-        <!-- 검색창 -->
-        <div class="search-bar">
-            <div class="search-container">
-                <form method="GET" action="{% url 'search-results' %}">
-                    <input type="text" placeholder="대화하고 싶은 서비스를 검색해보세요" name="query" id="searchInput">
-                    <button id="searchButton" type="submit"><img src="{% static 'image/assistant/search.svg' %}" alt="Search"></button>
-                </form>
-            </div>
+    <!-- 로고 -->
+    <header class="menu-bar">
+        <button id="menuButton">
+            <a href="{% url 'main-select' %}">
+                <img src="{% static 'image/assistant/newlogo.png' %}" alt="Menu">
+            </a>
+        </button>
+    </header>
+
+    <!-- 검색창 -->
+    <div class="search-bar">
+        <div class="search-container">
+            <form method="GET" action="{% url 'search-results' %}">
+                <input type="text" placeholder="대화하고 싶은 서비스를 검색해보세요" name="query" id="searchInput">
+                <button id="searchButton" type="submit">
+                    <img src="{% static 'image/assistant/search.svg' %}" alt="Search">
+                </button>
+            </form>
         </div>
-
-        <!-- 카테고리 리스트 -->
-        <div>
-            <ul class="category-list">
-                <li><a href="{% url 'main-select' %}">크리에이터</a></li>
-                <li><a href="{% url 'local-select' %}" class="category-select">지역별</a></li>
-<!--                <li><a href="{% url 'thema-select' %}">테마별</a></li>-->
-                <li><a href="{% url 'independence-select' %}">독립운동</a></li>
-                <li><a href="{% url 'sommelier-select' %}">소믈리에</a></li>
-            </ul>
-        </div>
-
-        <!-- 첫 번째 태그 버튼 Swiper -->
-        <div class="swiper-container tag-swiper-1">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide"><button class="tag-button selected" data-province="서울">서울</button></div>
-                <div class="swiper-slide"><button class="tag-button" data-province="경기도">경기도</button></div>
-                <div class="swiper-slide"><button class="tag-button" data-province="경상북도">경상북도</button></div>
-                <div class="swiper-slide"><button class="tag-button" data-province="경상남도">경상남도</button></div>
-                <div class="swiper-slide"><button class="tag-button" data-province="전라북도">전라북도</button></div>
-                <div class="swiper-slide"><button class="tag-button" data-province="전라남도">전라남도</button></div>
-                <div class="swiper-slide"><button class="tag-button" data-province="충청북도">충청북도</button></div>
-                <div class="swiper-slide"><button class="tag-button" data-province="충청남도">충청남도</button></div>
-            </div>
-        </div>
-
-        <!-- 두 번째 태그 버튼 Swiper (시/군/읍 목록) -->
-        <div class="swiper-container tag-swiper-2" style="display: none;">
-            <div class="swiper-wrapper" id="cityList"></div>
-        </div>
-
-        <!-- 이미지 2행 4열로 출력 -->
-        <div class="photo-grid" id="assistantList">
-            <!-- 어시스턴트 이미지가 여기에 동적으로 로드됨 -->
-        </div>
-
-        <footer></footer>
     </div>
 
-    <!-- Swiper JS -->
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <!-- 카테고리 -->
+    <ul class="category-list">
+        <li><a href="{% url 'main-select' %}">크리에이터</a></li>
+        <li><a href="{% url 'local-select' %}" class="category-select">지역별</a></li>
+        <li><a href="{% url 'independence-select' %}">독립운동</a></li>
+        <li><a href="{% url 'sommelier-select' %}">소믈리에</a></li>
+    </ul>
 
-    <!-- Swiper 초기화 및 jQuery로 다중 선택 기능 -->
-    <script>
-    // 첫 번째 Swiper 초기화
-    var swiper1 = new Swiper('.tag-swiper-1', {
-        slidesPerView: 3.4, // 한 화면에 4개의 태그가 보이도록 설정
-        spaceBetween: 15, // 슬라이드 간의 간격을 15px로 설정
-        freeMode: true, // 자유롭게 스크롤 가능하도록 설정
-        scrollbar: {
-            el: '.swiper-scrollbar',
-            draggable: true,
-        },
-    });
+    <!-- 시/도 선택 (Swiper 제거하고 스크롤 방식으로 대체) -->
+    <div class="tag-scroll-container">
+        <div class="tag-scroll-wrapper">
+            <button class="tag-button" data-province="서울">서울</button>
+            <button class="tag-button" data-province="경기도">경기도</button>
+            <button class="tag-button" data-province="인천">인천</button>
+            <button class="tag-button" data-province="강원도">강원도</button>
+            <button class="tag-button" data-province="충청북도">충청북도</button>
+            <button class="tag-button" data-province="충청남도">충청남도</button>
+            <button class="tag-button" data-province="대전">대전</button>
+            <button class="tag-button" data-province="세종">세종</button>
+            <button class="tag-button" data-province="전라북도">전라북도</button>
+            <button class="tag-button" data-province="전라남도">전라남도</button>
+            <button class="tag-button" data-province="광주">광주</button>
+            <button class="tag-button" data-province="경상북도">경상북도</button>
+            <button class="tag-button" data-province="경상남도">경상남도</button>
+            <button class="tag-button" data-province="대구">대구</button>
+            <button class="tag-button" data-province="울산">울산</button>
+            <button class="tag-button" data-province="부산">부산</button>
+            <button class="tag-button" data-province="제주도">제주도</button>
+        </div>
+    </div>
 
-    // 두 번째 Swiper 초기화
-    var swiper2 = new Swiper('.tag-swiper-2', {
-        slidesPerView: 3.5,
-        spaceBetween: 15,
-        freeMode: true,
-        scrollbar: {
-            el: '.swiper-scrollbar',
-            draggable: true,
-        },
-    });
+    <!-- 시/군/구 버튼 리스트 -->
+    <div class="tag-scroll-container city-container" style="display: none;">
+        <div class="tag-scroll-wrapper" id="cityList"></div>
+    </div>
 
-    // 도별 시/군/읍 목록을 수동으로 정의
-    var cityData = {
-        '서울': ['종로구', '강남구', '송파구', '서초구', '마포구', '광진구'],
-        '경기도': ['수원시', '성남시', '용인시', '부천시', '고양시', '안산시'],
-        '경상북도': ['안동시', '경주시', '포항시', '구미시', '문경시', '상주시'],
-        '경상남도': ['창원시', '김해시', '진주시', '양산시', '통영시', '거제시'],
-        '전라북도': ['전주시', '군산시', '익산시', '남원시', '김제시', '완주군'],
-        '전라남도': ['여수시', '순천시', '목포시', '광양시', '나주시', '해남군'],
-        '충청북도': ['청주시', '충주시', '제천시', '옥천군', '단양군', '음성군'],
-        '충청남도': ['천안시', '아산시', '서산시', '보령시', '공주시', '논산시'],
-    };
+    <br>
 
-    // 첫 번째 Swiper의 버튼 클릭 이벤트 처리
-    $('.tag-swiper-1 .tag-button').on('click', function() {
-        // 모든 버튼에서 selected 클래스 제거
-        $('.tag-swiper-1 .tag-button').removeClass('selected');
-        // 클릭된 버튼에 selected 클래스 추가
-        $(this).addClass('selected');
+    <!-- 어시스턴트 목록 -->
+    <div class="assistant-grid" id="assistantList"></div>
+</div>
 
-        // 선택된 도에 따라 시/군/읍 목록 로드
-        var selectedProvince = $(this).data('province');
-        $('#cityList').empty(); // 시/군/읍 리스트 초기화
-        $('.tag-swiper-2').hide(); // 기본적으로 숨기기
-        $('#assistantList').empty(); // 어시스턴트 목록 초기화
-
-        // 시/군/읍 목록 수동으로 설정
-        if (selectedProvince && cityData[selectedProvince]) {
-            cityData[selectedProvince].forEach(function(city) {
-                $('#cityList').append(`<div class="swiper-slide"><button class="tag-button" data-city="${city}">${city}</button></div>`);
-            });
-            $('.tag-swiper-2').show(); // 시/군/읍 Swiper 보이기
-            swiper2.update(); // Swiper 업데이트
-        }
-    });
-
-    // 세션 스토리지에 배열 인덱스 저장
-    function setArrayIndex(index) {
-        sessionStorage.setItem('arrayIndex', index);
-    }
-
-    // 선택된 도와 시에 맞는 어시스턴트 데이터 불러오기
-    $('#cityList').on('click', '.tag-button', function() {
-        // 모든 시/군/읍 버튼에서 selected 클래스 제거
-        $('.tag-swiper-2 .tag-button').removeClass('selected');
-        // 클릭된 시/군/읍 버튼에 selected 클래스 추가
-        $(this).addClass('selected');
-
-        // 시/군/읍 선택
-        var selectedCity = $(this).data('city');
-        var selectedProvince = $('.tag-swiper-1 .tag-button.selected').data('province');
-        $('#assistantList').empty(); // 어시스턴트 목록 초기화
-
-        // 선택된 도와 시에 맞는 어시스턴트 데이터 불러오기
-        if (selectedProvince && selectedCity) {
-            $.ajax({
-                url: '/api/assistants/',  // 어시스턴트 정보를 제공하는 API 엔드포인트
-                method: 'GET',
-                data: {
-                    province: selectedProvince,
-                    city_county_town: selectedCity
-                },
-
-                // success: function(response) {
-                //     if (response.length === 0) {
-                //         $('#assistantList').append('<p>해당 지역에 어시스턴트가 없습니다.</p>');
-                //     } else {
-                //         response.forEach(function(assistant) {
-                //             console.log(assistant);  // 확인을 위해 추가
-                //
-                //             // 도시, 도 정보가 존재하는지 확인 후 추가
-                //             const city_name = assistant.city_county_town ? assistant.city_county_town.name : '정보 없음';
-                //             const province_name = assistant.province ? assistant.province.name : '정보 없음';
-                //
-                //             // 중복되는 텍스트 출력 방지하고, 어시스턴트 정보만 출력
-                //             $('#assistantList').append(`
-                //                 <div class="photo-item">
-                //                     <a href="/chatbot/${assistant.id}/" onclick="setArrayIndex(1)">
-                //                         <img src="${assistant.photo}" alt="${assistant.name}">
-                //                         <p class="photo-title">${assistant.name}</p>
-                //                         <p class="photo-address"> ${province_name}, ${city_name}, ${assistant.country}</p>
-                //                     </a>
-                //                 </div>
-                //             `);
-                //
-                //
-                //         });
-                //     }
-                // },
-
-                success: function(response) {
-                    if (response.length === 0) {
-                        $('#assistantList').append('<p>해당 지역에 어시스턴트가 없습니다.</p>');
-                    } else {
-                        response.forEach(function(assistant) {
-                            // console.log(assistant);  // 어시스턴트의 정보, 문서아이디 등등 관련정보 출력
-
-                            // 도시, 도 정보가 존재하는지 확인 후 추가
-                            const city_name = assistant.city_county_town ? assistant.city_county_town.name : '정보 없음';
-                            const province_name = assistant.province ? assistant.province.name : '정보 없음';
-
-                            // 태그 리스트 생성
-                            let tagsHtml = '';
-                            if (assistant.tags && assistant.tags.length > 0) {
-                                // 태그를 우선순위(priority)로 정렬
-                                assistant.tags.sort((a, b) => a.priority - b.priority);
-                                assistant.tags.forEach(tag => {
-                                    tagsHtml += `#${tag.name} `;
-                                });
-                            }
-
-                            // 어시스턴트 정보 출력
-                            $('#assistantList').append(`
-                                <div class="photo-item">
-                                    <a href="/chatbot/${assistant.id}/" onclick="setArrayIndex(1)">
-                                        <img src="${assistant.photo}" alt="${assistant.name}">
-                                        <p class="photo-title">${assistant.name}</p>
-<!--                                        <p class="photo-address"> ${province_name}, ${city_name}, ${assistant.country}</p>-->
-                                        <p class="photo-address">${tagsHtml}</p>
-                                    </a>
-                                </div>
-                            `);
-                        });
-                    }
-                },
-
-
-                error: function(error) {
-                    console.error('Error fetching assistants:', error);
-                }
-            });
-        }
-    });
-    </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'js/assistant/local.js' %}"></script>
 </body>
 </html>

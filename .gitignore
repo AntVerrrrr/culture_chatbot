@@ -5,3 +5,6 @@ migrations/
 
 __pycache__/
 *.pyc
+*.dylib
+*.so
+*.dll

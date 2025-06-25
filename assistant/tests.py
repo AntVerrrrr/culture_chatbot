@@ -1,29 +1,12 @@
+import openai
+import os
 
-# from dotenv import load_dotenv
-# from openai import OpenAI
-# import os
-#
-# # .env 파일 로드 (기존 환경 변수 덮어쓰기 허용)
-# load_dotenv(override=True)
-# print(os.getenv("OPENAI_API_KEY"))
-# client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-#
-# try:
-#     file_info = client.files.retrieve(file_id="file-s3zWpiqz0ayTtgrfILOFcKP2")
-#     print(f"File Info: {file_info}")
-# except Exception as e:
-#     print(f"Error retrieving file: {e}")
-#
+openai.api_key = os.getenv("OPENAI_API_KEY") or "sk-..."  # 키가 있으면 대체
 
-
-
-
-#
-# # 전체 환경 변수 출력
-# for key, value in os.environ.items():
-#     if "OPENAI_API_KEY" in key:
-#         print(f"{key}: {value}")
-
-
-
-
+try:
+    session = openai.beta.assistants.realtime.sessions.create(
+        assistant_id="asst_QdqM7VVU8LtjH94OtSKMQTg0"
+    )
+    print("✅ 생성 완료:", session.id)
+except Exception as e:
+    print("🔥 오류:", str(e))

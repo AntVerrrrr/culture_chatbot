@@ -1,94 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Main</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     {% load static %}
-
-    <link rel="stylesheet" href="{% static 'css/assistant/independence.css' %}">
-
-    <!-- Swiper CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/nanummyeongjo.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="{% static 'css/assistant/main.css' %}">
 </head>
 <body>
-    <div class="main-container">
-        <!-- 메뉴 바 -->
-        <header class="menu-bar">
-            <button id="menuButton"><a href="{% url 'main-select' %}"><img src="{% static 'image/assistant/newlogo.png' %}" alt="Menu"></a></button>
-{#            <button id="userButton"><img src="{% static 'image/assistant/user-circle.svg' %}" alt="User"></button>#}
-        </header>
+<div class="page-container">
+    <!-- 메뉴 바 -->
+    <header class="menu-bar">
+        <button id="menuButton">
+            <a href="{% url 'main-select' %}">
+                <img src="{% static 'image/assistant/newlogo.png' %}" alt="Menu">
+            </a>
+        </button>
+    </header>
 
-        <!-- 검색창 -->
-        <div class="search-bar">
-            <div class="search-container">
-                <form method="GET" action="{% url 'search-results' %}">
-                    <input type="text" placeholder="대화하고 싶은 서비스를 검색해보세요" name="query" id="searchInput">
-                    <button id="searchButton" type="submit"><img src="{% static 'image/assistant/search.svg' %}" alt="Search"></button>
-                </form>
-            </div>
+    <!-- 검색창 -->
+    <div class="search-bar">
+        <div class="search-container">
+            <form method="GET" action="{% url 'search-results' %}">
+                <input type="text" placeholder="대화하고 싶은 서비스를 검색해보세요" name="query" id="searchInput">
+                <button id="searchButton" type="submit">
+                    <img src="{% static 'image/assistant/search.svg' %}" alt="Search">
+                </button>
+            </form>
         </div>
-
-        <!-- 카테고리 -->
-        <div>
-            <ul class="category-list">
-                <li><a href="{% url 'main-select' %}">크리에이터</a></li>
-                <li><a href="{% url 'local-select' %}">지역별</a></li>
-<!--                <li><a href="{% url 'thema-select' %}">테마별</a></li>-->
-                <li><a href="{% url 'independence-select' %}">독립운동</a></li>
-                <li><a href="{% url 'sommelier-select' %}" class="category-select">소믈리에</a></li>
-            </ul>
-        </div>
-
-        <!-- 어시스턴트를 주제별로 보여줌 -->
-        {% for description, assistants in assistants_by_description.items %}
-            <p class="tour-container-title">{{ description }}</p>
-            <div class="tour-container">
-                <div class="swiper-container">
-                    <div class="swiper-wrapper">
-                        {% for assistant in assistants %}
-                            <div class="swiper-slide tour-item">
-                                <a href="/chatbot/{{ assistant.id }}/" onclick="setArrayIndex(2)" class="chatbot-link" style=" text-decoration: none; color: inherit;">
-<!--                                    <img src="{{ assistant.photo.url }}" alt="{{ assistant.name }}">-->
-                                    <img src="{% if assistant.photo %}{{ assistant.photo.url }}{% else %}{{ MEDIA_URL }}assistnat_photos/default.png{% endif %}" alt="{{ assistant.name }}">
-                                    <p class="tour-title">{{ assistant.name }}</p>
-                                    <p class="tour-address">
-                                        <!-- 우선순위별 해시태그 표시 -->
-                                        {% for tag in assistant.tags.all|dictsort:"priority" %}
-                                            #{{ tag.name }}
-                                        {% endfor %}
-                                    </p>
-                                </a>
-                            </div>
-                        {% endfor %}
-                    </div>
-                    <div class="swiper-scrollbar"></div>
-                </div>
-            </div>
-        {% endfor %}
     </div>
 
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    <script>
-        var swipers = [];
-        document.querySelectorAll('.swiper-container').forEach((container, index) => {
-            swipers.push(new Swiper(container, {
-                loop: false,
-                slidesPerView: 1.9,
-                spaceBetween: 2,
-                scrollbar: {
-                    el: container.querySelector('.swiper-scrollbar'),
-                    draggable: true,
-                },
-            }));
-        });
+    <!-- 카테고리 -->
+    <ul class="category-list">
+        <li><a href="{% url 'main-select' %}">크리에이터</a></li>
+        <li><a href="{% url 'local-select' %}">지역별</a></li>
+        <li><a href="{% url 'independence-select' %}">독립운동</a></li>
+        <li><a href="{% url 'sommelier-select' %}" class="category-select">소믈리에</a></li>
+    </ul>
 
-    // 세션 스토리지에 배열 인덱스 저장
+    <!-- 어시스턴트 목록 -->
+    {% for description, assistants in assistants_by_description.items %}
+        <p class="assistant-container-title">{{ description }}</p>
+        <div class="assistant-container">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    {% for assistant in assistants %}
+                        <div class="swiper-slide assistant-item">
+                            <a href="/chatbot/{{ assistant.id }}/" onclick="setArrayIndex(2)" class="chatbot-link">
+                                <img src="
+                                        {% if assistant.photo %}{{ assistant.photo.url }}{% else %}{{ MEDIA_URL }}assistnat_photos/default.png{% endif %}"
+                                     alt="{{ assistant.name }}">
+                                <p class="assistant-title">{{ assistant.name }}</p>
+                                <p class="assistant-address">
+                                    {% for tag in assistant.tags.all|dictsort:"priority" %}
+                                        #{{ tag.name }}
+                                    {% endfor %}
+                                </p>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="swiper-scrollbar"></div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script>
+    const swipers = [];
+    document.querySelectorAll('.swiper-container').forEach((container) => {
+        swipers.push(new Swiper(container, {
+            loop: false,
+            slidesPerView: 1.9,
+            spaceBetween: 2,
+            scrollbar: {
+                el: container.querySelector('.swiper-scrollbar'),
+                draggable: true,
+            },
+        }));
+    });
+
     function setArrayIndex(index) {
         sessionStorage.setItem('arrayIndex', index);
     }
-    </script>
+</script>
 </body>
 </html>
