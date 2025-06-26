@@ -14,15 +14,18 @@
     <!-- 헤더 -->
     <header class="menu-bar">
         <button id="menuButton">
-            <img src="{% static 'image/assistant/newlogo.png' %}" alt="Menu">
+            <a href="{% url 'main-select' %}">
+                <img src="{% static 'image/assistant/newlogo.png' %}" alt="Menu">
+            </a>
         </button>
     </header>
+
 
     <!-- 검색창 -->
     <div class="search-bar">
         <div class="search-container">
             <form method="GET" action="{% url 'search-results' %}">
-                <input type="text" placeholder="대화하고 싶은 서비스를 검색해보세요" name="query" id="searchInput">
+                <input type="text" placeholder="会話したいサービスを検索してください" name="query" id="searchInput">
                 <button id="searchButton" type="submit">
                     <img src="{% static 'image/assistant/search.svg' %}" alt="Search">
                 </button>
