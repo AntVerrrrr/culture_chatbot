@@ -26,7 +26,7 @@ TOKEN_LIMIT_PER_DAY = 690000
 # -------------------------------------------------------------
 # 첫 번째 페이지: 추천 페이지
 def main_view(request):
-    descriptions = ["로컬 크리에이터와 나누는 대화", "로컬 캐릭터와 즐기는 대화", "소주어리: 안동소주 투어", "코레아우라! 독립운동을 따라 즐기는 안동"]
+    descriptions = ["로컬 크리에이터와 나누는 대화", "로컬 캐릭터와 즐기는 대화", "소주어리: 안동소주 투어", "안동 유네스코 문화 미니 투어"]
     assistants_by_description = {}
 
     # 각 description에 맞는 어시스턴트 데이터를 가져옴
@@ -164,8 +164,13 @@ class EventHandler(AssistantEventHandler):
         self.usage = 0
 
     def on_message_done(self, message) -> None:
-        clean = re.sub(r'【.*?】', '', message.content[0].text.value).strip()
+        text = message.content[0].text.value
+        text = re.sub(r'【.*?】', '', text)  # 괄호 주석 제거
+        text = re.sub(r'\*\*(.*?)\*\*', r'\1', text)  # **강조** 제거
+        clean = text.strip()
+
         self.responses.append(clean)
+
         if hasattr(message, 'usage') and message.usage and message.usage.total_tokens:
             self.usage = message.usage.total_tokens
 
@@ -209,6 +214,8 @@ class ChatbotAPIView(APIView):
         prompt = assistant.prompt_context or f"당신은 '{assistant.name}'입니다.\n- 첨부된 파일의 내용을 바탕으로 대답해주세요."
         if str(fast_response).lower() == "true":
             prompt += "\n- 답변은 2문장 이내로 간결하게 요약해주세요."
+
+        print("📢 prompt_context:", prompt)
 
         try:
             thread = client.beta.threads.create(messages=[{
@@ -268,14 +275,39 @@ def text_to_speech(request):
         return JsonResponse({'error': 'Invalid request'}, status=400)
 
     try:
-        text = json.loads(request.body).get('text')
+        data = json.loads(request.body)
+        text = data.get('text')
+        assistant_db_id = data.get('id')
+
         if not text:
             return JsonResponse({'error': 'Text is required'}, status=400)
 
+        # response = client.audio.speech.create(
+        #     model="tts-1", voice="nova", input=text, speed=1.0)
+
+        # DB에서 voice 값 가져오기
+
+        try:
+            assistant = Assistant.objects.get(id=assistant_db_id)
+            voice = (assistant.voice or 'nova').lower()
+        except Assistant.DoesNotExist:
+            voice = 'nova'
+
+        # print(f"[DEBUG] text: {text}")
+        print(f"[DEBUG] id: {assistant_db_id}")
+        print(f"[DEBUG] selected voice: {voice}")
+
+        # OpenAI TTS 요청
         response = client.audio.speech.create(
-            model="tts-1", voice="nova", input=text, speed=1.0)
+            model="tts-1",
+            voice=voice,
+            input=text,
+            speed=1.0
+        )
+
         audio_data = base64.b64encode(response.content).decode('utf-8')
         return JsonResponse({'audio_data': audio_data})
+
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
 

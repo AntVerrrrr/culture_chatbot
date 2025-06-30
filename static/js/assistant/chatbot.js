@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const csrftoken = getCookie("csrftoken");
   const assistantProfileImgUrl = document.body.dataset.assistantImg;
 
+//  console.log("🟢 assistantDbId:", assistantDbId);
+
   let fastMode = false;
   let currentAudio = null;
   let mediaRecorder = null;
@@ -208,12 +210,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ✅ tts 재생 ------------------------------------------------------------------------------------------
   function playTTS(text) {
+    console.log("📢 TTS 재생 요청:", text);
+    console.log("🎯 assistantDbId:", assistantDbId);
+
     if (currentAudio) currentAudio.pause();
 
     fetch("/tts/", {
       method: "POST",
       headers: { "Content-Type": "application/json", "X-CSRFToken": csrftoken },
-      body: JSON.stringify({ text }),
+      body: JSON.stringify({
+        text: text,
+        id: assistantDbId
+      })
     })
       .then((res) => res.json())
       .then((data) => {

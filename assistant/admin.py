@@ -8,17 +8,31 @@ class TagAdmin(admin.ModelAdmin):
     list_editable = ('priority',)  # 어드민 페이지에서 우선순위를 직접 수정할 수 있도록 설정
 
 class AssistantAdmin(admin.ModelAdmin):
-    list_display = ['name', 'country', 'province', 'city_county_town', 'assistant_id', 'welcome_message']  # assistant_variable은 제거
-    search_fields = ['name', 'assistant_id']
-    list_filter = ['country', 'province', 'city_county_town', 'tags']
+    list_display = [
+        'name',  # 어시스턴트 이름
+        'assistant_id',  # OpenAI assistant id
+        'document_id',  # 첨부 문서 ID
+        'voice',  # 선택된 음성 (TTS 음성)
+        'tag_list',  # 태그 목록 (커스텀 메서드로)
+        'welcome_message',  # 간단한 환영 메시지
+    ]
+
+    search_fields = ['name', 'assistant_id', 'document_id', 'voice',]
+    list_filter = ['country', 'province', 'city_county_town', 'tags', 'voice']
     fields = (
-        'assistant_id', 'name', 'photo', 'description', 'country', 'province', 'city_county_town',
-        'document_id', 'tags', 'prompt_context',
+        'name', 'photo', 'assistant_id', 'document_id',
+        'country', 'province', 'city_county_town', 'tags',
+        'description', 'prompt_context', 'voice',
+        'welcome_message',
         'question_1', 'question_2', 'question_3', 'question_4',
         'question_5', 'question_6', 'question_7', 'question_8', 'question_9', 'question_10',
-        'welcome_message'
     )
     filter_horizontal = ('tags',)  # ManyToManyField를 쉽게 선택할 수 있도록 필터 사용
+
+    def tag_list(self, obj):
+        return ", ".join(tag.name for tag in obj.tags.all())
+
+    tag_list.short_description = "태그"
 
 
 admin.site.register(Assistant, AssistantAdmin)
