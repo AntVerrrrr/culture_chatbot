@@ -210,10 +210,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ✅ tts 재생 ------------------------------------------------------------------------------------------
   function playTTS(text) {
-    console.log("📢 TTS 재생 요청:", text);
-    console.log("🎯 assistantDbId:", assistantDbId);
-
     if (currentAudio) currentAudio.pause();
+
+    const voice = document.getElementById("voice")?.value || "nova";
+    console.log("🎤 요청 보낼 ID:", assistantDbId);
+    console.log("🎤 현재 Voice:", voice);
 
     fetch("/tts/", {
       method: "POST",
