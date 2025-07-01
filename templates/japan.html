@@ -49,7 +49,7 @@
                 <div class="swiper-wrapper">
                     {% for assistant in assistants %}
                         <div class="swiper-slide assistant-item">
-                            <a href="/chatbot/{{ assistant.id }}" onclick="setArrayIndex(1)" class="chatbot-link">
+                            <a href="/chatbot/{{ assistant.id }}/" onclick="setArrayIndex(1)" class="chatbot-link">
                                 <img src="
                                         {% if assistant.photo %}{{ assistant.photo.url }}{% else %}{{ MEDIA_URL }}assistnat_photos/default.png{% endif %}"
                                      alt="{{ assistant.name }}">
