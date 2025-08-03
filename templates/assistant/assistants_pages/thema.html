@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/assistant/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/includes/header.css' %}">
+    <link rel="stylesheet" href="{% static 'css/includes/search_bar.css' %}">
+</head>
+<body>
+    <div class="main-container">
+        <!-- 공통 헤더 불러오기 -->
+        {% include "includes/header.html" %}
+
+        <!-- 검색창 -->
+        {% include "includes/search_bar.html" %}
+
+        <!-- 카테고리 리스트 -->
+        <div>
+            <ul class="category-list">
+                <li><a href="{% url 'main-select' %}">크리에이터</a></li>
+                <li><a href="{% url 'local-select' %}">지역별</a></li>
+                <li><a href="{% url 'thema-select' %}" class="category-select">테마별</a></li>
+                <li><a href="{% url 'independence-select' %}">독립운동</a></li>
+                <li><a href="{% url 'sommelier-select' %}">소믈리에</a></li>
+            </ul>
+        </div>
+
+        <footer></footer>
+    </div>
+
+<script src="{% static 'js/includes/header.js' %}"></script>
+<script src="{% static 'js/setting/setting.js' %}"></script>
+</body>
+</html>

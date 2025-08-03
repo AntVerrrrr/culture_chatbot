@@ -66,16 +66,16 @@ class Assistant(models.Model):
 
 
     # 질문 필드 추가
-    question_1 = models.CharField(max_length=255, null=True, blank=True)
-    question_2 = models.CharField(max_length=255, null=True, blank=True)
-    question_3 = models.CharField(max_length=255, null=True, blank=True)
-    question_4 = models.CharField(max_length=255, null=True, blank=True)
-    question_5 = models.CharField(max_length=255, null=True, blank=True)
-    question_6 = models.CharField(max_length=255, null=True, blank=True)
-    question_7 = models.CharField(max_length=255, null=True, blank=True)
-    question_8 = models.CharField(max_length=255, null=True, blank=True)
-    question_9 = models.CharField(max_length=255, null=True, blank=True)
-    question_10 = models.CharField(max_length=255, null=True, blank=True)
+    question_1 = models.TextField(null=True, blank=True)
+    question_2 = models.TextField(null=True, blank=True)
+    question_3 = models.TextField(null=True, blank=True)
+    question_4 = models.TextField(null=True, blank=True)
+    question_5 = models.TextField(null=True, blank=True)
+    question_6 = models.TextField(null=True, blank=True)
+    question_7 = models.TextField(null=True, blank=True)
+    question_8 = models.TextField(null=True, blank=True)
+    question_9 = models.TextField(null=True, blank=True)
+    question_10 = models.TextField(null=True, blank=True)
 
 
     def __str__(self):

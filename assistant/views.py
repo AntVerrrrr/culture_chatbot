@@ -17,6 +17,11 @@ from .models import Province, CityCountyTown, Assistant
 from .serializers import ProvinceSerializer, AssistantSerializer, CityCountyTownSerializer
 
 import tempfile, os, json, base64, logging, re, openai
+from django.utils import translation
+from django.utils.translation import activate
+from django.utils.translation import activate
+from django.utils.translation import get_language
+from django.utils.translation import get_language
 
 logger = logging.getLogger(__name__)
 load_dotenv(override=True)
@@ -33,12 +38,12 @@ def main_view(request):
     for description in descriptions:
         assistants_by_description[description] = Assistant.objects.filter(description=description)
 
-    return render(request, 'main.html', {'assistants_by_description': assistants_by_description})
+    return render(request, 'assistant/assistants_pages/main.html', {'assistants_by_description': assistants_by_description})
 
 # -------------------------------------------------------------
 # 두 번째 페이지: 지역 선택 페이지
 def local_view(request):
-    return render(request, 'local.html')
+    return render(request, 'assistant/assistants_pages/local.html')
 
 # 도 목록 API
 class ProvinceListView(generics.ListAPIView):
@@ -68,7 +73,7 @@ class AssistantListView(generics.ListAPIView):
 # -------------------------------------------------------------------------------------------------------------------
 # 숨겨진 페이지
 def thema_view(request):
-    return render(request, 'thema.html')
+    return render(request, 'assistant/assistants_pages/thema.html')
 
 # -------------------------------------------------------------------------------------------------------------------
 # 세 번째 페이지: 독립 선택 페이지
@@ -80,7 +85,7 @@ def independence_view(request):
     for description in descriptions:
         assistants_by_description[description] = Assistant.objects.filter(description=description)
 
-    return render(request, 'independence.html', {'assistants_by_description': assistants_by_description})
+    return render(request, 'assistant/assistants_pages/independence.html', {'assistants_by_description': assistants_by_description})
 
 # -------------------------------------------------------------------------------------------------------------------
 # 네 번째 페이지: 지역 상인 페이지
@@ -92,7 +97,7 @@ def sommelier_view(request):
     for description in descriptions:
         assistants_by_description[description] = Assistant.objects.filter(description=description)
 
-    return render(request, 'sommelier.html', {'assistants_by_description': assistants_by_description})
+    return render(request, 'assistant/assistants_pages/sommelier.html', {'assistants_by_description': assistants_by_description})
 
 # -------------------------------------------------------------------------------------------------------------------
 # 다섯 번째 페이지: 라운지 페이지
@@ -104,7 +109,7 @@ def lounge_view(request):
     for description in descriptions:
         assistants_by_description[description] = Assistant.objects.filter(description=description)
 
-    return render(request, 'lounge.html', {'assistants_by_description': assistants_by_description})
+    return render(request, 'assistant/assistants_pages/lounge.html', {'assistants_by_description': assistants_by_description})
 
 # -------------------------------------------------------------------------------------------------------------------
 # 여섯 번째 페이지: 일본 박람회 준비
@@ -116,19 +121,20 @@ def jp_view(request):
     for description in descriptions:
         assistants_by_description[description] = Assistant.objects.filter(description=description)
 
-    return render(request, 'japan.html', {'assistants_by_description': assistants_by_description})
+    return render(request, 'assistant/assistants_pages/japan.html', {'assistants_by_description': assistants_by_description})
 
 # -------------------------------------------------------------------------------------------------------------------
 # 검색 페이지
 def search_results_view(request):
     query = request.GET.get('query')
     results = Assistant.objects.filter(name__icontains=query)  # 이름 기준으로 검색
-    return render(request, 'search_results.html', {'query': query, 'results': results})
+    return render(request, 'assistant/assistants_pages/search_results.html', {'query': query, 'results': results})
 
 ### ---------- 일반 렌더링 뷰 ---------- ###
 def chatbot_view(request, id):
     request.session.pop('thread_id', None)
     assistant = get_object_or_404(Assistant, id=id)
+
     questions = [q for q in [
         assistant.question_1, assistant.question_2, assistant.question_3,
         assistant.question_4, assistant.question_5, assistant.question_6,
@@ -136,7 +142,7 @@ def chatbot_view(request, id):
         assistant.question_10
     ] if q]
 
-    return render(request, 'chatbot.html', {
+    return render(request, 'assistant/chatbot_pages/chatbot.html', {
         'assistant': assistant,
         'id': assistant.id,
         'assistant_id': assistant.assistant_id,
@@ -335,7 +341,7 @@ def lounge_chatbot_view(request, id):
 
     questions = [q for q in questions if q]  # None 값 제외
 
-    return render(request, 'lounge_chatbot.html', {
+    return render(request, 'assistant/chatbot_pages/lounge_chatbot.html', {
         'assistant': assistant,
         'id': assistant.id,
         'assistant_id': assistant.assistant_id,
@@ -370,7 +376,7 @@ def memorium_chatbot_view(request, id):
 
     questions = [q for q in questions if q]  # None 값 제외
 
-    return render(request, 'memorium_chatbot.html', {
+    return render(request, 'assistant/chatbot_pages/memorium_chatbot.html', {
         'assistant': assistant,
         'id': assistant.id,
         'assistant_id': assistant.assistant_id,
@@ -379,6 +385,15 @@ def memorium_chatbot_view(request, id):
         'questions': questions,
         'welcome_message': assistant.welcome_message
     })
+
+def debug_lang_view(request):
+    activate('ja')
+    assistant = Assistant.objects.first()
+
+    print("🌐 LANGUAGE_CODE--:", get_language())
+    print("🟡 name_ja--:", assistant.name_ja)
+    print("🔵 assistant.--:", assistant.name)
+    return JsonResponse({'name': assistant.name})
 
 
 

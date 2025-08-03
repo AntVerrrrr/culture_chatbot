@@ -26,5 +26,7 @@ urlpatterns = [
 
     path('', include('assistant.urls')),  # assistant 앱의 URL 포함
 
+    path('setting', include('setting.urls')),
+    path("api/", include("setting.urls")),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

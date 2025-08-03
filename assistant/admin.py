@@ -1,13 +1,15 @@
 from django.contrib import admin
 from .models import Assistant, Province, CityCountyTown, Tag
 from django.utils.html import format_html
+from modeltranslation.admin import TranslationAdmin   # ✅ 꼭 추가
 
-class TagAdmin(admin.ModelAdmin):
+
+class TagAdmin(TranslationAdmin):  # ✅ 수정
     list_display = ('name', 'priority')
     search_fields = ('name',)
     list_editable = ('priority',)  # 어드민 페이지에서 우선순위를 직접 수정할 수 있도록 설정
 
-class AssistantAdmin(admin.ModelAdmin):
+class AssistantAdmin(TranslationAdmin):  # ✅ 수정
     list_display = [
         'name',  # 어시스턴트 이름
         'assistant_id',  # OpenAI assistant id
@@ -38,4 +40,4 @@ class AssistantAdmin(admin.ModelAdmin):
 admin.site.register(Assistant, AssistantAdmin)
 admin.site.register(Province)
 admin.site.register(CityCountyTown)
-admin.site.register(Tag)
+admin.site.register(Tag, TagAdmin)

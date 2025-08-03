@@ -16,7 +16,28 @@ body {
   min-height: 100vh;
 }
 
-/*.search-bar {
+/*
+.menu-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 0;
+}
+
+.menu-bar button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.menu-bar #menuButton img {
+  width: 70px;
+  height: 70px;
+  display: block;
+}
+*/
+
+.search-bar {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -53,7 +74,7 @@ body {
 #searchButton img {
   width: 20px;
   height: 20px;
-}*/
+}
 
 .category-list {
   list-style-type: none;

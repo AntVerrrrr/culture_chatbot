@@ -19,6 +19,9 @@ from .views import (
     text_to_speech,
     )
 
+from .views import debug_lang_view
+
+
 urlpatterns = [
     path('', main_view, name='main-select'),
     path('local/', local_view, name='local-select'),  # 두 번째 페이지: 지역 선택 후 어시스턴트 연결 페이지
@@ -32,7 +35,7 @@ urlpatterns = [
 
     path('memorium/<int:id>/', memorium_chatbot_view, name='chatbot-memorium'),
 
-    path('jp', jp_view, name='jp-select'),  # 라운지페이지
+    path('japan', jp_view, name='jp-select'),  # 라운지페이지
 
     path('chatbot/<int:id>/', chatbot_view, name='chatbot'),
 
@@ -41,4 +44,7 @@ urlpatterns = [
 
     path('stt/', speech_to_text, name='speech_to_text'),
     path('tts/', text_to_speech, name='text_to_speech'),
+
+    path('debug-lang/', debug_lang_view, name='debug-lang'),
+
 ]

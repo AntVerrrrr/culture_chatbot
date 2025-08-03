@@ -1,0 +1,80 @@
+/* === 헤더 전체 === */
+.menu-bar {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 0;
+}
+
+.logo-link img {
+  height: 70px;
+}
+
+/* === 햄버거 버튼 === */
+.hamburger-button {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.hamburger-button img {
+  height: 28px;
+  width: auto;
+  display: block;
+}
+
+/* === 사이드 드로어 === */
+.side-drawer {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 260px;
+  height: 100%;
+  background-color: #fff;
+  box-shadow: -2px 0 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  transition: right 0.3s ease-in-out;
+  padding: 20px;
+}
+
+.side-drawer.open {
+  right: 0;
+}
+
+.drawer-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.drawer-menu li {
+  margin-bottom: 20px;
+}
+
+.drawer-menu a {
+  text-decoration: none;
+  font-size: 18px;
+  color: #333;
+}
+
+/* === 드로어 오버레이 === */
+.drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.3); /* 어두운 배경 */
+  z-index: 999;
+  display: none; /* 처음엔 숨김 */
+}
+
+.drawer-overlay.active {
+  display: block;
+}

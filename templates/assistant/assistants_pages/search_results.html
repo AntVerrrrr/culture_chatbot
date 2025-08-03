@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/assistant/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/includes/header.css' %}">
+    <link rel="stylesheet" href="{% static 'css/includes/search_bar.css' %}">
+<body>
+<div class="page-container">
+    <!-- 공통 헤더 불러오기 -->
+    {% include "includes/header.html" %}
+
+    <!-- 검색창 -->
+    {% include "includes/search_bar.html" %}
+
+    <!-- 카테고리 -->
+    <ul class="category-list">
+        <li><a href="{% url 'main-select' %}"  data-i18n="메인" >메인</a></li>
+        <li><a href="{% url 'local-select' %}"  data-i18n="지역별">지역별</a></li>
+        <li><a href="{% url 'independence-select' %}" data-i18n="코레아우라">코레아우라</a></li>
+        <li><a href="{% url 'sommelier-select' %}"  data-i18n="소믈리에">소믈리에</a></li>
+    </ul>
+
+    <!-- 검색 결과 -->
+    <h2>검색 결과: "{{ query }}"</h2>
+    <div class="photo-grid" id="assistantList">
+        {% if results %}
+        {% for assistant in results %}
+        <div class="photo-item">
+            <a href="/chatbot/{{ assistant.id }}/" onclick="setArrayIndex(2)">
+                <img src="
+                                {% if assistant.photo %}{{ assistant.photo.url }}{% else %}{{ MEDIA_URL }}assistnat_photos/default.png{% endif %}"
+                     alt="{{ assistant.name }}">
+                <p class="assistant-title">{{ assistant.name }}</p>
+                <p class="assistant-address">
+                    {% for tag in assistant.tags.all|dictsort:"priority" %}
+                    #{{ tag.name }}
+                    {% endfor %}
+                </p>
+            </a>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p>검색 결과가 없습니다.</p>
+        {% endif %}
+    </div>
+</div>
+
+<script src="{% static 'js/includes/header.js' %}"></script>
+<script src="{% static 'js/setting/setting.js' %}"></script>
+<script>
+    function setArrayIndex(index) {
+        sessionStorage.setItem('arrayIndex', index);
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!-- includes/header.html -->
+
+{% load static %}
+<header class="menu-bar">
+  <!-- 왼쪽 로고 -->
+  <a href="{% url 'main-select' %}" class="logo-link">
+    <img src="{% static 'image/assistant/newlogo.png' %}" alt="Logo">
+  </a>
+
+  <!-- 오른쪽 햄버거 버튼 -->
+  <button id="menuButton" class="hamburger-button" aria-label="메뉴 열기">
+    <img src="{% static 'image/includes/menu.svg' %}" alt="Menu Icon">
+  </button>
+</header>
+
+<!-- 오버레이 추가 -->
+<div id="drawerOverlay" class="drawer-overlay"></div>
+
+<!-- 우측 사이드 드로어 -->
+<div id="sideDrawer" class="side-drawer">
+  <ul class="drawer-menu">
+    <li><a href="#">마이페이지</a></li>
+    <a href="{% url 'setting' %}">설정</a>
+  </ul>
+</div>

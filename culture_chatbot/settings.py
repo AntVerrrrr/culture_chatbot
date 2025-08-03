@@ -10,79 +10,52 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
+
 from pathlib import Path
 import os
 from dotenv import load_dotenv
 import logging
 from decouple import config
 
-# .env 파일 로드---------------------------------
+# =================================== .env 파일 로드 ===================================
 load_dotenv()
 
 logging.basicConfig(level=logging.ERROR)
 
 APPEND_SLASH=False
 
-# loggin---------------------------------------
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'handlers': {
-#         'console': {
-#             'class': 'logging.StreamHandler',
-#         },
-#     },
-#     'loggers': {
-#         'django': {
-#             'handlers': ['console'],
-#             'level': 'DEBUG',
-#         },
-#     },
-# }
 
-
-
-# OpenAI API 설정
+# =================================== OpenAI API 설정 ===================================
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 if not OPENAI_API_KEY:
     raise ValueError("OpenAI API key is missing.")
-# ----------------------------------------------
+# =========================================================================================================
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
-
-# SECRET_KEY를 환경 변수에서 읽어오기
+# =================================== SECRET_KEY를 환경 변수에서 읽어오기 ===================================
 SECRET_KEY = os.getenv('SECRET_KEY')
-
 if not SECRET_KEY:
     raise ValueError("SECRET_KEY is not set in the .env file")
 
+# =================================== 디버그 모드 설정 ===================================
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ['*']
-# ALLOWED_HOSTS = [
-#     "sgimagine.com",
-#     "www.sgimagine.com",
-#     "koreaura.sgimagine.com",
-#     "45.77.15.145",    # 서버 아이피
-#     "127.0.0.1",       # 로컬호스트
-#     "localhost"        # 로컬 테스트
-# ]
-# ALLOWED_HOSTS 설정 (환경 변수에서 불러오기)
+
+# =================================== ALLOWED_HOSTS 설정 (환경 변수에서 불러오기) ===================================
 ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost').split(',')
 
 
 
-# Application definition
-
+# =================================== Application definition ===================================
 INSTALLED_APPS = [
+    'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -90,20 +63,28 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
+
     'assistant',
+    'setting',
     'rest_framework',
     'channels',
+
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+
+    'django.middleware.locale.LocaleMiddleware',
+    'setting.middleware.LanguageHeaderMiddleware',
+
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'culture_chatbot.urls'
@@ -120,11 +101,12 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.i18n',
             ],
         },
     },
 ]
-# channels 설정---------------------------------------------------------------------------------------------------
+# =================================== channels 설정 ===================================
 ASGI_APPLICATION = "culture_chatbot.asgi.application"
 
 CHANNEL_LAYERS = {
@@ -134,7 +116,7 @@ CHANNEL_LAYERS = {
 }
 
 
-# csrf토큰 설정---------------------------------------------------------------------------------------------------
+# =================================== csrf토큰 설정 ===================================
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = [
     "https://sgimagine.com",  # 허용할 도메인
@@ -169,13 +151,12 @@ CORS_ALLOW_HEADERS = [
 # 세션 기반 인증 허용 (로그인 인증 관련)
 CORS_ALLOW_CREDENTIALS = True
 
-# wsgi----------------------------------------------------------------------------------------------------
+# =================================== wsgi ===================================
 WSGI_APPLICATION = 'culture_chatbot.wsgi.application'
 
 
-# Database---------------------------------------------------------------------------------------------------
+# =================================== Database ===================================
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -187,7 +168,7 @@ DATABASES = {
     }
 }
 
-# Password validation
+# =================================== Password validation ===================================
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -206,10 +187,13 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
+# =================================== Internationalization ===================================
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
+USE_I18N = True
 
-LANGUAGE_CODE = 'ko-kr'
+LANGUAGE_CODE = 'ko'
+# 기본 언어
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'ko'
 
 TIME_ZONE = 'Asia/Seoul'
 
@@ -220,7 +204,7 @@ USE_TZ = True
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
 
-# Static files (CSS, JavaScript, Images)
+# =================================== Static files (CSS, JavaScript, Images) ===================================
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
@@ -231,12 +215,28 @@ STATICFILES_DIRS = [
 # 정적파일을 한곳에 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-
 # 미디어 파일 설정
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Default primary key field type
+# =================================== locale 디렉토리 경로 설정 > 다국어 기능 ===================================
+# 활성화 언어 목록
+LANGUAGES = (
+    ('ko', 'Korean'),
+    ('en', 'English'),
+    ('ja', 'Japanese'),
+    ('fr', 'French'),
+    ('de', 'German'),
+)
+
+
+
+# locale 디렉토리 경로 설정
+LOCALE_PATHS = [ BASE_DIR / 'locale' ]
+
+
+
+# =================================== Default primary key field type ===================================
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
