@@ -1,0 +1,28 @@
+<!--가로스크롤 어시스턴트목록-->
+
+{% for description, assistants in assistants_by_description.items %}
+<p class="assistant-container-title">{{ description }}</p>
+<div class="assistant-container">
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            {% for assistant in assistants %}
+            <div class="swiper-slide assistant-item">
+                <a href="{% url 'chatbot' assistant.id %}" onclick="setArrayIndex(1)" class="chatbot-link">
+                    <img src="
+                                        {% if assistant.photo %}{{ assistant.photo.url }}{% else %}{{ MEDIA_URL }}assistnat_photos/default.png{% endif %}"
+                         alt="{{ assistant.name }}">
+                    <p class="assistant-title">{{ assistant.name }}</p>
+                    <p class="assistant-address">
+                        {% for tag in assistant.tags.all|dictsort:"priority" %}
+                        #{{ tag.name }}
+                        {% endfor %}
+                    </p>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="swiper-scrollbar"></div>
+    </div>
+</div>
+{% endfor %}
+
