@@ -375,7 +375,7 @@ body {
     text-align: right;
 }
 
-.fast-response-button {
+.fileSearch-button {
     padding: 5px 10px;
     border-radius: 5px;
     display: flex;
@@ -385,12 +385,12 @@ body {
     margin-left: auto;
 }
 
-.fast-response-button img {
+.fileSearch-button img {
     width: 20px;
     height: 20px;
 }
 
-.fast-response-button.active {
+.fileSearch-button.active {
     background-color: azure;
 }
 
