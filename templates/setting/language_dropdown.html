@@ -1,0 +1,22 @@
+{% load i18n %}
+<form id="langForm" action="{% url 'set_language' %}" method="post">
+  {% csrf_token %}
+  <input type="hidden" name="next" value="{{ request.path }}">
+
+  {% get_current_language as CURRENT_LANG %}
+  {% get_available_languages as LANGS %}
+  {% get_language_info_list for LANGS as languages %}
+
+  <select id="langSelect" name="language" aria-label="{% trans '언어 선택' %}">
+    {% for lang in languages %}
+      <option
+        value="{{ lang.code }}"
+        {% if lang.code == CURRENT_LANG %}selected{% endif %}
+        dir="{% if lang.bidi %}rtl{% else %}ltr{% endif %}"
+      >
+        {{ lang.name_local|capfirst }}  {# 예: 한국어, English, 日本語, Français, Deutsch #}
+        {# 참고: {{ lang.name }} (영문명), {{ lang.name_translated }} (현재 UI 언어로 번역된 이름) #}
+      </option>
+    {% endfor %}
+  </select>
+</form>
