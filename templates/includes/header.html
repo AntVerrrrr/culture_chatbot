@@ -1,6 +1,8 @@
 <!-- includes/header.html -->
 
 {% load static %}
+{% load i18n %}
+
 <header class="menu-bar">
   <!-- 왼쪽 로고 -->
   <a href="{% url 'main-select' %}" class="logo-link">
@@ -19,7 +21,7 @@
 <!-- 우측 사이드 드로어 -->
 <div id="sideDrawer" class="side-drawer">
   <ul class="drawer-menu">
-    <li><a href="#">마이페이지</a></li>
-    <a href="{% url 'setting' %}">설정</a>
+    <li><a href="#">{% trans "마이페이지" %}</a></li>
+    <a href="{% url 'setting' %}">{% trans "설정" %}</a>
   </ul>
 </div>
