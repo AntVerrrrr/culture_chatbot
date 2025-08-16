@@ -1,9 +1,12 @@
+{% load static %}
+{% load i18n %}
+
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="{{ LANGUAGE_CODE|default:'ko' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main</title>
+    <title>{% trans "검색 결과" %}</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     {% load static %}
@@ -20,10 +23,10 @@
 
     <!-- 카테고리 -->
     <ul class="category-list">
-        <li><a href="{% url 'main-select' %}"  data-i18n="메인" >메인</a></li>
-        <li><a href="{% url 'local-select' %}"  data-i18n="지역별">지역별</a></li>
-        <li><a href="{% url 'independence-select' %}" data-i18n="코레아우라">코레아우라</a></li>
-        <li><a href="{% url 'sommelier-select' %}"  data-i18n="소믈리에">소믈리에</a></li>
+        <li><a href="{% url 'main-select' %}">{% trans "메인" %}</a></li>
+        <li><a href="{% url 'local-select' %}">{% trans "지역별" %}</a></li>
+        <li><a href="{% url 'independence-select' %}">{% trans "코레아우라" %}</a></li>
+        <li><a href="{% url 'sommelier-select' %}">{% trans "소믈리에" %}</a></li>
     </ul>
 
     <!-- 검색 결과 -->
@@ -46,7 +49,7 @@
         </div>
         {% endfor %}
         {% else %}
-        <p>검색 결과가 없습니다.</p>
+        <p>{% trans "검색 결과가 없습니다." %}</p>
         {% endif %}
     </div>
 </div>
