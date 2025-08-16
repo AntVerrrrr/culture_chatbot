@@ -1,9 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
+
+  // i18n helpers (jsi18n 카탈로그 미로드 대비 폴백)
+  const _  = (typeof gettext  === "function") ? gettext  : (s) => s;
+  const _n = (typeof ngettext === "function") ? ngettext : (s1, s2, c) => (c === 1 ? s1 : s2);
+  const _p = (typeof pgettext === "function") ? pgettext : (_ctx, s) => s;
+
+  const API_BASE = "/api/assistant";
   const micButton = document.getElementById("sendTts");
   const inputField = document.getElementById("messageInput");
   const sendButton = document.getElementById("sendButton");
   const cancelMicBtn = document.getElementById("cancelMic");
-  const fastResponseButton = document.getElementById("fastResponseButton");
+  const fileSearchResponseButton = document.getElementById("fileSearchResponseButton");
   const messageList = document.getElementById("messageList");
   const assistantId = document.getElementById("assistant_id").value;
   const documentId = document.getElementById("document_id").value;
@@ -13,20 +20,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
 //  console.log("🟢 assistantDbId:", assistantDbId);
 
-  let fastMode = false;
+  let fileSearchEnabled = false;
   let currentAudio = null;
   let mediaRecorder = null;
   let micStream = null;
 
-  fastResponseButton?.addEventListener("click", () => {
-    fastMode = !fastMode;
-    console.log("⚡ fastMode 상태:", fastMode);
-    fastResponseButton.classList.toggle("active", fastMode);
+  fileSearchResponseButton?.addEventListener("click", () => {
+    fileSearchEnabled = !fileSearchEnabled;
+    console.log("🔎 FileSearch 상태:", fileSearchEnabled);
+    fileSearchResponseButton.classList.toggle("active", fileSearchEnabled);
+    // 라벨 바꾸고 싶으면 ↓
+    // fileSearchResponseButton.textContent = fileSearchEnabled ? "FileSearch: ON" : "FileSearch: OFF";
   });
 
   micButton?.addEventListener("click", async () => {
     micButton.disabled = true;
-    inputField.placeholder = "듣는 중...";
+    inputField.placeholder = _("듣는 중...");
 
     // 👇 입력창 숨기고 마이크 UI 표시
     document.getElementById("inputWrapper")?.classList.add("hidden");
@@ -42,22 +51,29 @@ document.addEventListener("DOMContentLoaded", () => {
       const formData = new FormData();
       formData.append('audio', audioBlob);
 
-      const sttRes = await fetch("/stt/", { method: "POST", body: formData }).then(res => res.json());
+      // STT: /api/assistant/stt/
+      const sttRes = await fetch(`${API_BASE}/stt/`, {
+        method: "POST",
+        headers: { "X-CSRFToken": csrftoken },
+        body: formData
+      }).then(res => res.json());
+
       const userText = sttRes.text;
       if (!userText) {
-        appendMessage("(음성 인식 실패)", "ai");
+        appendMessage(_("(음성 인식 실패)"), "ai");
         return;
       }
       appendMessage(userText, "user");
 
-      const aiRes = await fetch(`/api/chatbot/${assistantDbId}/`, {
+      // 답변: /api/assistant/chatbot/<id>/
+      const aiRes = await fetch(`${API_BASE}/chatbot/${assistantDbId}/`, {
         method: "POST",
         headers: { "Content-Type": "application/json", "X-CSRFToken": csrftoken },
         body: JSON.stringify({
           assistant_id: assistantId,
           document_id: documentId,
           question: userText,
-          fast_response: fastMode,
+          file_search: fileSearchEnabled,
         })
       }).then(res => res.json());
 
@@ -67,9 +83,8 @@ document.addEventListener("DOMContentLoaded", () => {
       // 👇 마이크 UI 숨기고 입력창 다시 표시
       document.getElementById("inputWrapper")?.classList.remove("hidden");
       document.getElementById("voiceUi")?.classList.add("hidden");
-
       micButton.disabled = false;
-      inputField.placeholder = "무엇이든 물어보세요...";
+      inputField.placeholder = _("무엇이든 물어보세요...");
     };
 
     mediaRecorder.start();
@@ -87,13 +102,13 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("voiceUi")?.classList.add("hidden");
     document.getElementById("inputWrapper")?.classList.remove("hidden");
     micButton.disabled = false;
-    inputField.placeholder = "무엇이든 물어보세요...";
+    inputField.placeholder = _("무엇이든 물어보세요...");
   });
 
   sendButton?.addEventListener("click", () => {
     const msg = inputField.value.trim();
     if (msg) {
-      inputField.value = "";  // 💡 먼저 비우기
+      inputField.value = "";
       appendMessage(msg, "user");
       sendMessageToBackend(msg);
     }
@@ -185,15 +200,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function sendMessageToBackend(text) {
     const stopThinking = showThinkingBubble();
-
-    fetch(`/api/chatbot/${assistantDbId}/`, {
+    fetch(`${API_BASE}/chatbot/${assistantDbId}/`, {
       method: "POST",
       headers: { "Content-Type": "application/json", "X-CSRFToken": csrftoken },
       body: JSON.stringify({
         assistant_id: assistantId,
         document_id: documentId,
         question: text,
-        fast_response: fastMode,
+        file_search: fileSearchEnabled,
       }),
     })
       .then((res) => res.json())
@@ -204,11 +218,11 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .catch((err) => {
         console.error("❌ POST 전송 에러", err);
-        appendMessage("⚠️ 답변을 불러오는 데 실패했어요.", "ai");
+        appendMessage(_("⚠️ 답변을 불러오는 데 실패했어요."), "ai");
       });
   }
 
-  // ✅ tts 재생 ------------------------------------------------------------------------------------------
+  // ✅ TTS: /api/assistant/tts/ ------------------------------------------------------------------------------------------
   function playTTS(text) {
     if (currentAudio) currentAudio.pause();
 
@@ -216,13 +230,10 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("🎤 요청 보낼 ID:", assistantDbId);
     console.log("🎤 현재 Voice:", voice);
 
-    fetch("/tts/", {
+    fetch(`${API_BASE}/tts/`, {
       method: "POST",
       headers: { "Content-Type": "application/json", "X-CSRFToken": csrftoken },
-      body: JSON.stringify({
-        text: text,
-        id: assistantDbId
-      })
+      body: JSON.stringify({ text, id: assistantDbId })
     })
       .then((res) => res.json())
       .then((data) => {
@@ -292,7 +303,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const p = document.createElement("p");
     p.className = "thinking-dots";
-    p.textContent = "고민 중.";
+    p.textContent = _("고민 중.");
 
     msgContent.appendChild(p);
     msgBody.appendChild(msgContent);
@@ -305,7 +316,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let dotCount = 1;
     const interval = setInterval(() => {
       dotCount = dotCount % 3 + 1;
-      p.textContent = "고민 중" + ".".repeat(dotCount);
+      p.textContent = _("고민 중") + ".".repeat(dotCount);
     }, 500);
 
     return () => {
@@ -339,7 +350,7 @@ document.addEventListener("DOMContentLoaded", () => {
     copyBtn.addEventListener("click", () => {
       const content = wrapper.closest(".message-content").querySelector("p").innerText;
       navigator.clipboard.writeText(content);
-      alert("복사되었습니다.");
+      alert(_("복사되었습니다."));
     });
 
     actionBox.appendChild(likeBtn);
@@ -351,9 +362,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
     return wrapper;
   }
-
-
-
-
-
 });
