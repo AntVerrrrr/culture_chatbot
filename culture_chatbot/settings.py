@@ -74,17 +74,14 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-
     'django.middleware.locale.LocaleMiddleware',
-    'setting.middleware.LanguageHeaderMiddleware',
-
+    # 'setting.middleware.LanguageHeaderMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-
 ]
 
 ROOT_URLCONF = 'culture_chatbot.urls'
@@ -188,14 +185,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # =================================== Internationalization ===================================
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-USE_I18N = True
-
 LANGUAGE_CODE = 'ko'
 # 기본 언어
 MODELTRANSLATION_DEFAULT_LANGUAGE = 'ko'
 
 TIME_ZONE = 'Asia/Seoul'
+
+USE_I18N = True
 
 USE_L10N = True
 
@@ -229,10 +225,10 @@ LANGUAGES = (
     ('de', 'German'),
 )
 
-
-
-# locale 디렉토리 경로 설정
-LOCALE_PATHS = [ BASE_DIR / 'locale' ]
+# .po 파일 위치
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
 
 
 
