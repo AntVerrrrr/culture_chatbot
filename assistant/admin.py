@@ -1,8 +1,14 @@
 from django.contrib import admin
-from .models import Assistant, Province, CityCountyTown, Tag
+from .models import Assistant, Province, CityCountyTown, Tag, PageDescription
 from django.utils.html import format_html
 from modeltranslation.admin import TranslationAdmin   # ✅ 꼭 추가
 
+@admin.register(PageDescription)
+class PageDescriptionAdmin(TranslationAdmin):
+    list_display  = ('page', 'text', 'order', 'is_active')
+    list_filter   = ('page', 'is_active')
+    search_fields = ('text',)
+    ordering      = ('page', 'order', 'id')
 
 class TagAdmin(TranslationAdmin):  # ✅ 수정
     list_display = ('name', 'priority')
