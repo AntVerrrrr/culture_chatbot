@@ -1,9 +1,10 @@
 <!-- templates/includes/search_bar.html -->
 {% load static %}
+{% load i18n %}
 <div class="search-bar">
     <div class="search-container">
         <form method="GET" action="{% url 'search-results' %}">
-            <input type="text" data-i18n="검색창 플레이스홀더" placeholder="대화하고 싶은 서비스를 검색해보세요" name="query" id="searchInput">
+            <input type="text" placeholder="{% trans '대화하고 싶은 서비스를 검색해보세요' %}" name="query" id="searchInput">
 
             <button id="searchButton" type="submit">
                 <img src="{% static 'image/assistant/search.svg' %}" alt="Search">
