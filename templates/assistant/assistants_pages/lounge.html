@@ -1,9 +1,12 @@
+{% load static %}
+{% load i18n %}
+
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="{{ LANGUAGE_CODE|default:'ko' }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>라운지</title>
+  <title>{% trans "라운지" %}</title>
     
   {% load static %}
   <link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/nanummyeongjo.css">
