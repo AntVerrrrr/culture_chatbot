@@ -1,5 +1,25 @@
 from django.db import models
 
+class PageDescription(models.Model):
+    PAGE_CHOICES = [
+        ('main', 'Main'),
+        ('koreaura', 'Koreaura'),
+        ('sommelier', 'Sommelier'),
+        # 필요하면 더 추가
+    ]
+    page = models.CharField(max_length=50, choices=PAGE_CHOICES, db_index=True)
+    text = models.CharField(max_length=255)     # ✅ 다국어로 관리할 본문
+    order = models.PositiveIntegerField(default=0, db_index=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ('page', 'order', 'id')
+        indexes = [models.Index(fields=['page', 'order'])]
+
+    def __str__(self):
+        return f'[{self.page}] {self.text}'
+
+
 class Province(models.Model):
     name = models.CharField(max_length=100)
 
