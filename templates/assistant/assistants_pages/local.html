@@ -1,11 +1,13 @@
+{% load static %}
+{% load i18n %}
+
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="{{ LANGUAGE_CODE|default:'ko' }}">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>지역별 어시스턴트</title>
+    <title>{% trans "지역별 어시스턴트" %}</title>
 
-    {% load static %}
     <link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/nanummyeongjo.css">
     <link rel="stylesheet" href="{% static 'css/assistant/main.css' %}">
     <link rel="stylesheet" href="{% static 'css/assistant/local.css' %}">
@@ -15,54 +17,57 @@
 
 <body>
 <div class="page-container">
-
-    <!-- 공통 헤더 불러오기 -->
-    {% include "includes/header.html" %}
-
-    <!-- 검색창 -->
-    {% include "includes/search_bar.html" %}
+    {% include "includes/header.html" %}    <!-- 공통 헤더 불러오기 -->
+    {% include "includes/search_bar.html" %}    <!-- 검색창 -->
 
     <!-- 카테고리 리스트 -->
     <ul class="category-list">
-        <li><a href="{% url 'main-select' %}"  data-i18n="메인" >메인</a></li>
-        <li><a href="{% url 'local-select' %}" class="category-select" data-i18n="지역별">지역별</a></li>
-        <li><a href="{% url 'independence-select' %}" data-i18n="코레아우라">코레아우라</a></li>
-        <li><a href="{% url 'sommelier-select' %}" data-i18n="소믈리에">소믈리에</a></li>
+        <li><a href="{% url 'main-select' %}">{% trans "메인" %}</a></li>
+        <li><a href="{% url 'local-select' %}" class="category-select">{% trans "지역별" %}</a></li>
+        <li><a href="{% url 'independence-select' %}">{% trans "코레아우라" %}</a></li>
+        <li><a href="{% url 'sommelier-select' %}">{% trans "소믈리에" %}</a></li>
     </ul>
 
-    <!-- 시/도 선택 (Swiper 제거하고 스크롤 방식으로 대체) -->
+    <!-- 시/도 리스트 (가로 스크롤) -->
     <div class="tag-scroll-container">
-        <div class="tag-scroll-wrapper">
-            <button class="tag-button" data-province="서울">서울</button>
-            <button class="tag-button" data-province="경기도">경기도</button>
-            <button class="tag-button" data-province="인천">인천</button>
-            <button class="tag-button" data-province="강원도">강원도</button>
-            <button class="tag-button" data-province="충청북도">충청북도</button>
-            <button class="tag-button" data-province="충청남도">충청남도</button>
-            <button class="tag-button" data-province="대전">대전</button>
-            <button class="tag-button" data-province="세종">세종</button>
-            <button class="tag-button" data-province="전라북도">전라북도</button>
-            <button class="tag-button" data-province="전라남도">전라남도</button>
-            <button class="tag-button" data-province="광주">광주</button>
-            <button class="tag-button" data-province="경상북도">경상북도</button>
-            <button class="tag-button" data-province="경상남도">경상남도</button>
-            <button class="tag-button" data-province="대구">대구</button>
-            <button class="tag-button" data-province="울산">울산</button>
-            <button class="tag-button" data-province="부산">부산</button>
-            <button class="tag-button" data-province="제주도">제주도</button>
+        <div class="tag-scroll-wrapper" id="provinceList">
+            {% for p in provinces %}
+            <!-- modeltranslation이 켜져있으면 p.name이 현재 언어로 렌더됨 -->
+            <button
+                    class="tag-button"
+                    data-province-id="{{ p.id }}"
+                    title="{{ p.name }}"
+            >{{ p.name }}
+            </button>
+            {% endfor %}
         </div>
     </div>
 
-    <!-- 시/군/구 버튼 리스트 -->
-    <div class="tag-scroll-container city-container" style="display: none;">
-        <div class="tag-scroll-wrapper" id="cityList"></div>
+    <!-- 시/군/구 리스트 (가로 스크롤) -->
+    <div class="tag-scroll-container city-container" style="display:block">
+        <div id="cityList">
+            {% for p in provinces %}
+            <div class="tag-scroll-wrapper city-group" data-province-id="{{ p.id }}" hidden>
+                {% for c in p.cities.all %}
+                <button
+                        class="tag-button"
+                        data-city-id="{{ c.id }}"
+                        title="{{ c.name }}"
+                >{{ c.name }}
+                </button>
+                {% empty %}
+                <span class="dim small">{% trans "하위 지역이 없습니다" %}</span>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
     </div>
-
-    <br>
 
     <!-- 어시스턴트 목록 -->
     <div class="assistant-grid" id="assistantList"></div>
 </div>
+
+<script src="{% url 'javascript-catalog' %}"></script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{% static 'js/assistant/local.js' %}"></script>
