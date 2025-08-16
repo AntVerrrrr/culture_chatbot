@@ -1,85 +1,87 @@
+{% load static %}
+{% load i18n %}
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Chatbot</title>
-  {% load static %}
-  <link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/nanummyeongjo.css">
-  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
-  <link rel="stylesheet" href="{% static 'css/assistant/chatbot.css' %}"/>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{% trans "채팅" %}</title>
+    <link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/nanummyeongjo.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="{% static 'css/assistant/chatbot.css' %}"/>
 </head>
 
 <body data-assistant-img="{{ assistant.photo.url }}">
 <div class="page-container">
-  <!-- 헤더 -->
-  <header class="menu-bar">
-    <button id="menuButton" class="menu-logo-button">
-      <a href="{% url 'lounge-select' %}">
-        <img src="{% static 'image/assistant/lounge.png' %}" alt="Menu">
-      </a>
-    </button>
-    <div class="menu-right">
-      <button id="fastResponseButton" class="fast-response-button">
-        <img src="{% static 'image/assistant/fast-response.png' %}" alt="빠른 응답">
-        빠른 응답
-      </button>
-    </div>
-  </header>
-
-  <!-- 채팅 메시지 목록 -->
-  <div id="chatContainer" class="chat-container">
-    <div id="messageList" class="message-list">
-      <div class="message-container ai-message">
-        <img src="{{ assistant.photo.url }}" alt="{{ assistant.name }}" class="profile-image"/>
-        <div class="message-body">
-          <div class="message-content">
-            <p id="welcomeMessage">{{ assistant.welcome_message }}</p>
-            <div class="actions-wrapper"></div>
-          </div>
+    <!-- 헤더 -->
+    <header class="menu-bar">
+        <button id="menuButton" class="menu-logo-button">
+            <a href="{% url 'lounge-select' %}">
+                <img src="{% static 'image/assistant/lounge.png' %}" alt="Menu">
+            </a>
+        </button>
+        <div class="menu-right">
+            <button id="fastResponseButton" class="fast-response-button">
+                <img src="{% static 'image/assistant/fast-response.png' %}" alt="빠른 응답">
+                <span>{% trans "빠른 응답" %}</span>
+            </button>
         </div>
-      </div>
-    </div>
-  </div>
+    </header>
 
-  <!-- 입력창 -->
-  <div class="input-container">
-    <!-- 질문 버블 슬라이더 -->
-    <div class="question-slider swiper-container">
-      <div class="swiper-wrapper">
-        {% for q in questions %}
-          <div class="swiper-slide">{{ q }}</div>
-        {% endfor %}
-      </div>
+    <!-- 채팅 메시지 목록 -->
+    <div id="chatContainer" class="chat-container">
+        <div id="messageList" class="message-list">
+            <div class="message-container ai-message">
+                <img src="{{ assistant.photo.url }}" alt="{{ assistant.name }}" class="profile-image"/>
+                <div class="message-body">
+                    <div class="message-content">
+                        <p id="welcomeMessage">{{ assistant.welcome_message }}</p>
+                        <div class="actions-wrapper"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- 입력창 -->
-    <div class="input-wrapper" id="inputWrapper">
-      <input id="messageInput" type="text" placeholder="무엇이든 물어보세요...">
-      <input type="hidden" id="assistant_db_id" value="{{ assistant.id }}">
-      <input type="hidden" id="assistant_id" value="{{ assistant_id }}">
-      <input type="hidden" id="document_id" value="{{ document_id }}">
-      <input type="hidden" id="voice" value="{{ assistant.voice }}">
-      <button id="sendButton" class="send-button">
-        <img src="{% static 'image/assistant/message-send.svg' %}" alt="Send">
-      </button>
-      <button id="sendTts" class="send-button" type="button">
-        <img src="{% static 'image/assistant/mic.png' %}" alt="Voice">
-      </button>
-    </div>
-  </div>
+    <div class="input-container">
+        <!-- 질문 버블 슬라이더 -->
+        <div class="question-slider swiper-container">
+            <div class="swiper-wrapper">
+                {% for q in questions %}
+                <div class="swiper-slide">{{ q }}</div>
+                {% endfor %}
+            </div>
+        </div>
 
-  <!-- 음성 UI -->
-  <div id="voiceUi" class="voice-ui hidden">
-    🎙 듣는 중...
-    <div class="waveform">
-      <div class="bar"></div>
-      <div class="bar"></div>
-      <div class="bar"></div>
-      <div class="bar"></div>
+        <!-- 입력창 -->
+        <div class="input-wrapper" id="inputWrapper">
+            <input id="messageInput" type="text" placeholder="{% trans '무엇이든 물어보세요...' %}">
+            <input type="hidden" id="assistant_db_id" value="{{ assistant.id }}">
+            <input type="hidden" id="assistant_id" value="{{ assistant_id }}">
+            <input type="hidden" id="document_id" value="{{ document_id }}">
+            <input type="hidden" id="voice" value="{{ assistant.voice }}">
+            <button id="sendButton" class="send-button">
+                <img src="{% static 'image/assistant/message-send.svg' %}" alt="{% trans '전송' %}">
+            </button>
+            <button id="sendTts" class="send-button" type="button">
+                <img src="{% static 'image/assistant/mic.png' %}" alt="{% trans '음성 입력' %}">
+            </button>
+        </div>
     </div>
-    <button id="cancelMic" class="cancel-button">취소</button>
-  </div>
+
+    <!-- 음성 UI -->
+    <div id="voiceUi" class="voice-ui hidden">
+        <span aria-live="polite">🎙 {% trans "듣는 중..." %}</span>
+        <div class="waveform">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+        <button id="cancelMic" class="cancel-button">{% trans "취소" %}</button>
+    </div>
 </div>
 
 <!-- 외부 라이브러리 -->
@@ -88,9 +90,9 @@
 
 <!-- Static 이미지 JS 변수화 -->
 <script>
-  const likeImgUrl = "{% static 'image/assistant/like.svg' %}";
-  const unlikeImgUrl = "{% static 'image/assistant/unlike.svg' %}";
-  const copyImgUrl = "{% static 'image/assistant/copy.svg' %}";
+    const likeImgUrl = "{% static 'image/assistant/like.svg' %}";
+    const unlikeImgUrl = "{% static 'image/assistant/unlike.svg' %}";
+    const copyImgUrl = "{% static 'image/assistant/copy.svg' %}";
 </script>
 
 <!-- 챗봇 로직 -->
