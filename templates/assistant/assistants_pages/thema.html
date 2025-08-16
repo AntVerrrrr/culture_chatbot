@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE|default:'ko' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,11 +22,11 @@
         <!-- 카테고리 리스트 -->
         <div>
             <ul class="category-list">
-                <li><a href="{% url 'main-select' %}">크리에이터</a></li>
-                <li><a href="{% url 'local-select' %}">지역별</a></li>
-                <li><a href="{% url 'thema-select' %}" class="category-select">테마별</a></li>
-                <li><a href="{% url 'independence-select' %}">독립운동</a></li>
-                <li><a href="{% url 'sommelier-select' %}">소믈리에</a></li>
+                <li><a href="{% url 'main-select' %}">{% trans "메인" %}</a></li>
+                <li><a href="{% url 'local-select' %}">{% trans "지역별" %</a></li>
+                <li><a href="{% url 'thema-select' %}" class="category-select">{% trans "테마" %}</a></li>
+                <li><a href="{% url 'independence-select' %}">{% trans "코레아우라" %}</a></li>
+                <li><a href="{% url 'sommelier-select' %}">{% trans "소믈리에" %}</a></li>
             </ul>
         </div>
 
