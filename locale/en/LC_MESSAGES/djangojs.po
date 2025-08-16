@@ -1,0 +1,331 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-16 16:36+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: static/js/assistant/chatbot.js:38
+msgid "듣는 중..."
+msgstr "Listening..."
+
+#: static/js/assistant/chatbot.js:63
+msgid "(음성 인식 실패)"
+msgstr "(Speech recognition failed)"
+
+#: static/js/assistant/chatbot.js:87 static/js/assistant/chatbot.js:105
+msgid "무엇이든 물어보세요..."
+msgstr "Ask me anything..."
+
+#: static/js/assistant/chatbot.js:221
+msgid "⚠️ 답변을 불러오는 데 실패했어요."
+msgstr "Failed to load the reply."
+
+#: static/js/assistant/chatbot.js:306
+msgid "고민 중."
+msgstr "Thinking."
+
+#: static/js/assistant/chatbot.js:319
+msgid "고민 중"
+msgstr "Thinking"
+
+#: static/js/assistant/chatbot.js:353
+msgid "복사되었습니다."
+msgstr "Copied."
+
+#: static/js/assistant/local.js:12
+msgid "강남구"
+msgstr "Gangnam-gu"
+
+#: static/js/assistant/local.js:12
+msgid "종로구"
+msgstr "Jongno-gu"
+
+#: static/js/assistant/local.js:12
+msgid "마포구"
+msgstr "Mapo-gu"
+
+#: static/js/assistant/local.js:12
+msgid "서초구"
+msgstr "Seocho-gu"
+
+#: static/js/assistant/local.js:12
+msgid "송파구"
+msgstr "Songpa-gu"
+
+#: static/js/assistant/local.js:12
+msgid "영등포구"
+msgstr "Yeongdeungpo-gu"
+
+#: static/js/assistant/local.js:13
+msgid "수원시"
+msgstr "Suwon-si"
+
+#: static/js/assistant/local.js:13
+msgid "성남시"
+msgstr "Seongnam-si"
+
+#: static/js/assistant/local.js:13
+msgid "용인시"
+msgstr "Yongin-si"
+
+#: static/js/assistant/local.js:13
+msgid "고양시"
+msgstr "Goyang-si"
+
+#: static/js/assistant/local.js:13
+msgid "부천시"
+msgstr "Bucheon-si"
+
+#: static/js/assistant/local.js:13
+msgid "남양주시"
+msgstr "Namyangju-si"
+
+#: static/js/assistant/local.js:14
+msgid "미추홀구"
+msgstr "Michuhol-gu"
+
+#: static/js/assistant/local.js:14
+msgid "부평구"
+msgstr "Bupyeong-gu"
+
+#: static/js/assistant/local.js:14
+msgid "연수구"
+msgstr "Yeonsu-gu"
+
+#: static/js/assistant/local.js:14
+msgid "계양구"
+msgstr "Gyeyang-gu"
+
+#: static/js/assistant/local.js:14
+msgid "남동구"
+msgstr "Namdong-gu"
+
+#: static/js/assistant/local.js:15
+msgid "춘천시"
+msgstr "Chuncheon-si"
+
+#: static/js/assistant/local.js:15
+msgid "원주시"
+msgstr "Wonju-si"
+
+#: static/js/assistant/local.js:15
+msgid "강릉시"
+msgstr "Gangneung-si"
+
+#: static/js/assistant/local.js:15
+msgid "속초시"
+msgstr "Sokcho-si"
+
+#: static/js/assistant/local.js:15
+msgid "동해시"
+msgstr "Donghae-si"
+
+#: static/js/assistant/local.js:16
+msgid "청주시"
+msgstr "Cheongju-si"
+
+#: static/js/assistant/local.js:16
+msgid "충주시"
+msgstr "Chungju-si"
+
+#: static/js/assistant/local.js:16
+msgid "제천시"
+msgstr "Jecheon-si"
+
+#: static/js/assistant/local.js:16
+msgid "옥천군"
+msgstr "Okcheon-gun"
+
+#: static/js/assistant/local.js:16
+msgid "음성군"
+msgstr "Eumseong-gun"
+
+#: static/js/assistant/local.js:17
+msgid "천안시"
+msgstr "Cheonan-si"
+
+#: static/js/assistant/local.js:17
+msgid "아산시"
+msgstr "Asan-si"
+
+#: static/js/assistant/local.js:17
+msgid "공주시"
+msgstr "Gongju-si"
+
+#: static/js/assistant/local.js:17
+msgid "논산시"
+msgstr "Nonsan-si"
+
+#: static/js/assistant/local.js:17
+msgid "서산시"
+msgstr "Seosan-si"
+
+#: static/js/assistant/local.js:18 static/js/assistant/local.js:22
+msgid "서구"
+msgstr "Seo-gu"
+
+#: static/js/assistant/local.js:18
+msgid "유성구"
+msgstr "Yuseong-gu"
+
+#: static/js/assistant/local.js:18 static/js/assistant/local.js:25 static/js/assistant/local.js:26
+msgid "중구"
+msgstr "Jung-gu"
+
+#: static/js/assistant/local.js:18 static/js/assistant/local.js:22 static/js/assistant/local.js:25 static/js/assistant/local.js:26
+msgid "동구"
+msgstr "Dong-gu"
+
+#: static/js/assistant/local.js:19
+msgid "세종시"
+msgstr "Sejong-si"
+
+#: static/js/assistant/local.js:20
+msgid "전주시"
+msgstr "Jeonju-si"
+
+#: static/js/assistant/local.js:20
+msgid "군산시"
+msgstr "Gunsan-si"
+
+#: static/js/assistant/local.js:20
+msgid "익산시"
+msgstr "Iksan-si"
+
+#: static/js/assistant/local.js:20
+msgid "남원시"
+msgstr "Namwon-si"
+
+#: static/js/assistant/local.js:20
+msgid "김제시"
+msgstr "Gimje-si"
+
+#: static/js/assistant/local.js:21
+msgid "여수시"
+msgstr "Yeosu-si"
+
+#: static/js/assistant/local.js:21
+msgid "순천시"
+msgstr "Suncheon-si"
+
+#: static/js/assistant/local.js:21
+msgid "목포시"
+msgstr "Mokpo-si"
+
+#: static/js/assistant/local.js:21
+msgid "광양시"
+msgstr "Gwangyang-si"
+
+#: static/js/assistant/local.js:21
+msgid "나주시"
+msgstr "Naju-si"
+
+#: static/js/assistant/local.js:22 static/js/assistant/local.js:26
+msgid "북구"
+msgstr "Buk-gu"
+
+#: static/js/assistant/local.js:22 static/js/assistant/local.js:26
+msgid "남구"
+msgstr "Nam-gu"
+
+#: static/js/assistant/local.js:22
+msgid "광산구"
+msgstr "Gwangsan-gu"
+
+#: static/js/assistant/local.js:23
+msgid "안동시"
+msgstr "Andong-si"
+
+#: static/js/assistant/local.js:23
+msgid "경주시"
+msgstr "Gyeongju-si"
+
+#: static/js/assistant/local.js:23
+msgid "포항시"
+msgstr "Pohang-si"
+
+#: static/js/assistant/local.js:23
+msgid "구미시"
+msgstr "Gumi-si"
+
+#: static/js/assistant/local.js:23
+msgid "울진군"
+msgstr "Uljin-gun"
+
+#: static/js/assistant/local.js:23
+msgid "영덕군"
+msgstr "Yeongdeok-gun"
+
+#: static/js/assistant/local.js:24
+msgid "창원시"
+msgstr "Changwon-si"
+
+#: static/js/assistant/local.js:24
+msgid "진주시"
+msgstr "Jinju-si"
+
+#: static/js/assistant/local.js:24
+msgid "김해시"
+msgstr "Gimhae-si"
+
+#: static/js/assistant/local.js:24
+msgid "양산시"
+msgstr "Yangsan-si"
+
+#: static/js/assistant/local.js:24
+msgid "거제시"
+msgstr "Geoje-si"
+
+#: static/js/assistant/local.js:25
+msgid "수성구"
+msgstr "Suseong-gu"
+
+#: static/js/assistant/local.js:25
+msgid "달서구"
+msgstr "Dalseo-gu"
+
+#: static/js/assistant/local.js:27
+msgid "해운대구"
+msgstr "Haeundae-gu"
+
+#: static/js/assistant/local.js:27
+msgid "수영구"
+msgstr "Suyeong-gu"
+
+#: static/js/assistant/local.js:27
+msgid "동래구"
+msgstr "Dongnae-gu"
+
+#: static/js/assistant/local.js:27
+msgid "부산진구"
+msgstr "Busanjin-gu"
+
+#: static/js/assistant/local.js:28
+msgid "제주시"
+msgstr "Jeju-si"
+
+#: static/js/assistant/local.js:28
+msgid "서귀포시"
+msgstr "Seogwipo-si"
+
+#: static/js/assistant/local.js:194
+msgid "해당 지역에 어시스턴트가 없습니다."
+msgstr "No assistants available for this area."
+
+#: static/js/assistant/local.js:204
+msgid "어시스턴트를 불러오는 데 실패했습니다."
+msgstr "Failed to load assistants."

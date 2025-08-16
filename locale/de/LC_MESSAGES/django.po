@@ -1,0 +1,204 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-16 16:14+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: templates/assistant/assistants_pages/independence.html:9
+#: templates/assistant/assistants_pages/independence.html:30
+#: templates/assistant/assistants_pages/local.html:27
+#: templates/assistant/assistants_pages/main.html:28
+#: templates/assistant/assistants_pages/search_results.html:28
+#: templates/assistant/assistants_pages/sommelier.html:31
+#: templates/assistant/assistants_pages/thema.html:28
+msgid "코레아우라"
+msgstr ""
+
+#: templates/assistant/assistants_pages/independence.html:28
+#: templates/assistant/assistants_pages/local.html:25
+#: templates/assistant/assistants_pages/main.html:26
+#: templates/assistant/assistants_pages/search_results.html:26
+#: templates/assistant/assistants_pages/sommelier.html:29
+#: templates/assistant/assistants_pages/thema.html:25
+msgid "메인"
+msgstr ""
+
+#: templates/assistant/assistants_pages/independence.html:29
+#: templates/assistant/assistants_pages/local.html:26
+#: templates/assistant/assistants_pages/main.html:27
+#: templates/assistant/assistants_pages/search_results.html:27
+#: templates/assistant/assistants_pages/sommelier.html:30
+msgid "지역별"
+msgstr ""
+
+#: templates/assistant/assistants_pages/independence.html:31
+#: templates/assistant/assistants_pages/local.html:28
+#: templates/assistant/assistants_pages/main.html:29
+#: templates/assistant/assistants_pages/search_results.html:29
+#: templates/assistant/assistants_pages/sommelier.html:32
+#: templates/assistant/assistants_pages/thema.html:29
+msgid "소믈리에"
+msgstr ""
+
+#: templates/assistant/assistants_pages/local.html:9
+msgid "지역별 어시스턴트"
+msgstr ""
+
+#: templates/assistant/assistants_pages/local.html:34
+msgid "서울"
+msgstr ""
+
+#: templates/assistant/assistants_pages/local.html:35
+msgid "경기도"
+msgstr ""
+
+#: templates/assistant/assistants_pages/local.html:36
+msgid "인천"
+msgstr ""
+
+#: templates/assistant/assistants_pages/local.html:37
+msgid "강원도"
+msgstr ""
+
+#: templates/assistant/assistants_pages/local.html:38
+msgid "충청북도"
+msgstr ""
+
+#: templates/assistant/assistants_pages/local.html:39
+msgid "충청남도"
+msgstr ""
+
+#: templates/assistant/assistants_pages/local.html:40
+msgid "대전"
+msgstr ""
+
+#: templates/assistant/assistants_pages/local.html:41
+msgid "세종"
+msgstr ""
+
+#: templates/assistant/assistants_pages/local.html:42
+msgid "전라북도"
+msgstr ""
+
+#: templates/assistant/assistants_pages/local.html:43
+msgid "전라남도"
+msgstr ""
+
+#: templates/assistant/assistants_pages/local.html:44
+msgid "광주"
+msgstr ""
+
+#: templates/assistant/assistants_pages/local.html:45
+msgid "경상북도"
+msgstr ""
+
+#: templates/assistant/assistants_pages/local.html:46
+msgid "경상남도"
+msgstr ""
+
+#: templates/assistant/assistants_pages/local.html:47
+msgid "대구"
+msgstr ""
+
+#: templates/assistant/assistants_pages/local.html:48
+msgid "울산"
+msgstr ""
+
+#: templates/assistant/assistants_pages/local.html:49
+msgid "부산"
+msgstr ""
+
+#: templates/assistant/assistants_pages/local.html:50
+msgid "제주도"
+msgstr ""
+
+#: templates/assistant/assistants_pages/lounge.html:9
+msgid "라운지"
+msgstr ""
+
+#: templates/assistant/assistants_pages/main.html:9
+msgid "메인 어시스턴트"
+msgstr ""
+
+#: templates/assistant/assistants_pages/search_results.html:9
+msgid "검색 결과"
+msgstr ""
+
+#: templates/assistant/assistants_pages/search_results.html:52
+msgid "검색 결과가 없습니다."
+msgstr ""
+
+#: templates/assistant/assistants_pages/sommelier.html:9
+msgid "지역 전통주 어시스턴트"
+msgstr ""
+
+#: templates/assistant/assistants_pages/thema.html:27
+msgid "테마"
+msgstr ""
+
+#: templates/assistant/chatbot_pages/chatbot.html:9
+#: templates/assistant/chatbot_pages/lounge_chatbot.html:9
+msgid "채팅"
+msgstr ""
+
+#: templates/assistant/chatbot_pages/chatbot.html:27
+msgid "큐레이션"
+msgstr ""
+
+#: templates/assistant/chatbot_pages/chatbot.html:76
+#: templates/assistant/chatbot_pages/lounge_chatbot.html:60
+msgid "무엇이든 물어보세요..."
+msgstr ""
+
+#: templates/assistant/chatbot_pages/chatbot.html:82
+#: templates/assistant/chatbot_pages/lounge_chatbot.html:66
+msgid "전송"
+msgstr ""
+
+#: templates/assistant/chatbot_pages/chatbot.html:85
+#: templates/assistant/chatbot_pages/lounge_chatbot.html:69
+msgid "음성 입력"
+msgstr ""
+
+#: templates/assistant/chatbot_pages/chatbot.html:92
+#: templates/assistant/chatbot_pages/lounge_chatbot.html:76
+msgid "듣는 중..."
+msgstr ""
+
+#: templates/assistant/chatbot_pages/chatbot.html:99
+#: templates/assistant/chatbot_pages/lounge_chatbot.html:83
+msgid "취소"
+msgstr ""
+
+#: templates/assistant/chatbot_pages/lounge_chatbot.html:27
+msgid "빠른 응답"
+msgstr ""
+
+#: templates/includes/header.html:24
+msgid "마이페이지"
+msgstr ""
+
+#: templates/includes/header.html:25
+msgid "설정"
+msgstr ""
+
+#: templates/includes/search_bar.html:7
+msgid "대화하고 싶은 서비스를 검색해보세요"
+msgstr ""
+
+#: templates/setting/language_dropdown.html:10
+msgid "언어 선택"
+msgstr ""
