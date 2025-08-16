@@ -1,5 +1,18 @@
 from modeltranslation.translator import register, TranslationOptions
-from .models import Assistant, Tag
+from .models import PageDescription, Province, CityCountyTown, Assistant, Tag
+
+@register(PageDescription)
+class PageDescriptionTranslation(TranslationOptions):
+    fields = ('text',)
+
+@register(Province)
+class ProvinceTranslationOptions(TranslationOptions):
+    fields = ('name',)
+
+@register(CityCountyTown)
+class CityCountyTownTranslationOptions(TranslationOptions):
+    fields = ('name',)
+
 
 @register(Assistant)
 class AssistantTranslationOptions(TranslationOptions):
