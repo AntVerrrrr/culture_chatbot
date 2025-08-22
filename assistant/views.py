@@ -154,30 +154,6 @@ def sommelier_view(request):
         {'assistants_by_description': assistants_by_description}
     )
 # -------------------------------------------------------------------------------------------------------------------
-# 다섯 번째 페이지: 라운지 페이지
-def lounge_view(request):
-    descriptions = ["Hahoe Village, curved like a lotus flower", "Dosanseowon, a place of Joseon wisdom", "Byeongsan Seowon, like a beautiful folding screen", "Sad love in the moonlight", "Enjoy a fun round of mask dance in Andong"]
-    assistants_by_description = {}
-
-    # 각 description에 맞는 어시스턴트 데이터를 갖옴
-    for description in descriptions:
-        assistants_by_description[description] = Assistant.objects.filter(description=description)
-
-    return render(request, 'assistant/assistants_pages/lounge.html', {'assistants_by_description': assistants_by_description})
-
-# -------------------------------------------------------------------------------------------------------------------
-# 여섯 번째 페이지: 일본 박람회 준비
-def jp_view(request):
-    descriptions = ["ローカルクリエイターとの対話", "ローカルキャラクターと楽しむ会話", "ローカルキャラクター楽しむローカルツアー"]
-    assistants_by_description = {}
-
-    # 각 description에 맞는 어시스턴트 데이터를 가져옴
-    for description in descriptions:
-        assistants_by_description[description] = Assistant.objects.filter(description=description)
-
-    return render(request, 'assistant/assistants_pages/japan.html', {'assistants_by_description': assistants_by_description})
-
-# -------------------------------------------------------------------------------------------------------------------
 # 검색 페이지
 def search_results_view(request):
     query = request.GET.get('query')
@@ -402,74 +378,6 @@ def text_to_speech(request):
         return JsonResponse({'error': str(e)}, status=400)
 
 # -------------------------------------------------------------------------------------------------------------------
-# 라운지 챗봇 페이지 렌더링
-def lounge_chatbot_view(request, id):
-    # 새로운 어시스턴트로 이동할 때 세션에서 스레드 ID 삭제
-    request.session.pop('thread_id', None)
-
-    assistant = get_object_or_404(Assistant, id=id)
-
-    # 질문을 리스트로 준비
-    questions = [
-        assistant.question_1,
-        assistant.question_2,
-        assistant.question_3,
-        assistant.question_4,
-        assistant.question_5,
-        assistant.question_6,
-        assistant.question_7,
-        assistant.question_8,
-        assistant.question_9,
-        assistant.question_10,
-    ]
-
-    questions = [q for q in questions if q]  # None 값 제외
-
-    return render(request, 'assistant/chatbot_pages/lounge_chatbot.html', {
-        'assistant': assistant,
-        'id': assistant.id,
-        'assistant_id': assistant.assistant_id,
-        'document_id': assistant.document_id,
-        'assistant_name': assistant.name,
-        'questions': questions,
-        'welcome_message': assistant.welcome_message
-    })
-
-
-# -------------------------------------------------------------------------------------------------------------------
-# 메모리움 챗봇 페이지 렌더링
-def memorium_chatbot_view(request, id):
-    # 새로운 어시스턴트로 이동할 때 세션에서 스레드 ID 삭제
-    request.session.pop('thread_id', None)
-
-    assistant = get_object_or_404(Assistant, id=id)
-
-    # 질문을 리스트로 준비
-    questions = [
-        assistant.question_1,
-        assistant.question_2,
-        assistant.question_3,
-        assistant.question_4,
-        assistant.question_5,
-        assistant.question_6,
-        assistant.question_7,
-        assistant.question_8,
-        assistant.question_9,
-        assistant.question_10,
-    ]
-
-    questions = [q for q in questions if q]  # None 값 제외
-
-    return render(request, 'assistant/chatbot_pages/memorium_chatbot.html', {
-        'assistant': assistant,
-        'id': assistant.id,
-        'assistant_id': assistant.assistant_id,
-        'document_id': assistant.document_id,
-        'assistant_name': assistant.name,
-        'questions': questions,
-        'welcome_message': assistant.welcome_message
-    })
-
 def debug_lang_view(request):
     activate('ja')
     assistant = Assistant.objects.first()
