@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-16 16:15+0900\n"
+"POT-Creation-Date: 2025-08-20 18:43+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,631 +17,327 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-#: static/js/assistant/chatbot.js:38
-msgid "듣는 중..."
-msgstr ""
-
-#: static/js/assistant/chatbot.js:63
-msgid "(음성 인식 실패)"
-msgstr ""
-
-#: static/js/assistant/chatbot.js:87 static/js/assistant/chatbot.js:105
-msgid "무엇이든 물어보세요..."
-msgstr ""
-
-#: static/js/assistant/chatbot.js:221
-msgid "⚠️ 답변을 불러오는 데 실패했어요."
-msgstr ""
-
-#: static/js/assistant/chatbot.js:306
-msgid "고민 중."
-msgstr ""
-
-#: static/js/assistant/chatbot.js:319
-msgid "고민 중"
-msgstr ""
-
-#: static/js/assistant/chatbot.js:353
+#: static/js/assistant/chatbot/message.js:117
+#: staticfiles/js/assistant/chatbot.js:353
 msgid "복사되었습니다."
 msgstr ""
 
-#: static/js/assistant/local.js:12
+#: static/js/assistant/chatbot/mic.js:29 staticfiles/js/assistant/chatbot.js:38
+msgid "듣는 중..."
+msgstr ""
+
+#: static/js/assistant/chatbot/mic.js:51
+msgid "마이크 접근에 실패했습니다."
+msgstr ""
+
+#: static/js/assistant/chatbot/thinking.js:15
+#: static/js/assistant/chatbot/thinking.js:27
+msgid "생각 중"
+msgstr ""
+
+#: staticfiles/js/assistant/chatbot.js:63
+msgid "(음성 인식 실패)"
+msgstr ""
+
+#: staticfiles/js/assistant/chatbot.js:87
+#: staticfiles/js/assistant/chatbot.js:105
+msgid "무엇이든 물어보세요..."
+msgstr ""
+
+#: staticfiles/js/assistant/chatbot.js:221
+msgid "⚠️ 답변을 불러오는 데 실패했어요."
+msgstr ""
+
+#: staticfiles/js/assistant/chatbot.js:306
+msgid "고민 중."
+msgstr ""
+
+#: staticfiles/js/assistant/chatbot.js:319
+msgid "고민 중"
+msgstr ""
+
+#: staticfiles/js/assistant/local.js:12
 msgid "강남구"
 msgstr ""
 
-#: static/js/assistant/local.js:12
+#: staticfiles/js/assistant/local.js:12
 msgid "종로구"
 msgstr ""
 
-#: static/js/assistant/local.js:12
+#: staticfiles/js/assistant/local.js:12
 msgid "마포구"
 msgstr ""
 
-#: static/js/assistant/local.js:12
+#: staticfiles/js/assistant/local.js:12
 msgid "서초구"
 msgstr ""
 
-#: static/js/assistant/local.js:12
+#: staticfiles/js/assistant/local.js:12
 msgid "송파구"
 msgstr ""
 
-#: static/js/assistant/local.js:12
+#: staticfiles/js/assistant/local.js:12
 msgid "영등포구"
 msgstr ""
 
-#: static/js/assistant/local.js:13
+#: staticfiles/js/assistant/local.js:13
 msgid "수원시"
 msgstr ""
 
-#: static/js/assistant/local.js:13
+#: staticfiles/js/assistant/local.js:13
 msgid "성남시"
 msgstr ""
 
-#: static/js/assistant/local.js:13
+#: staticfiles/js/assistant/local.js:13
 msgid "용인시"
 msgstr ""
 
-#: static/js/assistant/local.js:13
+#: staticfiles/js/assistant/local.js:13
 msgid "고양시"
 msgstr ""
 
-#: static/js/assistant/local.js:13
+#: staticfiles/js/assistant/local.js:13
 msgid "부천시"
 msgstr ""
 
-#: static/js/assistant/local.js:13
+#: staticfiles/js/assistant/local.js:13
 msgid "남양주시"
 msgstr ""
 
-#: static/js/assistant/local.js:14
+#: staticfiles/js/assistant/local.js:14
 msgid "미추홀구"
 msgstr ""
 
-#: static/js/assistant/local.js:14
+#: staticfiles/js/assistant/local.js:14
 msgid "부평구"
 msgstr ""
 
-#: static/js/assistant/local.js:14
+#: staticfiles/js/assistant/local.js:14
 msgid "연수구"
 msgstr ""
 
-#: static/js/assistant/local.js:14
+#: staticfiles/js/assistant/local.js:14
 msgid "계양구"
 msgstr ""
 
-#: static/js/assistant/local.js:14
+#: staticfiles/js/assistant/local.js:14
 msgid "남동구"
 msgstr ""
 
-#: static/js/assistant/local.js:15
+#: staticfiles/js/assistant/local.js:15
 msgid "춘천시"
 msgstr ""
 
-#: static/js/assistant/local.js:15
+#: staticfiles/js/assistant/local.js:15
 msgid "원주시"
 msgstr ""
 
-#: static/js/assistant/local.js:15
+#: staticfiles/js/assistant/local.js:15
 msgid "강릉시"
 msgstr ""
 
-#: static/js/assistant/local.js:15
+#: staticfiles/js/assistant/local.js:15
 msgid "속초시"
 msgstr ""
 
-#: static/js/assistant/local.js:15
+#: staticfiles/js/assistant/local.js:15
 msgid "동해시"
 msgstr ""
 
-#: static/js/assistant/local.js:16
+#: staticfiles/js/assistant/local.js:16
 msgid "청주시"
 msgstr ""
 
-#: static/js/assistant/local.js:16
+#: staticfiles/js/assistant/local.js:16
 msgid "충주시"
 msgstr ""
 
-#: static/js/assistant/local.js:16
+#: staticfiles/js/assistant/local.js:16
 msgid "제천시"
 msgstr ""
 
-#: static/js/assistant/local.js:16
+#: staticfiles/js/assistant/local.js:16
 msgid "옥천군"
 msgstr ""
 
-#: static/js/assistant/local.js:16
+#: staticfiles/js/assistant/local.js:16
 msgid "음성군"
 msgstr ""
 
-#: static/js/assistant/local.js:17
+#: staticfiles/js/assistant/local.js:17
 msgid "천안시"
 msgstr ""
 
-#: static/js/assistant/local.js:17
+#: staticfiles/js/assistant/local.js:17
 msgid "아산시"
 msgstr ""
 
-#: static/js/assistant/local.js:17
+#: staticfiles/js/assistant/local.js:17
 msgid "공주시"
 msgstr ""
 
-#: static/js/assistant/local.js:17
+#: staticfiles/js/assistant/local.js:17
 msgid "논산시"
 msgstr ""
 
-#: static/js/assistant/local.js:17
+#: staticfiles/js/assistant/local.js:17
 msgid "서산시"
 msgstr ""
 
-#: static/js/assistant/local.js:18 static/js/assistant/local.js:22
+#: staticfiles/js/assistant/local.js:18 staticfiles/js/assistant/local.js:22
 msgid "서구"
 msgstr ""
 
-#: static/js/assistant/local.js:18
+#: staticfiles/js/assistant/local.js:18
 msgid "유성구"
 msgstr ""
 
-#: static/js/assistant/local.js:18 static/js/assistant/local.js:25
-#: static/js/assistant/local.js:26
+#: staticfiles/js/assistant/local.js:18 staticfiles/js/assistant/local.js:25
+#: staticfiles/js/assistant/local.js:26
 msgid "중구"
 msgstr ""
 
-#: static/js/assistant/local.js:18 static/js/assistant/local.js:22
-#: static/js/assistant/local.js:25 static/js/assistant/local.js:26
+#: staticfiles/js/assistant/local.js:18 staticfiles/js/assistant/local.js:22
+#: staticfiles/js/assistant/local.js:25 staticfiles/js/assistant/local.js:26
 msgid "동구"
 msgstr ""
 
-#: static/js/assistant/local.js:19
+#: staticfiles/js/assistant/local.js:19
 msgid "세종시"
 msgstr ""
 
-#: static/js/assistant/local.js:20
+#: staticfiles/js/assistant/local.js:20
 msgid "전주시"
 msgstr ""
 
-#: static/js/assistant/local.js:20
+#: staticfiles/js/assistant/local.js:20
 msgid "군산시"
 msgstr ""
 
-#: static/js/assistant/local.js:20
+#: staticfiles/js/assistant/local.js:20
 msgid "익산시"
 msgstr ""
 
-#: static/js/assistant/local.js:20
+#: staticfiles/js/assistant/local.js:20
 msgid "남원시"
 msgstr ""
 
-#: static/js/assistant/local.js:20
+#: staticfiles/js/assistant/local.js:20
 msgid "김제시"
 msgstr ""
 
-#: static/js/assistant/local.js:21
+#: staticfiles/js/assistant/local.js:21
 msgid "여수시"
 msgstr ""
 
-#: static/js/assistant/local.js:21
+#: staticfiles/js/assistant/local.js:21
 msgid "순천시"
 msgstr ""
 
-#: static/js/assistant/local.js:21
+#: staticfiles/js/assistant/local.js:21
 msgid "목포시"
 msgstr ""
 
-#: static/js/assistant/local.js:21
+#: staticfiles/js/assistant/local.js:21
 msgid "광양시"
 msgstr ""
 
-#: static/js/assistant/local.js:21
+#: staticfiles/js/assistant/local.js:21
 msgid "나주시"
 msgstr ""
 
-#: static/js/assistant/local.js:22 static/js/assistant/local.js:26
+#: staticfiles/js/assistant/local.js:22 staticfiles/js/assistant/local.js:26
 msgid "북구"
 msgstr ""
 
-#: static/js/assistant/local.js:22 static/js/assistant/local.js:26
+#: staticfiles/js/assistant/local.js:22 staticfiles/js/assistant/local.js:26
 msgid "남구"
 msgstr ""
 
-#: static/js/assistant/local.js:22
+#: staticfiles/js/assistant/local.js:22
 msgid "광산구"
 msgstr ""
 
-#: static/js/assistant/local.js:23
+#: staticfiles/js/assistant/local.js:23
 msgid "안동시"
 msgstr ""
 
-#: static/js/assistant/local.js:23
+#: staticfiles/js/assistant/local.js:23
 msgid "경주시"
 msgstr ""
 
-#: static/js/assistant/local.js:23
+#: staticfiles/js/assistant/local.js:23
 msgid "포항시"
 msgstr ""
 
-#: static/js/assistant/local.js:23
+#: staticfiles/js/assistant/local.js:23
 msgid "구미시"
 msgstr ""
 
-#: static/js/assistant/local.js:23
+#: staticfiles/js/assistant/local.js:23
 msgid "울진군"
 msgstr ""
 
-#: static/js/assistant/local.js:23
+#: staticfiles/js/assistant/local.js:23
 msgid "영덕군"
 msgstr ""
 
-#: static/js/assistant/local.js:24
+#: staticfiles/js/assistant/local.js:24
 msgid "창원시"
 msgstr ""
 
-#: static/js/assistant/local.js:24
+#: staticfiles/js/assistant/local.js:24
 msgid "진주시"
 msgstr ""
 
-#: static/js/assistant/local.js:24
+#: staticfiles/js/assistant/local.js:24
 msgid "김해시"
 msgstr ""
 
-#: static/js/assistant/local.js:24
+#: staticfiles/js/assistant/local.js:24
 msgid "양산시"
 msgstr ""
 
-#: static/js/assistant/local.js:24
+#: staticfiles/js/assistant/local.js:24
 msgid "거제시"
 msgstr ""
 
-#: static/js/assistant/local.js:25
+#: staticfiles/js/assistant/local.js:25
 msgid "수성구"
 msgstr ""
 
-#: static/js/assistant/local.js:25
+#: staticfiles/js/assistant/local.js:25
 msgid "달서구"
 msgstr ""
 
-#: static/js/assistant/local.js:27
+#: staticfiles/js/assistant/local.js:27
 msgid "해운대구"
 msgstr ""
 
-#: static/js/assistant/local.js:27
+#: staticfiles/js/assistant/local.js:27
 msgid "수영구"
 msgstr ""
 
-#: static/js/assistant/local.js:27
+#: staticfiles/js/assistant/local.js:27
 msgid "동래구"
 msgstr ""
 
-#: static/js/assistant/local.js:27
+#: staticfiles/js/assistant/local.js:27
 msgid "부산진구"
 msgstr ""
 
-#: static/js/assistant/local.js:28
+#: staticfiles/js/assistant/local.js:28
 msgid "제주시"
 msgstr ""
 
-#: static/js/assistant/local.js:28
+#: staticfiles/js/assistant/local.js:28
 msgid "서귀포시"
 msgstr ""
 
-#: static/js/assistant/local.js:194
+#: staticfiles/js/assistant/local.js:194
 msgid "해당 지역에 어시스턴트가 없습니다."
 msgstr ""
 
-#: static/js/assistant/local.js:204
+#: staticfiles/js/assistant/local.js:204
 msgid "어시스턴트를 불러오는 데 실패했습니다."
-msgstr ""
-
-#: staticfiles/admin/js/SelectFilter2.js:38
-#, javascript-format
-msgid "Available %s"
-msgstr ""
-
-#: staticfiles/admin/js/SelectFilter2.js:44
-#, javascript-format
-msgid ""
-"This is the list of available %s. You may choose some by selecting them in "
-"the box below and then clicking the \"Choose\" arrow between the two boxes."
-msgstr ""
-
-#: staticfiles/admin/js/SelectFilter2.js:60
-#, javascript-format
-msgid "Type into this box to filter down the list of available %s."
-msgstr ""
-
-#: staticfiles/admin/js/SelectFilter2.js:65
-#: staticfiles/admin/js/SelectFilter2.js:110
-msgid "Filter"
-msgstr ""
-
-#: staticfiles/admin/js/SelectFilter2.js:69
-msgid "Choose all"
-msgstr ""
-
-#: staticfiles/admin/js/SelectFilter2.js:69
-#, javascript-format
-msgid "Click to choose all %s at once."
-msgstr ""
-
-#: staticfiles/admin/js/SelectFilter2.js:75
-msgid "Choose"
-msgstr ""
-
-#: staticfiles/admin/js/SelectFilter2.js:77
-msgid "Remove"
-msgstr ""
-
-#: staticfiles/admin/js/SelectFilter2.js:83
-#, javascript-format
-msgid "Chosen %s"
-msgstr ""
-
-#: staticfiles/admin/js/SelectFilter2.js:89
-#, javascript-format
-msgid ""
-"This is the list of chosen %s. You may remove some by selecting them in the "
-"box below and then clicking the \"Remove\" arrow between the two boxes."
-msgstr ""
-
-#: staticfiles/admin/js/SelectFilter2.js:105
-#, javascript-format
-msgid "Type into this box to filter down the list of selected %s."
-msgstr ""
-
-#: staticfiles/admin/js/SelectFilter2.js:120
-msgid "Remove all"
-msgstr ""
-
-#: staticfiles/admin/js/SelectFilter2.js:120
-#, javascript-format
-msgid "Click to remove all chosen %s at once."
-msgstr ""
-
-#: staticfiles/admin/js/SelectFilter2.js:211
-#, javascript-format
-msgid "%s selected option not visible"
-msgid_plural "%s selected options not visible"
-msgstr[0] ""
-msgstr[1] ""
-
-#: staticfiles/admin/js/actions.js:67
-msgid "%(sel)s of %(cnt)s selected"
-msgid_plural "%(sel)s of %(cnt)s selected"
-msgstr[0] ""
-msgstr[1] ""
-
-#: staticfiles/admin/js/actions.js:161
-msgid ""
-"You have unsaved changes on individual editable fields. If you run an "
-"action, your unsaved changes will be lost."
-msgstr ""
-
-#: staticfiles/admin/js/actions.js:174
-msgid ""
-"You have selected an action, but you haven’t saved your changes to "
-"individual fields yet. Please click OK to save. You’ll need to re-run the "
-"action."
-msgstr ""
-
-#: staticfiles/admin/js/actions.js:175
-msgid ""
-"You have selected an action, and you haven’t made any changes on individual "
-"fields. You’re probably looking for the Go button rather than the Save "
-"button."
-msgstr ""
-
-#: staticfiles/admin/js/admin/DateTimeShortcuts.js:13
-#: staticfiles/admin/js/admin/DateTimeShortcuts.js:110
-msgid "Now"
-msgstr ""
-
-#: staticfiles/admin/js/admin/DateTimeShortcuts.js:14
-msgid "Midnight"
-msgstr ""
-
-#: staticfiles/admin/js/admin/DateTimeShortcuts.js:15
-msgid "6 a.m."
-msgstr ""
-
-#: staticfiles/admin/js/admin/DateTimeShortcuts.js:16
-msgid "Noon"
-msgstr ""
-
-#: staticfiles/admin/js/admin/DateTimeShortcuts.js:17
-msgid "6 p.m."
-msgstr ""
-
-#: staticfiles/admin/js/admin/DateTimeShortcuts.js:78
-#, javascript-format
-msgid "Note: You are %s hour ahead of server time."
-msgid_plural "Note: You are %s hours ahead of server time."
-msgstr[0] ""
-msgstr[1] ""
-
-#: staticfiles/admin/js/admin/DateTimeShortcuts.js:86
-#, javascript-format
-msgid "Note: You are %s hour behind server time."
-msgid_plural "Note: You are %s hours behind server time."
-msgstr[0] ""
-msgstr[1] ""
-
-#: staticfiles/admin/js/admin/DateTimeShortcuts.js:128
-msgid "Choose a Time"
-msgstr ""
-
-#: staticfiles/admin/js/admin/DateTimeShortcuts.js:158
-msgid "Choose a time"
-msgstr ""
-
-#: staticfiles/admin/js/admin/DateTimeShortcuts.js:175
-#: staticfiles/admin/js/admin/DateTimeShortcuts.js:333
-msgid "Cancel"
-msgstr ""
-
-#: staticfiles/admin/js/admin/DateTimeShortcuts.js:238
-#: staticfiles/admin/js/admin/DateTimeShortcuts.js:318
-msgid "Today"
-msgstr ""
-
-#: staticfiles/admin/js/admin/DateTimeShortcuts.js:255
-msgid "Choose a Date"
-msgstr ""
-
-#: staticfiles/admin/js/admin/DateTimeShortcuts.js:312
-msgid "Yesterday"
-msgstr ""
-
-#: staticfiles/admin/js/admin/DateTimeShortcuts.js:324
-msgid "Tomorrow"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:11
-msgid "January"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:12
-msgid "February"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:13
-msgid "March"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:14
-msgid "April"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:15
-msgid "May"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:16
-msgid "June"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:17
-msgid "July"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:18
-msgid "August"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:19
-msgid "September"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:20
-msgid "October"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:21
-msgid "November"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:22
-msgid "December"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:25
-msgctxt "abbrev. month January"
-msgid "Jan"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:26
-msgctxt "abbrev. month February"
-msgid "Feb"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:27
-msgctxt "abbrev. month March"
-msgid "Mar"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:28
-msgctxt "abbrev. month April"
-msgid "Apr"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:29
-msgctxt "abbrev. month May"
-msgid "May"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:30
-msgctxt "abbrev. month June"
-msgid "Jun"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:31
-msgctxt "abbrev. month July"
-msgid "Jul"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:32
-msgctxt "abbrev. month August"
-msgid "Aug"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:33
-msgctxt "abbrev. month September"
-msgid "Sep"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:34
-msgctxt "abbrev. month October"
-msgid "Oct"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:35
-msgctxt "abbrev. month November"
-msgid "Nov"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:36
-msgctxt "abbrev. month December"
-msgid "Dec"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:39
-msgctxt "one letter Sunday"
-msgid "S"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:40
-msgctxt "one letter Monday"
-msgid "M"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:41
-msgctxt "one letter Tuesday"
-msgid "T"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:42
-msgctxt "one letter Wednesday"
-msgid "W"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:43
-msgctxt "one letter Thursday"
-msgid "T"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:44
-msgctxt "one letter Friday"
-msgid "F"
-msgstr ""
-
-#: staticfiles/admin/js/calendar.js:45
-msgctxt "one letter Saturday"
-msgid "S"
-msgstr ""
-
-#: staticfiles/admin/js/collapse.js:16 staticfiles/admin/js/collapse.js:34
-msgid "Show"
-msgstr ""
-
-#: staticfiles/admin/js/collapse.js:30
-msgid "Hide"
 msgstr ""

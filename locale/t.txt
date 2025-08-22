@@ -1,1 +1,16 @@
-python manage.py compilemessages -l en 실행하기
+django-admin makemessages -l en
+django-admin makemessages -l de
+django-admin makemessages -l fr
+django-admin makemessages -l ja
+
+django-admin makemessages -d djangojs -l en --extension=js
+django-admin makemessages -d djangojs -l ja --extension=js
+django-admin makemessages -d djangojs -l fr --extension=js
+django-admin makemessages -d djangojs -l de --extension=js
+processing locale en
+
+
+python manage.py compilemessages -l en
+python manage.py compilemessages -l de
+python manage.py compilemessages -l fr
+python manage.py compilemessages -l ja
