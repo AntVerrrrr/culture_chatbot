@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{% static 'css/assistant/main.css' %}">
     <link rel="stylesheet" href="{% static 'css/includes/header.css' %}">
     <link rel="stylesheet" href="{% static 'css/includes/search_bar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/assistant/search_results.css' %}">
 <body>
 <div class="page-container">
     <!-- 공통 헤더 불러오기 -->
@@ -30,14 +31,12 @@
     </ul>
 
     <!-- 검색 결과 -->
-    <h2>검색 결과: "{{ query }}"</h2>
-    <div class="photo-grid" id="assistantList">
-        {% if results %}
+    <h2>{% trans "검색 결과" %}: "{{ query }}"</h2>
+    <div class="photo-grid">
         {% for assistant in results %}
         <div class="photo-item">
-            <a href="/chatbot/{{ assistant.id }}/" onclick="setArrayIndex(2)">
-                <img src="
-                                {% if assistant.photo %}{{ assistant.photo.url }}{% else %}{{ MEDIA_URL }}assistnat_photos/default.png{% endif %}"
+            <a href="#" data-assistant-id="{{ assistant.id }}" class="chatbot-link" onclick="setArrayIndex(2)">
+                <img src="{% if assistant.photo %}{{ assistant.photo.url }}{% else %}{{ MEDIA_URL }}assistnat_photos/default.png{% endif %}"
                      alt="{{ assistant.name }}">
                 <p class="assistant-title">{{ assistant.name }}</p>
                 <p class="assistant-address">
@@ -48,18 +47,30 @@
             </a>
         </div>
         {% endfor %}
-        {% else %}
-        <p>{% trans "검색 결과가 없습니다." %}</p>
-        {% endif %}
     </div>
 </div>
 
 <script src="{% static 'js/includes/header.js' %}"></script>
-<script src="{% static 'js/setting/setting.js' %}"></script>
+
 <script>
     function setArrayIndex(index) {
         sessionStorage.setItem('arrayIndex', index);
     }
+
+    function currentLang() {
+        const m = location.pathname.match(/^\/(en|ja|fr|de)(?=\/|$)/);
+        return (m && m[1]) ? m[1].toLowerCase() : 'ko';
+    }
+
+    function buildChatbotUrl(id) {
+        const lang = currentLang();
+        return (lang === 'ko') ? `/chatbot/${id}/` : `/${lang}/chatbot/${id}/`;
+    }
+
+    document.querySelectorAll(".chatbot-link").forEach(link => {
+        const id = link.dataset.assistantId;
+        link.href = buildChatbotUrl(id);
+    });
 </script>
 </body>
 </html>

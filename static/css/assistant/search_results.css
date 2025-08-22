@@ -1,25 +1,38 @@
 .photo-grid {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 4%; /* 카드 간 간격 */
+  margin: 0 -1%; /* 양쪽 여백 보정 */
 }
 
 .photo-item {
-  flex: 0 0 48%;
-  aspect-ratio: 1 / 1;
+  width: 48%;
+  margin: 1%;  /* 좌우 여백 */
   box-sizing: border-box;
-  margin-bottom: 16px;
 }
 
 .photo-item img {
   width: 100%;
-  height: 100%;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: 20px;
+  display: block;
+}
+
+.assistant-title {
+  font-size: 15px;
+  font-weight: bold;
+  margin-top: 8px;
+  color: #000;
+}
+
+.assistant-address {
+  font-size: 12px;
+  margin-top: 4px;
+  color: #757575;
 }
 
 .photo-grid a {
   text-decoration: none;
   color: inherit;
+  display: block;
 }
