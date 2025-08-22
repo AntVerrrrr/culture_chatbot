@@ -28,40 +28,29 @@
         <li><a href="{% url 'sommelier-select' %}">{% trans "소믈리에" %}</a></li>
     </ul>
 
-    <!-- 시/도 리스트 (가로 스크롤) -->
+    <!-- 시/도 리스트 -->
     <div class="tag-scroll-container">
         <div class="tag-scroll-wrapper" id="provinceList">
             {% for p in provinces %}
-            <!-- modeltranslation이 켜져있으면 p.name이 현재 언어로 렌더됨 -->
-            <button
-                    class="tag-button"
-                    data-province-id="{{ p.id }}"
-                    title="{{ p.name }}"
-            >{{ p.name }}
-            </button>
+            <button class="tag-button" data-province-id="{{ p.id }}">{{ p.name }}</button>
             {% endfor %}
         </div>
     </div>
 
-    <!-- 시/군/구 리스트 (가로 스크롤) -->
-    <div class="tag-scroll-container city-container" style="display:block">
+    <!-- 시/군/구 리스트 -->
+    <div class="tag-scroll-container">
         <div id="cityList">
             {% for p in provinces %}
             <div class="tag-scroll-wrapper city-group" data-province-id="{{ p.id }}" hidden>
                 {% for c in p.cities.all %}
-                <button
-                        class="tag-button"
-                        data-city-id="{{ c.id }}"
-                        title="{{ c.name }}"
-                >{{ c.name }}
-                </button>
-                {% empty %}
-                <span class="dim small">{% trans "하위 지역이 없습니다" %}</span>
+                <button class="tag-button" data-city-id="{{ c.id }}">{{ c.name }}</button>
                 {% endfor %}
             </div>
             {% endfor %}
         </div>
     </div>
+
+    <br><br>
 
     <!-- 어시스턴트 목록 -->
     <div class="assistant-grid" id="assistantList"></div>
