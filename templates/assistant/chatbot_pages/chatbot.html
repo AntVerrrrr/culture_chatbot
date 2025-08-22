@@ -23,7 +23,7 @@
         </button>
         <div class="menu-right">
             <button id="fileSearchButton" class="fileSearch-button">
-                <img src="{% static 'image/assistant/fileSearch.png' %}" alt="빠른 응답">
+                <img src="{% static 'image/assistant/fileSearch.png' %}" alt="FileSearch">
                 <span>{% trans "큐레이션" %}</span>
             </button>
         </div>
@@ -79,10 +79,10 @@
             <input type="hidden" id="document_id" value="{{ document_id }}">
             <input type="hidden" id="voice" value="{{ assistant.voice }}">
             <button id="sendButton" class="send-button">
-                <img src="{% static 'image/assistant/message-send.svg' %}" alt="{% trans '전송' %}">
+                <img src="{% static 'image/assistant/message-send.svg' %}" alt="Send">
             </button>
             <button id="sendTts" class="send-button" type="button">
-                <img src="{% static 'image/assistant/mic.png' %}" alt="{% trans '음성 입력' %}">
+                <img src="{% static 'image/assistant/mic.png' %}" alt="VoiceInput">
             </button>
         </div>
     </div>
@@ -112,8 +112,7 @@
 </script>
 
 <!-- 챗봇 로직 스크립트 -->
-<script src="{% url 'javascript-catalog' %}"></script>
-<script src="{% static 'js/assistant/chatbot.js' %}"></script>
-<!--<script src="{% static 'js/setting/setting.js' %}"></script>-->
+<script type="module" src="{% static 'js/assistant/chatbot/main.js' %}"></script>
+<!--<script src="{% static 'js/assistant/chatbot.js' %}"></script>-->
 </body>
 </html>

@@ -106,10 +106,10 @@ body {
 
 .message-actions {
     display: flex;
-    justify-content: space-between;
-    /* 왼쪽과 오른쪽으로 버튼 분리 */
+    justify-content: flex-start;
     align-items: center;
-    gap: 6px;
+    gap: 15px;
+    text-align: initial;
 }
 
 .action-button {
@@ -125,16 +125,8 @@ body {
     height: 24px;
 }
 
-.action-button-cp img {
-    width: 68px;
-    /* Copy 버튼은 크기를 크게 조정 */
-    height: 32px;
-}
-
-/* Copy 버튼의 크기를 키우고 오른쪽에 배치 */
-.action-button-cp {
-    margin-left: auto;
-    /* Copy 버튼을 오른쪽으로 밀어 배치 */
+.copy-btn img {
+  width: 63px;
 }
 
 /* AI 메시지 스타일 */
