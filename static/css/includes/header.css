@@ -2,13 +2,23 @@
 .menu-bar {
   position: relative;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  padding: 15px 0;
+  padding: 35px 0;
+}
+
+.logo-link {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .logo-link img {
   height: 70px;
+}
+
+.lang-menu {
+  /* 헤더의 왼쪽에 자연스럽게 붙도록 */
 }
 
 /* === 햄버거 버튼 === */
