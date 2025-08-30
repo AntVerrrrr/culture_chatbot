@@ -1,0 +1,33 @@
+/* 숨김 처리된 select */
+.sr-only {
+  position:absolute;width:1px;height:1px;overflow:hidden;
+  clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;
+}
+
+.lang-menu { position:relative; display:inline-block; }
+
+.lang-trigger {
+  display:flex;align-items:center;gap:8px;
+  padding:6px 10px;border-radius:999px;border:1px solid rgba(0,0,0,.08);
+  background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+.lang-flag { width:18px;height:18px;border-radius:50%;object-fit:cover; }
+.lang-trigger .chevron { width:14px;height:14px;transition:transform .15s ease; }
+.lang-trigger[aria-expanded="true"] .chevron { transform:rotate(180deg); }
+
+.lang-panel {
+  position:absolute;top:120%;left:0;z-index:30;
+  min-width:150px;padding:10px 14px;
+  background:#fff;border-radius:16px;
+  box-shadow:0 12px 30px rgba(0,0,0,.15);
+  display:none;
+}
+.lang-panel.open { display:block; }
+
+.lang-item {
+  display:flex;align-items:center;gap:8px;
+  width:100%;padding:8px 6px;border:0;background:transparent;
+  border-radius:12px;cursor:pointer;font-weight:600;
+}
+.lang-item:hover { background:rgba(0,0,0,.05); }
+.lang-item .lang-flag { width:20px;height:20px;border-radius:50%; }
