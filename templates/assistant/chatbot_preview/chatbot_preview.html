@@ -1,0 +1,112 @@
+{% load i18n %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% load static %}
+    <link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/nanummyeongjo.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/chatbot_preview/chatbot_preview.css' %}">
+    <link rel="stylesheet" href="{% static 'css/includes/assistant_slider.css' %}">
+</head>
+<body>
+<div class="page-container">
+    {% include "includes/header.html" %}
+
+    <div>
+        <div class="preview-card">
+            <!-- 이미지 -->
+            <div class="preview-photo">
+                <img src="{{ assistant.photo.url }}" alt="{{ assistant.name }}" width="150">
+            </div>
+
+            <!-- 이름 + 태그 -->
+            <div class="preview-info">
+                <h2>{{ assistant.name }}</h2>
+                <p class="tags">
+                    {% for tag in assistant.tags.all|dictsort:"priority" %}
+                    #{{ tag.name }}
+                    {% endfor %}
+                </p>
+                <p class="desc">[{% trans "인사말" %}]</p>
+            </div>
+
+            <!-- 메뉴 -->
+            <div class="preview-menu">
+                <div class="menu-item">
+                    <span>
+                        <img src="{% static 'image/chatbot_preview/bell.svg' %}" alt="arrow" class="icon-arrow">️
+                        {% trans "큐레이션 모드" %}
+                    </span>
+                    <input type="checkbox" id="curation-toggle">
+                </div>
+
+                <!-- 링크 (토글 상태에 따라 변경) -->
+                <a id="chat-link" href="{% url 'chatbot' assistant.id %}?filesearch=0" class="menu-item link-btn">
+                    <span>
+                        <img src="{% static 'image/chatbot_preview/link.svg' %}" alt="arrow" class="icon-arrow">
+                        {% trans "채팅 시작" %}
+                    </span>
+                    <img src="{% static 'image/chatbot_preview/arrow.svg' %}" alt="arrow" class="icon-arrow">
+                </a>
+
+                <a href="#" class="menu-item link-btn">
+                    <span>
+                        <img src="{% static 'image/chatbot_preview/file.svg' %}" alt="arrow" class="icon-arrow">
+                        {% trans "자세히보기" %}
+                    </span>
+                    <img src="{% static 'image/chatbot_preview/arrow.svg' %}" alt="arrow" class="icon-arrow">
+                </a>
+            </div>
+            <br><br>
+
+            <!-- 현재 어시스턴트에 있는 테그들 중 3번째 테그와 같은 어시스트턴트들 보여주기-->
+            {# 추천이 있을 때만 푸터 + 슬라이더 노출 #}
+            {% with sec=assistant_sections|first %}
+            {% if sec and sec.assistants and sec.assistants|length %}
+            <div class="preview-footer">
+                <p>{% trans "이런 이야기는 어떤가요?" %}</p>
+                {% blocktrans with name=assistant.name %}
+                  {{ name }}과 함께할
+                {% endblocktrans %}
+            </div>
+            {% include "includes/assistant_slider.html" %}
+            {% endif %}
+            {% endwith %}
+        </div>
+
+    </div>
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const toggle = document.getElementById("curation-toggle");
+          const chatLink = document.getElementById("chat-link");
+          const baseUrl = "{% url 'chatbot' assistant.id %}";
+
+          function updateLink() {
+            if (toggle.checked) {
+              chatLink.href = baseUrl + "?filesearch=1"; // ON
+            } else {
+              chatLink.href = baseUrl + "?filesearch=0"; // OFF
+            }
+          }
+
+          // 초기값 설정
+          updateLink();
+
+          // 토글 상태 바뀔 때마다 링크 업데이트
+          toggle.addEventListener("change", updateLink);
+        });
+    </script>
+
+    <script src="{% static 'js/includes/assistant_slider.js' %}"></script>
+
+</body>
+</html>

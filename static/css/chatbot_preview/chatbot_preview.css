@@ -1,0 +1,132 @@
+/* ---------- Preview Page Card Layout ---------- */
+.preview-card{
+  max-width: 400px;
+  margin: 16px auto 40px;
+  padding: 18px;
+  font-family: "Nanum Myeongjo", serif;
+}
+
+/* 사진 */
+.preview-photo img{
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  display: block;
+  aspect-ratio: 1 / 1;                  /* 정사각 유지 (필요시 조정) */
+  object-fit: cover;
+}
+
+/* 제목/태그/인사말 */
+.preview-info{
+  margin-top: 14px;
+}
+.preview-info h2{
+  margin: 10px 0 6px;
+  font-size: 22px;
+  line-height: 1.25;
+  color: #1c1c1c;
+}
+.preview-info .tags{
+  margin: 4px 0 10px;
+  font-size: 13px;
+  color: #6b6b6b;
+  letter-spacing: .1px;
+}
+.preview-info .desc{
+  margin: 0;
+  font-size: 13px;
+  color: #8a8a8a;
+}
+
+/* 메뉴 블록 */
+.preview-menu{
+  margin-top: 14px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(0,0,0,.06);
+}
+.preview-menu .menu-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 14px 2px;
+  border-bottom: 1px solid rgba(0,0,0,.06);
+}
+.preview-menu .menu-item:last-child{
+  border-bottom: 0;
+}
+.preview-menu .menu-item > span{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  font-size: 15px;
+  color:#2a2a2a;
+}
+
+/* 우측 화살표 링크(작은 버튼 느낌) */
+.preview-menu .menu-item a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(0,0,0,.18);
+  border-radius: 8px;
+  text-decoration:none;
+  font-size: 16px;
+  color:#222;
+  background: #fff;
+  transition: transform .06s ease;
+}
+.preview-menu .menu-item a:active{
+  transform: scale(.97);
+}
+
+/* 토글 스위치 (체크박스를 iOS 스위치처럼) */
+#curation-toggle{
+  appearance: none;
+  -webkit-appearance: none;
+  width: 46px;
+  height: 26px;
+  border-radius: 999px;
+  background: #dddddd;
+  position: relative;
+  outline: none;
+  cursor: pointer;
+  border: 1px solid rgba(0,0,0,.12);
+  transition: background .2s ease;
+}
+#curation-toggle::after{
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,.15);
+  transition: transform .2s ease;
+}
+#curation-toggle:checked{
+  background: #222;                     /* 스샷은 어두운 ON 토글 */
+}
+#curation-toggle:checked::after{
+  transform: translateX(20px);
+}
+
+/* 하단 문구 */
+.preview-footer{
+  margin-top: 22px;
+  text-align: left;
+}
+.preview-footer p{
+  margin: 0 0 6px;
+  font-size: 12px;
+  color:#8f8f8f;
+  letter-spacing: .2px;
+}
+.preview-footer strong{
+  font-size: 18px;
+  color:#1f1f1f;
+  font-weight: 700;
+}

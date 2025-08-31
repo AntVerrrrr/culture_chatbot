@@ -20,6 +20,8 @@ import tempfile, os, json, base64, logging, re, openai
 from django.utils import translation
 from django.utils.translation import activate
 from django.utils.translation import get_language
+from .utils import build_sections_by_pagedescription, build_sections_by_top_tag_of_assistant
+
 
 logger = logging.getLogger(__name__)
 load_dotenv(override=True)
@@ -27,26 +29,14 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 TOKEN_LIMIT_PER_DAY = 690000
 
 # -----------------------------------------------------------------------------------------------------------------
-# 첫 번째 페이지: 추천 페이지
 def main_view(request):
-    lang = (get_language() or 'ko')[:2]
-
-    rows = PageDescription.objects.filter(page='main', is_active=True).order_by('order', 'id')
-    assistants_by_description = {}
-
-    for row in rows:
-        # 화면에 보여줄 언어별 텍스트
-        label = (getattr(row, f'text_{lang}', None)
-                 or row.text_ko
-                 or row.text)
-
-        # Assistant 필터는 항상 한국어 기준으로
-        assistants = Assistant.objects.filter(description=row.text_ko)
-
-        assistants_by_description[label] = assistants
-
-    return render(request, 'assistant/assistants_pages/main.html', {
-        'assistants_by_description': assistants_by_description
+    sections = build_sections_by_pagedescription(
+        page_key="main",
+        include_empty_sections=True,
+        assistant_ordering=("id",),  # 필요시 변경
+    )
+    return render(request, "assistant/assistants_pages/main.html", {
+        "assistant_sections": sections
     })
 
 # -----------------------------------------------------------------------------------------------------------------
@@ -98,61 +88,26 @@ def thema_view(request):
 # -------------------------------------------------------------------------------------------------------------------
 # 세 번째 페이지: 독립 선택 페이지
 def independence_view(request):
-    lang = (get_language() or 'ko')[:2]
-
-    rows = (
-        PageDescription.objects
-        .filter(page='koreaura', is_active=True)
-        .order_by('order', 'id')
+    sections = build_sections_by_pagedescription(
+        page_key="koreaura",
+        include_empty_sections=True,
+        assistant_ordering=("id",),
     )
+    return render(request, "assistant/assistants_pages/independence.html", {
+        "assistant_sections": sections
+    })
 
-    assistants_by_description = {}
-    for row in rows:
-        # 화면 표시는 현재 언어(없으면 ko → 원문 순)
-        label = getattr(row, f'text_{lang}', None) or row.text_ko or row.text
-        # 매칭은 한국어 텍스트(없으면 원문)로 필터
-        ko_key = row.text_ko or row.text
-        assistants = (
-            Assistant.objects
-            .filter(description=ko_key)
-            .prefetch_related('tags')
-        )
-        assistants_by_description[label] = assistants
-
-    return render(
-        request,
-        'assistant/assistants_pages/independence.html',
-        {'assistants_by_description': assistants_by_description}
-    )
 # -------------------------------------------------------------------------------------------------------------------
 # 네 번째 페이지: 지역 상인 페이지
 def sommelier_view(request):
-    lang = (get_language() or 'ko')[:2]
-
-    rows = (
-        PageDescription.objects
-        .filter(page='sommelier', is_active=True)
-        .order_by('order', 'id')
+    sections = build_sections_by_pagedescription(
+        page_key="sommelier",
+        include_empty_sections=True,
+        assistant_ordering=("id",),
     )
-
-    assistants_by_description = {}
-    for row in rows:
-        # 화면에 표시할 텍스트 (현재 언어 → ko → 기본 text 순)
-        label = getattr(row, f'text_{lang}', None) or row.text_ko or row.text
-        # 한국어 기준으로 Assistant 매칭
-        ko_key = row.text_ko or row.text
-        assistants = (
-            Assistant.objects
-            .filter(description=ko_key)
-            .prefetch_related('tags')
-        )
-        assistants_by_description[label] = assistants
-
-    return render(
-        request,
-        'assistant/assistants_pages/sommelier.html',
-        {'assistants_by_description': assistants_by_description}
-    )
+    return render(request, "assistant/assistants_pages/sommelier.html", {
+        "assistant_sections": sections
+    })
 # -------------------------------------------------------------------------------------------------------------------
 # 검색 페이지
 def search_results_view(request):
@@ -160,7 +115,26 @@ def search_results_view(request):
     results = Assistant.objects.filter(name__icontains=query)  # 이름 기준으로 검색
     return render(request, 'assistant/assistants_pages/search_results.html', {'query': query, 'results': results})
 
-### ---------- 일반 렌더링 뷰 ---------- ###
+# -------------------------------------------------------------------------------------------------------------------
+# 채팅 프리뷰 페이지
+def chatbot_preview_view(request, id: int):
+    assistant = get_object_or_404(Assistant, id=id)
+
+    # utils로 추천 섹션 구성 (대표 태그 1개 기준, 자기 자신 제외, 상한 20)
+    sections = build_sections_by_top_tag_of_assistant(
+        assistant=assistant,
+        limit=20,
+        exclude_self=True,
+        ordering=("id",),  # 필요 시 정렬 변경
+    )
+
+    return render(request, "assistant/chatbot_preview/chatbot_preview.html", {
+        "assistant": assistant,
+        "assistant_sections": sections,   # ← 공용 include에서 그대로 사용
+    })
+
+# -------------------------------------------------------------------------------------------------------------------
+# 채팅 페이지
 def chatbot_view(request, id):
     request.session.pop('thread_id', None)
     assistant = get_object_or_404(Assistant, id=id)
@@ -200,21 +174,21 @@ class EventHandler(AssistantEventHandler):
         self.usage = 0
 
     def on_message_done(self, message) -> None:
-        print("📩 on_message_done 호출됨")
-        print("📦 message.content:", message.content)
+        print("📩 on_message_done 호출됨")                                                                                      #7번
+        print("📦 message.content:", message.content)                                                                         #8번
 
         try:
             text = message.content[0].text.value
-            print("📝 원본 응답:", text)
+            print("📝 원본 응답:", text)                                                                                         #9번
         except Exception as e:
-            print("❌ 응답 파싱 실패:", e)
+            print("❌ 응답 파싱 실패:", e)                                                                                        #10번
             return
 
         text = re.sub(r'【.*?】', '', text)  # 괄호 주석 제거
         text = re.sub(r'\*\*(.*?)\*\*', r'\1', text)  # **강조** 제거
         clean = text.strip()
 
-        print("✅ 정리된 응답:", clean)
+        print("✅ 정리된 응답:", clean)                                                                                           #12번
         self.responses.append(clean)
 
         if hasattr(message, 'usage') and message.usage and message.usage.total_tokens:
@@ -254,30 +228,19 @@ class ChatbotAPIView(APIView):
         question = request.data.get('question')
         use_file_search = bool(request.data.get('file_search'))
 
-        print("❓ question:", question)
-        print("📄 document_id:", assistant.document_id)
-        print("🤖 assistant_id:", assistant.assistant_id)
-        # print("⚡ fast_response:", fast_response)
-        print("🔎 file_search:", use_file_search)
-        # prompt = assistant.prompt_context or f"당신은 '{assistant.name}'입니다.\n- 첨부된 파일의 내용을 바탕으로 대답해주세요."
-        # if str(fast_response).lower() == "true":
-        #     prompt += "\n- 답변은 2문장 이내로 간결하게 요약해주세요."
-
+        print("❓ question:", question)                                                                                      #1번
+        print("📄 document_id:", assistant.document_id)                                                                      #2번
+        print("🤖 assistant_id:", assistant.assistant_id)                                                                    #3번
+        print("🔎 file_search:", use_file_search)                                                                            #4번
         # 파일서치 문구는 켰을 때만 안내(선택)
         if use_file_search:
             prompt = (assistant.prompt_context or f"당신은 '{assistant.name}'입니다.") + \
                      "\n- 가능한 경우 첨부 파일(벡터 검색) 내용을 근거로 답변하세요."
         else:
             prompt = assistant.prompt_context or f"당신은 '{assistant.name}'입니다."
-        print("📢 prompt_context:", prompt)
+        # print("📢 prompt_context:", prompt)                                                                                   #5번
 
         try:
-            # thread = client.beta.threads.create(messages=[{
-            #     "role": "user", "content": question,
-            #     "attachments": [{"file_id": assistant.document_id, "tools": [{"type": "file_search"}]}]
-            # }])
-            # print("🧵 thread 생성:", thread.id)
-
             # ✅ file_search ON일 때만 첨부+툴 포함
             user_msg = {"role": "user", "content": question}
             if use_file_search and assistant.document_id:
@@ -286,7 +249,7 @@ class ChatbotAPIView(APIView):
                     "tools": [{"type": "file_search"}]
                 }]
             thread = client.beta.threads.create(messages=[user_msg])
-            print("🧵 thread 생성:", thread.id)
+            print("🧵 thread 생성:", thread.id)                                                                                #6번
 
             handler = EventHandler()
             with client.beta.threads.runs.stream(
@@ -296,7 +259,7 @@ class ChatbotAPIView(APIView):
                 event_handler=handler
             ) as stream:
                 stream.until_done()
-            print("✅ stream 완료")
+            print("✅ stream 완료")                                                                                            #13번
 
             self.update_token_usage(ip, handler.usage)
             if self.check_token_limit(ip):
