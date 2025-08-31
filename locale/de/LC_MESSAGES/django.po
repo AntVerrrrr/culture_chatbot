@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-20 18:25+0900\n"
+"POT-Creation-Date: 2025-08-31 21:58+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,38 +19,38 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: templates/assistant/assistants_pages/independence.html:9
-#: templates/assistant/assistants_pages/independence.html:30
-#: templates/assistant/assistants_pages/local.html:27
+#: templates/assistant/assistants_pages/independence.html:28
+#: templates/assistant/assistants_pages/local.html:25
 #: templates/assistant/assistants_pages/main.html:28
 #: templates/assistant/assistants_pages/search_results.html:28
-#: templates/assistant/assistants_pages/sommelier.html:31
-#: templates/assistant/assistants_pages/thema.html:28
+#: templates/assistant/assistants_pages/sommelier.html:29
+#: templates/assistant/assistants_pages/thema.html:27
 msgid "코레아우라"
 msgstr "KoreAura"
 
-#: templates/assistant/assistants_pages/independence.html:28
-#: templates/assistant/assistants_pages/local.html:25
+#: templates/assistant/assistants_pages/independence.html:26
+#: templates/assistant/assistants_pages/local.html:23
 #: templates/assistant/assistants_pages/main.html:26
 #: templates/assistant/assistants_pages/search_results.html:26
-#: templates/assistant/assistants_pages/sommelier.html:29
-#: templates/assistant/assistants_pages/thema.html:25
+#: templates/assistant/assistants_pages/sommelier.html:27
+#: templates/assistant/assistants_pages/thema.html:24
 msgid "메인"
 msgstr "Startseite"
 
-#: templates/assistant/assistants_pages/independence.html:29
-#: templates/assistant/assistants_pages/local.html:26
+#: templates/assistant/assistants_pages/independence.html:27
+#: templates/assistant/assistants_pages/local.html:24
 #: templates/assistant/assistants_pages/main.html:27
 #: templates/assistant/assistants_pages/search_results.html:27
-#: templates/assistant/assistants_pages/sommelier.html:30
+#: templates/assistant/assistants_pages/sommelier.html:28
 msgid "지역별"
 msgstr "Nach Region"
 
-#: templates/assistant/assistants_pages/independence.html:31
-#: templates/assistant/assistants_pages/local.html:28
+#: templates/assistant/assistants_pages/independence.html:29
+#: templates/assistant/assistants_pages/local.html:26
 #: templates/assistant/assistants_pages/main.html:29
 #: templates/assistant/assistants_pages/search_results.html:29
-#: templates/assistant/assistants_pages/sommelier.html:32
-#: templates/assistant/assistants_pages/thema.html:29
+#: templates/assistant/assistants_pages/sommelier.html:30
+#: templates/assistant/assistants_pages/thema.html:28
 msgid "소믈리에"
 msgstr "Sommelier"
 
@@ -58,27 +58,20 @@ msgstr "Sommelier"
 msgid "지역별 어시스턴트"
 msgstr "Regionale Assistenten"
 
-#: templates/assistant/assistants_pages/lounge.html:9
-msgid "라운지"
-msgstr "Lounge"
-
 #: templates/assistant/assistants_pages/main.html:9
 msgid "메인 어시스턴트"
 msgstr "Hauptassistent"
 
 #: templates/assistant/assistants_pages/search_results.html:9
+#: templates/assistant/assistants_pages/search_results.html:33
 msgid "검색 결과"
 msgstr "Suchergebnisse"
-
-#: templates/assistant/assistants_pages/search_results.html:52
-msgid "검색 결과가 없습니다."
-msgstr "Keine Suchergebnisse gefunden."
 
 #: templates/assistant/assistants_pages/sommelier.html:9
 msgid "지역 전통주 어시스턴트"
 msgstr "Regionale traditionelle Alkohol-Assistenten"
 
-#: templates/assistant/assistants_pages/thema.html:27
+#: templates/assistant/assistants_pages/thema.html:26
 msgid "테마"
 msgstr "Thema"
 
@@ -87,21 +80,17 @@ msgstr "Thema"
 msgid "채팅"
 msgstr "Chat"
 
-#: templates/assistant/chatbot_pages/chatbot.html:27
-msgid "큐레이션"
-msgstr "Kuration"
-
-#: templates/assistant/chatbot_pages/chatbot.html:76
+#: templates/assistant/chatbot_pages/chatbot.html:54
 #: templates/assistant/chatbot_pages/lounge_chatbot.html:60
 msgid "무엇이든 물어보세요..."
 msgstr "Fragen Sie mich alles..."
 
-#: templates/assistant/chatbot_pages/chatbot.html:92
+#: templates/assistant/chatbot_pages/chatbot.html:70
 #: templates/assistant/chatbot_pages/lounge_chatbot.html:76
 msgid "듣는 중..."
 msgstr "Ich höre zu..."
 
-#: templates/assistant/chatbot_pages/chatbot.html:99
+#: templates/assistant/chatbot_pages/chatbot.html:77
 #: templates/assistant/chatbot_pages/lounge_chatbot.html:83
 msgid "취소"
 msgstr "Abbrechen"
@@ -118,18 +107,56 @@ msgstr "Senden"
 msgid "음성 입력"
 msgstr "Spracheingabe"
 
-#: templates/includes/header.html:24
+#: templates/assistant/chatbot_preview/chatbot_preview.html:36
+msgid "인사말"
+msgstr "Begrüßung"
+
+#: templates/assistant/chatbot_preview/chatbot_preview.html:44
+msgid "큐레이션 모드"
+msgstr "Kuratierungsmodus"
+
+#: templates/assistant/chatbot_preview/chatbot_preview.html:53
+msgid "채팅 시작"
+msgstr "Chat starten"
+
+#: templates/assistant/chatbot_preview/chatbot_preview.html:61
+msgid "자세히보기"
+msgstr "Mehr anzeigen"
+
+#: templates/assistant/chatbot_preview/chatbot_preview.html:73
+msgid "이런 이야기는 어떤가요?"
+msgstr "Wie wäre es mit diesem Gespräch?"
+
+#: templates/assistant/chatbot_preview/chatbot_preview.html:74
+#, python-format
+msgid ""
+"\n"
+"                  %(name)s과 함께할\n"
+"                "
+msgstr ""
+"\n"
+"                  mit %(name)s\n"
+"                "
+
+#: templates/includes/header.html:28
 msgid "마이페이지"
 msgstr "Mein Profil"
 
-#: templates/includes/header.html:25
+#: templates/includes/header.html:29
 msgid "설정"
 msgstr "Einstellungen"
 
-#: templates/includes/search_bar.html:7
+#: templates/includes/language_dropdown.html:15
+#: templates/includes/language_dropdown.html:66
+msgid "언어 선택"
+msgstr "Sprache wählen"
+
+#: templates/includes/search_bar.html:9
 msgid "대화하고 싶은 서비스를 검색해보세요"
 msgstr "Suchen Sie nach dem Service, mit dem Sie sprechen möchten"
 
-#: templates/setting/language_dropdown.html:10
-msgid "언어 선택"
-msgstr "Sprache wählen"
+#~ msgid "라운지"
+#~ msgstr "Lounge"
+
+#~ msgid "검색 결과가 없습니다."
+#~ msgstr "Keine Suchergebnisse gefunden."
