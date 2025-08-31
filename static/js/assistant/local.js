@@ -11,7 +11,7 @@
   }
   function buildChatbotUrl(id) {
     const lang = currentLang();
-    return (lang === 'ko') ? `/chatbot/${id}/` : `/${lang}/chatbot/${id}/`;
+    return (lang === 'ko') ? `/chatbot_preview/${id}/` : `/${lang}/chatbot_preview/${id}/`;
   }
   function toAbs(url) {
     if (!url) return '';

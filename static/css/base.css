@@ -1,0 +1,22 @@
+/* main.css */
+body {
+  font-family: 'Nanum Myeongjo', Serif;
+  background-color: #f2efe4;
+  margin: 0;
+}
+
+.page-container {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 3%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+a {
+  text-decoration: none;
+  color: inherit; /* 링크 기본 파란색도 없애고, 부모 요소 색상 따라가게 */
+}

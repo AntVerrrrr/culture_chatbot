@@ -9,25 +9,16 @@
     <title>{% trans "채팅" %}</title>
     <link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/nanummyeongjo.css">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+<!--    <link rel="stylesheet" href="{% static 'css/includes/header.css' %}">-->
     <link rel="stylesheet" href="{% static 'css/assistant/chatbot.css' %}"/>
 </head>
 
 <body data-assistant-img="{{ assistant.photo.url }}">
+
 <div class="page-container">
     <!-- 헤더 -->
-    <header class="menu-bar">
-        <button id="menuButton" class="menu-logo-button">
-            <a href="{% url 'main-select' %}">
-                <img src="{% static 'image/assistant/newlogo.png' %}" alt="Menu">
-            </a>
-        </button>
-        <div class="menu-right">
-            <button id="fileSearchButton" class="fileSearch-button">
-                <img src="{% static 'image/assistant/fileSearch.png' %}" alt="FileSearch">
-                <span>{% trans "큐레이션" %}</span>
-            </button>
-        </div>
-    </header>
+    {% include "includes/header.html" %}
 
     <!-- 채팅 메시지 목록 -->
     <div id="chatContainer" class="chat-container">
@@ -39,19 +30,6 @@
                         <p id="welcomeMessage">{{ assistant.welcome_message }}</p>
 
                         <div class="actions-wrapper">
-                            <!--                            {#                <hr class="msg-hr">#}-->
-                            <!--                            {#                <div class="message-actions">#}-->
-                            <!--                            {#                  <button class="action-button like-btn" data-like-img="{% static 'image/assistant/like.svg' %}">#}-->
-                            <!--                            {#                    <img src="{% static 'image/assistant/like.svg' %}" alt="좋아요">#}-->
-                            <!--                            {#                  </button>#}-->
-                            <!--                            {#                  <button class="action-button unlike-btn" data-unlike-img="{% static 'image/assistant/unlike.svg' %}">#}-->
-                            <!--                            {#                    <img src="{% static 'image/assistant/unlike.svg' %}" alt="싫어요">#}-->
-                            <!--                            {#                  </button>#}-->
-                            <!--                            {#                  <button class="action-button action-button-cp copy-btn"#}-->
-                            <!--                            {#                    data-copy-img="{% static 'image/assistant/copy.svg' %}" onclick="handleCopy(this)">#}-->
-                            <!--                            {#                    <img src="{% static 'image/assistant/copy.svg' %}" alt="복사">#}-->
-                            <!--                            {#                  </button>#}-->
-                            <!--                            {#                </div>#}-->
                         </div>
                     </div>
                 </div>

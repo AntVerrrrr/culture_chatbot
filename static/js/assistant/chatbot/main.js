@@ -88,9 +88,14 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // 파일서치 버튼
-  const fileSearchBtn = document.getElementById("fileSearchButton");
-  fileSearchBtn?.addEventListener("click", () => {
-    fileSearchEnabled = !fileSearchEnabled;
-    fileSearchBtn.classList.toggle("active", fileSearchEnabled);
-  });
+  // URL 파라미터에서 fileSearch 플래그 읽기
+  const params = new URLSearchParams(location.search);
+  if (params.get("filesearch") === "1") {
+    fileSearchEnabled = true;
+  }
+//  const fileSearchBtn = document.getElementById("fileSearchButton");
+//  fileSearchBtn?.addEventListener("click", () => {
+//    fileSearchEnabled = !fileSearchEnabled;
+//    fileSearchBtn.classList.toggle("active", fileSearchEnabled);
+//  });
 });

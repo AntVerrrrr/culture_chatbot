@@ -1,0 +1,23 @@
+
+
+.category-list {
+  list-style-type: none;
+  display: flex;
+  justify-content: flex-start;
+  gap: 15px;
+  padding: 10px 0;
+  margin: 0;
+}
+
+.category-list li a {
+    text-decoration: none;
+    color: #BBBBBB;
+}
+
+.category-list li a.category-select {
+    font-weight: bold;
+    color: #000000; /* 진하게 보이게 텍스트 색상도 변경 */
+}
+
+
+
