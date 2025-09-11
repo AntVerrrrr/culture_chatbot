@@ -1,0 +1,24 @@
+.detail-box {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.35s ease, padding 0.35s ease;
+  padding: 0 15px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+/* 열렸을 때 */
+.detail-box.open {
+  max-height: 500px;  /* 내용보다 충분히 큰 값 */
+  padding: 15px;
+}
+
+/* hidden 속성이 있으면 강제로 display:none */
+.detail-box[hidden] {
+  display: none;
+}
+
+/* 화살표 회전 */
+.chevron { transition: transform 0.3s ease; }
+.chevron.rotate { transform: rotate(90deg); }

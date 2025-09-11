@@ -114,6 +114,24 @@
   transform: translateX(20px);
 }
 
+/* 채팅 시작 버튼 - 검은색 둥근 사각형 */
+#chat-link {
+  display: block;
+  margin: 16px 0;
+  padding: 12px 20px;
+  background-color: #000;  /* 검정 */
+  color: #fff;             /* 흰색 글자 */
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  border-radius: 12px;     /* 둥근 사각형 */
+  text-decoration: none;
+  transition: background 0.2s;
+}
+#chat-link:hover {
+  background-color: #333;  /* hover 시 밝은 검정 */
+}
+
 /* 하단 문구 */
 .preview-footer{
   margin-top: 22px;

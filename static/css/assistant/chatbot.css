@@ -327,24 +327,7 @@
     text-align: right;
 }
 
-.fileSearch-button {
-    padding: 5px 10px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 0.8em;
-    margin-left: auto;
-}
 
-.fileSearch-button img {
-    width: 20px;
-    height: 20px;
-}
-
-.fileSearch-button.active {
-    background-color: azure;
-}
 
 .voice-ui {
   position: absolute;

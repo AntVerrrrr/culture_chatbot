@@ -6,6 +6,7 @@ import { initSwiper } from "./swiper-init.js";
 import { appendMessage } from "./message.js";
 import { sendQuestion } from "./api.js";
 import { showThinking, removeThinking } from "./thinking.js";
+import { initFileSearchToggle } from "./filesearch-toggle.js";
 
 // DOM 로딩 완료 후 초기화
 document.addEventListener("DOMContentLoaded", () => {
@@ -50,22 +51,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-//  // 엔터 키 입력 처리
-//  inputField?.addEventListener("keydown", (e) => {
-//    if (e.key === "Enter" && !e.shiftKey) {
-//      e.preventDefault();
-//      const text = inputField.value.trim();
-//      if (text) submitQuestion(text);
-//    }
-//  });
-
   // 교체본 (IME 대응)
   let composing = false;
   inputField?.addEventListener("compositionstart", () => { composing = true; });
   inputField?.addEventListener("compositionend",   () => { composing = false; });
-
   inputField?.addEventListener("keydown", (e) => {
-    if (e.isComposing || composing || e.keyCode === 229) return; // ✅ 한글 조합 중이면 무시
+    if (e.isComposing || composing || e.keyCode === 229) return;
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       const text = inputField.value.trim();
@@ -87,15 +78,38 @@ document.addEventListener("DOMContentLoaded", () => {
     submitQuestion(question);
   });
 
+  //파일서치 버튼
+  const fsCtl = initFileSearchToggle({
+    onChange(enabled) {
+      fileSearchEnabled = enabled; // 전역 상태 갱신 → submitQuestion 에 반영됨
+    },
+  });
+
+  // 첫 진입 시 URL(?filesearch=1|0) 반영
+  if (fsCtl) fileSearchEnabled = fsCtl.enabled;
+});
+
   // 파일서치 버튼
   // URL 파라미터에서 fileSearch 플래그 읽기
-  const params = new URLSearchParams(location.search);
-  if (params.get("filesearch") === "1") {
-    fileSearchEnabled = true;
-  }
+//  const params = new URLSearchParams(location.search);
+//  if (params.get("filesearch") === "1") {
+//    fileSearchEnabled = true;
+//  }
+//
+//  const fileSearchBtn = document.getElementById("fileSearchButton");
+//  if (fileSearchBtn) {
+//    fileSearchBtn.addEventListener("click", () => {
+//      fileSearchEnabled = !fileSearchEnabled;
+//      fileSearchBtn.classList.toggle("active", fileSearchEnabled);
+//
+//      const params = new URLSearchParams(location.search);
+//      params.set("filesearch", fileSearchEnabled ? "1" : "0");
+//      history.replaceState(null, "", "?" + params.toString());
+//    });
+//  }
+
 //  const fileSearchBtn = document.getElementById("fileSearchButton");
 //  fileSearchBtn?.addEventListener("click", () => {
 //    fileSearchEnabled = !fileSearchEnabled;
 //    fileSearchBtn.classList.toggle("active", fileSearchEnabled);
 //  });
-});

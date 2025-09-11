@@ -1,0 +1,38 @@
+.file-search-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #f0f0f0;     /* OFF 상태 → 연한 회색 */
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  color: #333;
+}
+
+.file-search-button:hover {
+  background: #e0e0e0;     /* OFF 상태 hover → 조금 진한 회색 */
+}
+
+.file-search-button.active {
+  background: #ffd84d;     /* ON 상태 → 노란색 */
+  border-color: #e6b800;
+  color: #222;             /* 글자는 진한 검정으로 */
+}
+
+.file-search-button.active:hover {
+  background: #ffcc00;     /* ON 상태 hover → 더 진한 노랑 */
+}
+
+.file-search-button img {
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  filter: none;
+}
+
+.file-search-button.active img {
+  filter: brightness(1.2); /* 노란 배경에서 아이콘이 더 선명하게 보이게 */
+}

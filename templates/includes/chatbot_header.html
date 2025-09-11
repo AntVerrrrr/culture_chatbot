@@ -1,0 +1,36 @@
+<!-- includes/header.html -->
+
+{% load static %}
+{% load i18n %}
+<link rel="stylesheet" href="{% static 'css/includes/header.css' %}">
+<link rel="stylesheet" href="{% static 'css/includes/file-search-button.css' %}">
+
+<header class="menu-bar">
+  <!-- 왼쪽 언어 드롭다운 -->
+  {% include "includes/language_dropdown.html" %}
+
+  <!-- 가운데 로고 -->
+  <a href="{% url 'main-select' %}" class="logo-link">
+    <img src="{% static 'image/assistant/newlogo.png' %}" alt="Logo">
+  </a>
+
+  <button id="fileSearchButton" class="file-search-button">
+    <img src="{% static 'image/assistant/filesearch.png' %}" alt="파일서치">
+    <span>{% trans "큐레이션 모드" %}</span>
+  </button>
+
+</header>
+
+<!-- 오버레이 추가 -->
+<div id="drawerOverlay" class="drawer-overlay"></div>
+
+<!-- 우측 사이드 드로어 -->
+<div id="sideDrawer" class="side-drawer">
+  <ul class="drawer-menu">
+    <li><a href="#">{% trans "마이페이지" %}</a></li>
+    <a href="{% url 'setting' %}">{% trans "설정" %}</a>
+  </ul>
+</div>
+
+<!-- header JS를 여기서 전역 로드 -->
+<script src="{% static 'js/includes/header.js' %}"></script>

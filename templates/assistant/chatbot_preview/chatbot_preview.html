@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <link rel="stylesheet" href="{% static 'css/chatbot_preview/chatbot_preview.css' %}">
     <link rel="stylesheet" href="{% static 'css/includes/assistant_slider.css' %}">
+    <link rel="stylesheet" href="{% static 'css/includes/modal.css' %}">
+    <link rel="stylesheet" href="{% static 'css/includes/detail_toggle.css' %}">
 </head>
 <body>
 <div class="page-container">
@@ -33,7 +35,13 @@
                     #{{ tag.name }}
                     {% endfor %}
                 </p>
-                <p class="desc">[{% trans "인사말" %}]</p>
+
+                <br>
+
+                {% if assistant.greeting %}
+                    <p class="desc">[{% trans "인사말" %}]</p>
+                    <p class="desc">{{ assistant.greeting }}</p>
+                {% endif %}
             </div>
 
             <!-- 메뉴 -->
@@ -46,22 +54,56 @@
                     <input type="checkbox" id="curation-toggle">
                 </div>
 
-                <!-- 링크 (토글 상태에 따라 변경) -->
-                <a id="chat-link" href="{% url 'chatbot' assistant.id %}?filesearch=0" class="menu-item link-btn">
-                    <span>
-                        <img src="{% static 'image/chatbot_preview/link.svg' %}" alt="arrow" class="icon-arrow">
-                        {% trans "채팅 시작" %}
-                    </span>
-                    <img src="{% static 'image/chatbot_preview/arrow.svg' %}" alt="arrow" class="icon-arrow">
-                </a>
+                {# 링크가 1개 이상 있으면 전체 블록 출력 #}
+                {% if assistant.links.all %}
+                  {% for link in assistant.links.all %}
+                    {% if link.is_active %}
+                      <a href="{{ link.url }}"
+                         class="menu-item link-btn"
+                         {% if link.target_blank %}target="_blank" rel="noopener"{% endif %}>
+                        <span>
+                          <img src="{% static 'image/chatbot_preview/file.svg' %}" alt="arrow" class="icon-arrow">
+                          {{ link.title|default:_("자세히보기") }}
+                        </span>
+                        <img src="{% static 'image/chatbot_preview/arrow.svg' %}" alt="arrow" class="icon-arrow">
+                      </a>
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
 
-                <a href="#" class="menu-item link-btn">
-                    <span>
-                        <img src="{% static 'image/chatbot_preview/file.svg' %}" alt="arrow" class="icon-arrow">
-                        {% trans "자세히보기" %}
-                    </span>
-                    <img src="{% static 'image/chatbot_preview/arrow.svg' %}" alt="arrow" class="icon-arrow">
-                </a>
+
+<!--                <a href="#" class="menu-item link-btn" data-modal-target="detailModal1">-->
+<!--                    <span>-->
+<!--                      <img src="{% static 'image/chatbot_preview/file.svg' %}" alt="arrow" class="icon-arrow">-->
+<!--                      {% trans "자세히보기1" %}-->
+<!--                    </span>-->
+<!--                    <img src="{% static 'image/chatbot_preview/arrow.svg' %}" alt="arrow" class="icon-arrow">-->
+<!--                </a>-->
+
+<!--                모달 기능-->
+<!--                <a href="#" class="menu-item link-btn" data-modal-target="detailModal2">-->
+<!--                    <span>-->
+<!--                        <img src="{% static 'image/chatbot_preview/file.svg' %}" alt="arrow" class="icon-arrow">-->
+<!--                        {% trans "자세히보기2" %}-->
+<!--                    </span>-->
+<!--                    <img src="{% static 'image/chatbot_preview/arrow.svg' %}" alt="arrow" class="icon-arrow">-->
+<!--                </a>-->
+<!--===========================================--->
+<!--                토글기능-->
+<!--                <a href="#" class="menu-item link-btn js-detail-toggle" data-target="#detailBox2">-->
+<!--                    <span>-->
+<!--                        <img src="{% static 'image/chatbot_preview/file.svg' %}" alt="arrow" class="icon-arrow">-->
+<!--                        {% trans "자세히보기2" %}-->
+<!--                    </span>-->
+<!--                    <img src="{% static 'image/chatbot_preview/arrow.svg' %}" alt="arrow" class="icon-arrow chevron">-->
+<!--                </a>-->
+
+<!--                &lt;!&ndash; 펼쳐지는 공간 &ndash;&gt;-->
+<!--                <div id="detailBox2" class="detail-box" hidden>-->
+<!--                    <p>이곳에 자세한 설명을 적어주세요. 필요하면 이미지/리스트도 넣을 수 있습니다.</p>-->
+<!--                </div>-->
+
+
             </div>
             <br><br>
 
@@ -72,18 +114,49 @@
             <div class="preview-footer">
                 <p>{% trans "이런 이야기는 어떤가요?" %}</p>
                 {% blocktrans with name=assistant.name %}
-                  {{ name }}과 함께할
+                {{ name }}과 함께할
                 {% endblocktrans %}
             </div>
             {% include "includes/assistant_slider.html" %}
             {% endif %}
             {% endwith %}
+
+
+            <!-- 링크 (토글 상태에 따라 변경) -->
+            <a id="chat-link" href="{% url 'chatbot' assistant.id %}?filesearch=0" class="menu-item link-btn">
+                <span>{% trans "채팅 시작" %}</span>
+            </a>
         </div>
 
     </div>
 
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<!--    &lt;!&ndash; Modal 1 &ndash;&gt;-->
+<!--    <div id="detailModal1" class="modal" aria-hidden="true" role="dialog" aria-modal="true"-->
+<!--         aria-labelledby="detailTitle1">-->
+<!--        <div class="modal-backdrop" data-modal-close></div>-->
+<!--        <div class="modal-panel" role="document">-->
+<!--            <button class="modal-close" aria-label="{% trans '닫기' %}" data-modal-close>&times;</button>-->
+<!--            <h3 id="detailTitle1" class="modal-title">{% trans "자세히보기1" %}</h3>-->
+<!--            <div class="modal-content">&lt;!&ndash; 비워둠 &ndash;&gt;</div>-->
+<!--        </div>-->
+<!--    </div>-->
 
+    <!-- Modal 2 -->
+    <!--    <div id="detailModal2" class="modal" aria-hidden="true" role="dialog" aria-modal="true"-->
+    <!--         aria-labelledby="detailTitle2">-->
+    <!--        <div class="modal-backdrop" data-modal-close></div>-->
+    <!--        <div class="modal-panel" role="document">-->
+    <!--            <button class="modal-close" aria-label="{% trans '닫기' %}" data-modal-close>&times;</button>-->
+    <!--            <h3 id="detailTitle2" class="modal-title">{% trans "자세히보기2" %}</h3>-->
+    <!--            <div class="modal-content">&lt;!&ndash; 비워둠 &ndash;&gt;</div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="{% static 'js/includes/assistant_slider.js' %}"></script>
+    <script src="{% static 'js/includes/modal.js' %}"></script>
+    <script src="{% static 'js/includes/detail_toggle.js' %}"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
           const toggle = document.getElementById("curation-toggle");
@@ -105,8 +178,5 @@
           toggle.addEventListener("change", updateLink);
         });
     </script>
-
-    <script src="{% static 'js/includes/assistant_slider.js' %}"></script>
-
 </body>
 </html>
