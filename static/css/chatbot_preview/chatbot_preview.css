@@ -114,33 +114,34 @@
   transform: translateX(20px);
 }
 
-/* 채팅 시작 버튼 - 검은색 둥근 사각형 */
+/* 채팅 시작 버튼 - 화면 하단 고정, 카드폭만큼 중앙 정렬 */
 #chat-link {
-  display: block;
-  margin: 16px 0;
-  padding: 12px 20px;
-  background-color: #000;  /* 검정 */
-  color: #fff;             /* 흰색 글자 */
+  position: fixed;
+  left: 50%;
+  bottom: 20px;                  /* 하단에서 살짝 띄움 */
+  transform: translateX(-50%);
+  width: 90%;                    /* 카드 폭의 90% 정도 (너무 꽉 차면 답답) */
+  max-width: 400px;              /* 프리뷰 카드 최대 폭과 동일하게 제한 */
+  background-color: #000;
+  color: #fff;
   font-size: 15px;
   font-weight: 600;
   text-align: center;
-  border-radius: 12px;     /* 둥근 사각형 */
+  border-radius: 12px;
   text-decoration: none;
-  transition: background 0.2s;
-}
-
-/* 채팅 버튼 - 화면 하단 고정 위치 */
-#chat-link {
-  position: fixed;
-  bottom: 20px;             /* 화면 하단에서 20px 위 */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 120px;
-  z-index: 50;            /* 다른 요소 위로 표시 */
+  padding: 14px 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 100;
+  transition: background 0.2s, transform 0.1s;
 }
 
 #chat-link:hover {
-  background-color: #333;  /* hover 시 밝은 검정 */
+  background-color: #333;
+  transform: translateX(-50%) translateY(-2px);
+}
+
+#chat-link:active {
+  transform: translateX(-50%) translateY(0);
 }
 
 /* 하단 문구 */
