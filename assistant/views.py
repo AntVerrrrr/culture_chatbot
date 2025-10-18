@@ -234,11 +234,20 @@ class ChatbotAPIView(APIView):
         print("🔎 file_search:", use_file_search)                                                                            #4번
         # 파일서치 문구는 켰을 때만 안내(선택)
         if use_file_search:
-            prompt = (assistant.prompt_context or f"당신은 '{assistant.name}'입니다.") + \
-                     "\n- 가능한 경우 첨부 파일(벡터 검색) 내용을 근거로 답변하세요."
+            prompt = (
+                    (assistant.prompt_context or f"당신은 '{assistant.name}'입니다.")
+                    + "\n- 가능한 경우 첨부 파일(벡터 검색) 내용을 근거로 답변하세요."
+                    + "\n- 질문한 언어와 같은 언어로 답변을 하세요."
+                    + "\n- 한국어 질문은 한국어 답변으로, 영어 질문은 영어 답변으로, 일본어 질문은 일본어 답변으로, 프랑스어 질문은 프랑스어 답변으로, 독일어 질문은 독일어 답변으로 하세요"
+            )
         else:
-            prompt = assistant.prompt_context or f"당신은 '{assistant.name}'입니다."
-        # print("📢 prompt_context:", prompt)                                                                                   #5번
+            prompt = (
+                    (assistant.prompt_context or f"당신은 '{assistant.name}'입니다.")
+                    + "\n- 질문한 언어와 같은 언어로 답변을 하세요."
+                    + "\n- 한국어 질문은 한국어 답변으로, 영어 질문은 영어 답변으로, 일본어 질문은 일본어 답변으로, 프랑스어 질문은 프랑스어 답변으로, 독일어 질문은 독일어 답변으로 하세요"
+            )
+
+        print("📢 prompt_context:", prompt)                                                                                   #5번
 
         try:
             # ✅ file_search ON일 때만 첨부+툴 포함
