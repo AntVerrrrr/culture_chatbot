@@ -40,7 +40,7 @@
 
                 {% if assistant.greeting %}
                     <p class="desc">[{% trans "인사말" %}]</p>
-                    <p class="desc">{{ assistant.greeting }}</p>
+                    <p class="desc">{{ assistant.greeting|linebreaksbr }}</p>
                 {% endif %}
             </div>
 
@@ -51,7 +51,7 @@
                         <img src="{% static 'image/chatbot_preview/bell.svg' %}" alt="arrow" class="icon-arrow">️
                         {% trans "큐레이션 모드" %}
                     </span>
-                    <input type="checkbox" id="curation-toggle">
+                    <input type="checkbox" id="curation-toggle" checked>
                 </div>
 
                 {# 링크가 1개 이상 있으면 전체 블록 출력 #}
