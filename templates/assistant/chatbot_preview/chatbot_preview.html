@@ -110,7 +110,7 @@
             <!-- 현재 어시스턴트에 있는 테그들 중 3번째 테그와 같은 어시스트턴트들 보여주기-->
             {# 추천이 있을 때만 푸터 + 슬라이더 노출 #}
             {% with sec=assistant_sections|first %}
-            {% if sec and sec.assistants and sec.assistants|length %}
+            {% if assistant.show_recommendations and sec and sec.assistants and sec.assistants|length %}
             <div class="preview-footer">
                 <p>{% trans "이런 이야기는 어떤가요?" %}</p>
                 {% blocktrans with name=assistant.name %}

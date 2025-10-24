@@ -60,6 +60,13 @@ class Assistant(models.Model):
     city_county_town = models.ForeignKey('CityCountyTown', on_delete=models.CASCADE)  # 시군읍 정보
     tags = models.ManyToManyField(Tag, related_name='assistants', blank=True)  # 어시스턴트 해시태그
 
+    # 프리뷰 페이지 추천구역 on/off
+    show_recommendations = models.BooleanField(
+        default=True,
+        help_text="프리뷰 추천 구역 표시 여부"
+    )
+
+    # 프리뷰 페이지 어시스턴트 인사말
     greeting = models.TextField(
         blank=True,
         help_text="카드/프리뷰에 보여줄 짧은 인사말"

@@ -25,24 +25,23 @@ class AssistantAdmin(TranslationAdmin):
     list_display = [
         'id',
         'name',  # 어시스턴트 이름
-        'assistant_id',  # OpenAI assistant id
-        'document_id',  # 첨부 문서 ID
+        'description',
         'voice',  # 선택된 음성 (TTS 음성)
-        # 'tag_list',  # 태그 목록 (커스텀 메서드로)
-        # 'welcome_message',  # 간단한 환영 메시지
-        # 'greeting',  # 인사말 요약
-        # 'link_count',
+        'show_recommendations', # 추천구역 on/off
     ]
-
-    search_fields = ['name', 'assistant_id', 'document_id', 'voice',]
+    list_editable = ('voice', 'show_recommendations',)
     list_filter = ['country', 'province', 'city_county_town', 'tags', 'voice']
+    search_fields = ['name', 'assistant_id', 'document_id', 'voice']
+
     fields = (
         'name', 'photo', 'assistant_id', 'document_id',
-        'country', 'province', 'city_county_town', 'tags',
-        'description', 'greeting', 'prompt_context', 'voice',
-        'welcome_message',
-        'question_1', 'question_2', 'question_3', 'question_4',
+        'country', 'province', 'city_county_town', 'voice', 'tags',
+        'description', 'prompt_context',
+
+        'welcome_message', 'question_1', 'question_2', 'question_3', 'question_4',
         'question_5', 'question_6', 'question_7', 'question_8', 'question_9', 'question_10',
+
+        'show_recommendations', 'greeting',
     )
     filter_horizontal = ('tags',)
 
@@ -62,11 +61,6 @@ class AssistantAdmin(TranslationAdmin):
     def link_count(self, obj):
         return obj.links.count()
     link_count.short_description = "링크 수"
-
-    def tag_list(self, obj):
-        return ", ".join(tag.name for tag in obj.tags.all())
-
-    tag_list.short_description = "태그"
 
 
 admin.site.register(Assistant, AssistantAdmin)
